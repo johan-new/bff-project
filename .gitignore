@@ -30,3 +30,4 @@ target/
 .idea/
 .mvn/
 project.iml
+*.iml
