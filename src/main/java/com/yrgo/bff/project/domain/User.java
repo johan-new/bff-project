@@ -1,19 +1,17 @@
 package com.yrgo.bff.project.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class User {
 
-    @Transient
-    private List<String> previousGames;
+    @ManyToMany (mappedBy = "participants")
+    Set<Game> previousGames;
 
     @Id
     private String userName;
-
     private String password;
 
     public User(String userName, String password) {
@@ -23,12 +21,12 @@ public class User {
 
     User(){}
 
-    public List<String> getPreviousGames() {
+    public Set<Game> getPreviousGames() {
 
         return previousGames;
     }
 
-    public void setPreviousGames(List<String> previousGames) {
+    public void setPreviousGames(Set<Game> previousGames) {
         this.previousGames = previousGames;
     }
 

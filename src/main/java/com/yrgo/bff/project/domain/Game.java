@@ -4,6 +4,7 @@ package com.yrgo.bff.project.domain;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Game {
@@ -15,10 +16,15 @@ public class Game {
     private Date when;
     private String venue;
 
-    @Transient
-    private List<User> participants;
+    @ManyToMany
+    @JoinTable(
+            name = "user_game",
+            joinColumns = @JoinColumn(name = "username"),
+            inverseJoinColumns = @JoinColumn(name = "game_id")
+    )
+    Set<User> participants;
 
-    public Game(Date when, String venue, List<User> participants) {
+    public Game(Date when, String venue, Set<User> participants) {
         this.when = when;
         this.venue = venue;
         this.participants = participants;
@@ -32,7 +38,7 @@ public class Game {
         return venue;
     }
 
-    public List<User> getParticipants() {
+    public Set<User> getParticipants() {
         return participants;
     }
 }
