@@ -1,14 +1,22 @@
 package com.yrgo.bff.project.service;
 
+import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserAccountServiceImplementation implements UserAccountService{
+
+    @Autowired
+    UserAccountDataAccess userAccountDataAccess;
+
     @Override
     public User createUser(String username, String password) {
-        return null;
+        User user = new User(username,password);
+        userAccountDataAccess.save(new User(username,password));
+        return user;
     }
 
     @Override
