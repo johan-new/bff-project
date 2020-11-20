@@ -24,6 +24,7 @@ public class User {
     User(){}
 
     public List<String> getPreviousGames() {
+
         return previousGames;
     }
 
@@ -37,6 +38,10 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

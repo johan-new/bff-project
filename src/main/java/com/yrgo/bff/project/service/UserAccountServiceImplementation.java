@@ -3,7 +3,6 @@ package com.yrgo.bff.project.service;
 import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,16 +20,21 @@ public class UserAccountServiceImplementation implements UserAccountService{
 
     @Override
     public User removeUser(String username, String password) {
-        return null;
+        User user = userAccountDataAccess.findByUserName(username);
+        userAccountDataAccess.delete(user);
+        return user;
     }
 
     @Override
-    public User updateUser(String username, String password) {
-        return null;
+    public User updateUser(String username, String password, String newPassword) {
+        User user = userAccountDataAccess.findByUserName(username);
+        user.setPassword(newPassword);
+        userAccountDataAccess.save(user);
+        return user;
     }
 
     @Override
     public User readUser(String username, String password) {
-        return null;
+        return userAccountDataAccess.findByUserName(username);
     }
 }

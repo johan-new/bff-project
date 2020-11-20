@@ -38,8 +38,9 @@ public class Ctrlr {
 
     @PutMapping("/user")
     void updateUser(@RequestParam(name="name",required = true) String name,
-                    @RequestParam(name="password",required = true) String password){
-        userAccountService.updateUser(name,password);
+                    @RequestParam(name="password",required = true) String password,
+                    @RequestParam(name="newPassword",required = true) String newPassword){
+        userAccountService.updateUser(name,password,newPassword);
     }
 
     @DeleteMapping("/user")

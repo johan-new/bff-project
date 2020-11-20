@@ -8,5 +8,5 @@ import java.util.List;
 
 //@Repository
 public interface UserAccountDataAccess extends CrudRepository<User, String> {
-    List<User> findByUserName(String userName);
+    User findByUserName(String userName);
 }
