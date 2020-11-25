@@ -10,7 +10,7 @@ public class GpsCoordinates {
         this.latitude = latitude;
     }
 
-    public GpsCoordinates() {
+    public GpsCoordinates(double v, double v1) {
     }
 
     public long getLongitude() {
