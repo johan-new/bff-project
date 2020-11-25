@@ -6,15 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserAccountServiceImplementation implements UserAccountService{
+public class UserAccountServiceImplementation implements UserAccountService {
 
     @Autowired
     UserAccountDataAccess userAccountDataAccess;
 
     @Override
     public User createUser(String username, String password) {
-        User user = new User(username,password);
-        userAccountDataAccess.save(new User(username,password));
+        User user = new User(username, password);
+        userAccountDataAccess.save(new User(username, password));
         return user;
     }
 
