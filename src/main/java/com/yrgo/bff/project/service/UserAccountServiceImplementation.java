@@ -5,6 +5,10 @@ import com.yrgo.bff.project.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 @Service
 public class UserAccountServiceImplementation implements UserAccountService{
 
@@ -14,7 +18,7 @@ public class UserAccountServiceImplementation implements UserAccountService{
     @Override
     public User createUser(String username, String password) {
         User user = new User(username,password);
-        userAccountDataAccess.save(new User(username,password));
+        userAccountDataAccess.save(user);
         return user;
     }
 
@@ -36,5 +40,15 @@ public class UserAccountServiceImplementation implements UserAccountService{
     @Override
     public User readUser(String username, String password) {
         return userAccountDataAccess.findByUserName(username);
+    }
+
+    @Override
+    public Set<User> findAll() {
+        Set<User> users = new HashSet<User>();
+        Iterator<User> ite = userAccountDataAccess.findAll().iterator();
+        while (ite.hasNext()) {
+            users.add(ite.next());
+        }
+        return users;
     }
 }

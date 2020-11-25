@@ -2,6 +2,8 @@ package com.yrgo.bff.project;
 
 import com.yrgo.bff.project.domain.Game;
 import com.yrgo.bff.project.domain.User;
+import com.yrgo.bff.project.service.UserAccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -16,10 +18,6 @@ public class Project2Application {
 
 		SpringApplication.run(Project2Application.class, args);
 
-//		User user = new User("Erik", "password");
-//		Set<User> u = new HashSet<User>();
-//		u.add(user);
-//		Game game = new Game(new Date(), "Götlaborg", u);
 
 
 	}
