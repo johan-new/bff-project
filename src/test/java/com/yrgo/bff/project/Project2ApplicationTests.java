@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@SpringBootTest
+//@SpringBootTest
 class Project2ApplicationTests {
 
     @Test
