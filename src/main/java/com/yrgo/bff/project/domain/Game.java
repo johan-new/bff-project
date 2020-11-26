@@ -28,6 +28,7 @@ public class Game {
         this.venue = venue;
         this.participants = participants;
     }
+    public Game () {}
 
     public Date getWhen() {
         return when;
