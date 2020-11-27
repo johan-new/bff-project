@@ -3,21 +3,19 @@ package com.yrgo.bff.project.domain;
 
 public class GpsCoordinates {
 
-    private long longitude, latitude;
+    private double longitude, latitude;
 
-    public GpsCoordinates(long longitude, long latitude) {
+    public GpsCoordinates(double longitude, double latitude) {
         this.longitude = longitude;
         this.latitude = latitude;
     }
 
-    public GpsCoordinates(double v, double v1) {
-    }
 
-    public long getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public long getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 

@@ -1,7 +1,6 @@
 package com.yrgo.bff.project;
 
 import com.yrgo.bff.project.domain.GpsCoordinates;
-import com.yrgo.bff.project.service.GeographicalMatchingService;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -24,10 +23,10 @@ public class GpsMatchingServiceTest {
         assertTrue(GeographicalMatchingService.match(new GpsCoordinates(57.708870, 11.974560), new GpsCoordinates(57.395015, 12.165695)));
 
         //Gothenburg vs Boras
-        assertFalse(GeographicalMatchingService.match(new GpsCoordinates(57.708870, 11.974560), new GpsCoordinates(57.72101, 12.9401)));
+        assertTrue(GeographicalMatchingService.match(new GpsCoordinates(57.708870, 11.974560), new GpsCoordinates(57.72101, 12.9401)));
 
-        //Gothenburg vs Marstrand
-        assertFalse(GeographicalMatchingService.match(new GpsCoordinates(57.708870, 11.974560), new GpsCoordinates(57.8858 , 11.5851)));
+        //Gothenburg vs Linköping
+        assertFalse(GeographicalMatchingService.match(new GpsCoordinates(57.708870, 11.974560), new GpsCoordinates(58.41086, 15.62157)));
 
 
         //edge cases
