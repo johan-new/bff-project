@@ -29,7 +29,6 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
     @Override
     public void matchUsers() {
         //locations -> gbg -> users
-        Map<String, List<User>> match = new HashMap<>();
         List<String> locationsOccurrences = new ArrayList<>();
 
         Iterator iterator = usersLookingToBeMatched.entrySet().iterator();
@@ -44,17 +43,15 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
         }
 
         locationAndUsers = new HashMap<>();
+
         for (String location : locationsOccurrences) {
             usersAtThatSpecificLocation = usersLookingToBeMatched.entrySet().stream().filter(s -> s.getValue().equals(location)).collect(Collectors.toList());
-//            for (int k = 0; k < location.length())
-            for (int i = 0; i < locationsOccurrences.size(); i++) {
+            for (String locationsOccurrence : locationsOccurrences) {
                 ArrayList<User> userino = new ArrayList<>();
-                for (int j = 0; j < usersAtThatSpecificLocation.size(); j++) {
-                    if (usersAtThatSpecificLocation.get(j).getValue().equals(locationsOccurrences.get(i))) {
-                        userino.add(usersAtThatSpecificLocation.get(j).getKey());
-                    }
-                    if (usersAtThatSpecificLocation.get(j).getValue().equals(locationsOccurrences.get(i))) {
-                        locationAndUsers.put(locationsOccurrences.get(i), userino);
+                for (Map.Entry<User, String> userStringEntry : usersAtThatSpecificLocation) {
+                    if (userStringEntry.getValue().equals(locationsOccurrence)) {
+                        userino.add(userStringEntry.getKey());
+                        locationAndUsers.put(locationsOccurrence, userino);
                     }
                 }
             }
