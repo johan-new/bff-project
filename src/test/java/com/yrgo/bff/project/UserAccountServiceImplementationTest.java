@@ -49,6 +49,11 @@ public class UserAccountServiceImplementationTest {
     }
 
     @Test
+    void testMockReadUserNoPw() {
+
+    }
+
+    @Test
     void testMockFindAll() {
         userSet = new HashSet<>();
         userSet = userAccountServiceImplementation.findAll();
