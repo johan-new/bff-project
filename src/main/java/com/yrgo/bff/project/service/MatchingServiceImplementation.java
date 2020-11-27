@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 public class MatchingServiceImplementation implements MatchingService, Runnable {
 
     private Map<User, String> usersLookingToBeMatched = new HashMap<>();
-    List<Map.Entry<User, String>> usersAtThatSpecificLocation;
-    Map<String, ArrayList<User>> locationAndUsers;
+    private List<Map.Entry<User, String>> usersAtThatSpecificLocation;
+    private Map<String, ArrayList<User>> locationAndUsers;
 
     private boolean interrupt = false;
 
