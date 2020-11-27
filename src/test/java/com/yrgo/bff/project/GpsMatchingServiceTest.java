@@ -13,9 +13,12 @@ public class GpsMatchingServiceTest {
 
     @Test
     void testMatching(){
-        User user1 = new User("Abraham","Bengtsoon");
-        User user2 = new User("Noel","Jul");
-        User user3 = new User("Bengt","Jul");
+        User user1 = new User("Abraham","Lincoln");
+        User user2 = new User("Noel","Noelsson");
+        User user3 = new User("Bengt","Bengan");
+        User user4 = new User("Glenn","Glennsson");
+        User user5 = new User("Åke","Åkesson");
+        User user6 = new User("Sven","Svensson");
         String location = "Stockholm";
         String location2 = "Göteborg";
 
@@ -23,6 +26,9 @@ public class GpsMatchingServiceTest {
         matchingService.addUserMatchRequest(user1,location);
         matchingService.addUserMatchRequest(user2,location);
         matchingService.addUserMatchRequest(user3,location2);
+        matchingService.addUserMatchRequest(user4, location2);
+        matchingService.addUserMatchRequest(user5, location2);
+        matchingService.addUserMatchRequest(user6, location2);
 
         matchingService.matchUsers();
     }

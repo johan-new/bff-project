@@ -3,21 +3,21 @@ package com.yrgo.bff.project.service;
 import com.yrgo.bff.project.domain.GpsCoordinates;
 import com.yrgo.bff.project.domain.User;
 
-import javax.swing.text.html.HTMLDocument;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class MatchingServiceImplementation implements MatchingService, Runnable{
+public class MatchingServiceImplementation implements MatchingService, Runnable {
 
-    // String location
     private Map<User, String> usersLookingToBeMatched = new HashMap<>();
+    List<Map.Entry<User, String>> usersAtThatSpecificLocation;
+    Map<String, ArrayList<User>> locationAndUsers;
 
     private boolean interrupt = false;
 
     @Override
     public void addUserMatchRequest(User user, String location) {
-        if (!usersLookingToBeMatched.containsKey(user)){
-            usersLookingToBeMatched.put(user,location);
+        if (!usersLookingToBeMatched.containsKey(user)) {
+            usersLookingToBeMatched.put(user, location);
         }
     }
 
@@ -29,84 +29,61 @@ public class MatchingServiceImplementation implements MatchingService, Runnable{
     @Override
     public void matchUsers() {
         //locations -> gbg -> users
-        Map<String,List<User>> match = new HashMap<>();
+        Map<String, List<User>> match = new HashMap<>();
         List<String> locationsOccurrences = new ArrayList<>();
 
         Iterator iterator = usersLookingToBeMatched.entrySet().iterator();
 
         //collecting locations UNIQUE values
-        while (iterator.hasNext()){
-            Map.Entry set = (Map.Entry)iterator.next();
-            final String location = (String)set.getValue();
+        while (iterator.hasNext()) {
+            Map.Entry set = (Map.Entry) iterator.next();
+            final String location = (String) set.getValue();
             if (!locationsOccurrences.contains(location)) {
                 locationsOccurrences.add(location);
-                System.out.println(location + " är tillagd!");
             }
         }
 
-        System.out.println(locationsOccurrences);
-
-        for (String location:locationsOccurrences) {
-            System.out.println("Går igenom " + location);
-            List <Object> usersAtThatSpecificLocation;
-            usersAtThatSpecificLocation = Arrays.asList(usersLookingToBeMatched.entrySet().stream().filter(s->s.getValue().equals(location)).toArray());
-            usersAtThatSpecificLocation.stream().forEach(System.out::println);
-
-
-            System.out.println(usersAtThatSpecificLocation.getClass());
-
-            System.out.println("AAAAAA");
-            System.out.println(usersAtThatSpecificLocation.get(0) + "\t" + usersAtThatSpecificLocation.get(0).getClass().getSimpleName());
-
-
-
-
-            // iterator2 = hits.entrySet().iterator();
-            List<User> matchingUsers = new ArrayList<>();
-            User u = HashMap.entry(usersAtThatSpecificLocation.get(0)).getValue();
-
-            //while (iterator2.hasNext())
-            {
-                //Map.Entry set = (Map.Entry)iterator2.next();
-                //matchingUsers.add((User) set.getValue());
+        locationAndUsers = new HashMap<>();
+        for (String location : locationsOccurrences) {
+            usersAtThatSpecificLocation = usersLookingToBeMatched.entrySet().stream().filter(s -> s.getValue().equals(location)).collect(Collectors.toList());
+//            for (int k = 0; k < location.length())
+            for (int i = 0; i < locationsOccurrences.size(); i++) {
+                ArrayList<User> userino = new ArrayList<>();
+                for (int j = 0; j < usersAtThatSpecificLocation.size(); j++) {
+                    if (usersAtThatSpecificLocation.get(j).getValue().equals(locationsOccurrences.get(i))) {
+                        userino.add(usersAtThatSpecificLocation.get(j).getKey());
+                    }
+                    if (usersAtThatSpecificLocation.get(j).getValue().equals(locationsOccurrences.get(i))) {
+                        locationAndUsers.put(locationsOccurrences.get(i), userino);
+                    }
+                }
             }
-
-            System.out.println("\nSamlat värden i denna");
-            System.out.println(matchingUsers);
-            System.out.println("\n");
-            match.put(location,matchingUsers);
-            System.out.println("----");
         }
-
-        //Erik Göteborg
-        // Erik
-
-
-
-       /* for (int i = 0; i < usersLookingToBeMatched.entrySet().size(); i++)
-        {
-            while (iterator.hasNext()){
-                Map.Entry set =
-            }
-        }*/
-
+        System.out.println("\n=======================================================================================\n");
+        System.out.println();
+        System.out.println("HashMap<String, ArrayList<User> :" + locationAndUsers);
+        System.out.println("\n=======================================================================================\n");
+        System.out.println("HashMap.get(\"Göteborg\") : " + locationAndUsers.get("Göteborg"));
+        System.out.println("\n=======================================================================================\n");
+        System.out.println("HashMap.get(\"Stockholm\") : " + locationAndUsers.get("Stockholm"));
+        System.out.println();
+        System.out.println("\n=======================================================================================\n");
     }
 
-    public static boolean match(GpsCoordinates playerA, GpsCoordinates playerB){
+    public static boolean match(GpsCoordinates playerA, GpsCoordinates playerB) {
         final double range = 1; // +- 0.1 corresponds to approx 10 km radius in Sweden
 
-        return (isWithinInterval(playerA.getLongitude(),playerB.getLongitude()-range, playerB.getLongitude()+range) &&
-                isWithinInterval(playerA.getLatitude(), playerB.getLatitude()-range, playerB.getLatitude()+range) &&
-                isWithinInterval(playerB.getLatitude(),playerA.getLatitude()-range,playerA.getLatitude()+range) &&
-                isWithinInterval(playerB.getLongitude(),playerA.getLongitude()-range,playerA.getLongitude()+range));
+        return (isWithinInterval(playerA.getLongitude(), playerB.getLongitude() - range, playerB.getLongitude() + range) &&
+                isWithinInterval(playerA.getLatitude(), playerB.getLatitude() - range, playerB.getLatitude() + range) &&
+                isWithinInterval(playerB.getLatitude(), playerA.getLatitude() - range, playerA.getLatitude() + range) &&
+                isWithinInterval(playerB.getLongitude(), playerA.getLongitude() - range, playerA.getLongitude() + range));
 
     }
 
     /**
      * Check if a value i within an interval
-     *
-     * */
-    public static boolean isWithinInterval(double valueToCheck, double minvalue, double maxvalue){
+     */
+    public static boolean isWithinInterval(double valueToCheck, double minvalue, double maxvalue) {
         return valueToCheck >= minvalue && valueToCheck <= maxvalue;
     }
 
