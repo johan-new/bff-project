@@ -44,15 +44,26 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
 
         locationAndUsers = new HashMap<>();
 
+//        for (String location : locationsOccurrences) {
+//            usersAtThatSpecificLocation = usersLookingToBeMatched.entrySet().stream().filter(s -> s.getValue().equals(location)).collect(Collectors.toList());
+//            for (String locationsOccurrence : locationsOccurrences) {
+//                ArrayList<User> userino = new ArrayList<>();
+//                for (Map.Entry<User, String> userStringEntry : usersAtThatSpecificLocation) {
+//                    if (userStringEntry.getValue().equals(locationsOccurrence)) {
+//                        userino.add(userStringEntry.getKey());
+//                        locationAndUsers.put(locationsOccurrence, userino);
+//                    }
+//                }
+//            }
+//        }
         for (String location : locationsOccurrences) {
             usersAtThatSpecificLocation = usersLookingToBeMatched.entrySet().stream().filter(s -> s.getValue().equals(location)).collect(Collectors.toList());
-            for (String locationsOccurrence : locationsOccurrences) {
-                ArrayList<User> userino = new ArrayList<>();
-                for (Map.Entry<User, String> userStringEntry : usersAtThatSpecificLocation) {
-                    if (userStringEntry.getValue().equals(locationsOccurrence)) {
-                        userino.add(userStringEntry.getKey());
-                        locationAndUsers.put(locationsOccurrence, userino);
-                    }
+            ArrayList<User> userino = new ArrayList<>();
+
+            for (Map.Entry<User, String> userStringEntry : usersAtThatSpecificLocation) {
+                if (userStringEntry.getValue().equals(location)) {
+                    userino.add(userStringEntry.getKey());
+                    locationAndUsers.put(location, userino);
                 }
             }
         }
