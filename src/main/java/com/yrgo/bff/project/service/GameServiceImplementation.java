@@ -15,6 +15,15 @@ public class GameServiceImplementation implements GameService {
     @Autowired
     GameDataAccess gameDataAccess;
 
+    /**
+     * Creates a Game and persists it in the database
+     *
+     * @param when - Date when of the Game you want to create
+     * @param venue - String of the Game you want to create
+     * @param users - Set of <Users> for the Game you want to create
+     * @return An instance of Game
+     *
+     * */
     @Override
     public Game createGame(Date when, String venue, Set<User> users) {
         Game game = new Game(when, venue, users);
@@ -22,6 +31,13 @@ public class GameServiceImplementation implements GameService {
         return game;
     }
 
+    /**
+     * Removes a Game from the database
+     *
+     * @param game_id - Long game_id of the Game you want to delete
+     * @return An instance of Game that was deleted
+     *
+     * */
     @Override
     public Game removeGame(Long game_id) {
         Game game = gameDataAccess.findById(game_id).get();
@@ -29,6 +45,14 @@ public class GameServiceImplementation implements GameService {
         return game;
     }
 
+    /**
+     * Updates a Game by removing a Game and creating a new Game and then
+     * persists it in the database
+     *
+     * @param game_id - Long of the game you want to update
+     * @return An instance of Game that was updated
+     *
+     * */
     @Override
     public Game updateGame(Long game_id, Game game) {
         removeGame(game_id);
@@ -36,6 +60,12 @@ public class GameServiceImplementation implements GameService {
         return game;
     }
 
+    /**
+     * Fetches a game from database
+     *
+     * @return a game_id of the Game
+     *
+     * */
     @Override
     public Game readGame(Long game_id) {
         return gameDataAccess.findById(game_id).get();

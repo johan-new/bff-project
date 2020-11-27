@@ -62,12 +62,12 @@ public class UserAccountServiceImplementation implements UserAccountService {
         return user;
     }
 
-    /**
-     * Searches for a user in the database
-     *
-     * @param username - String username of the user you want to find
-     * @param password - String password of the user you want to find
-     * @return An instance of User that was found
+     /**
+     *      * Searches for a user in the database
+     *      *
+     *      * @param username - String username of the user you want to find
+     *      * @param password - String password of the user you want to find
+     *      * @return Aninstance of User that was found
      *
      * */
     @Override
