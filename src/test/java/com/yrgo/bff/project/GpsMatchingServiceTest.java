@@ -4,43 +4,84 @@ import com.yrgo.bff.project.domain.GpsCoordinates;
 import com.yrgo.bff.project.domain.User;
 import com.yrgo.bff.project.service.MatchingService;
 import com.yrgo.bff.project.service.MatchingServiceImplementation;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GpsMatchingServiceTest {
 
-    @Test
-    void testMatching(){
-        User user1 = new User("Abraham","Lincoln");
-        User user2 = new User("Noel","Noelsson");
-        User user3 = new User("Bengt","Bengan");
-        User user4 = new User("Glenn","Glennsson");
-        User user5 = new User("Åke","Åkesson");
-        User user6 = new User("Sven","Svensson");
-        String location = "Stockholm";
-        String location2 = "Göteborg";
+    private MatchingService matchingService;
+    private User user1;
+    private User user2;
+    private User user3;
+    private User user4;
+    private User user5;
+    private User user6;
+    private String location = "Stockholm";
+    private String location2 = "Göteborg";
+    private Map<User, String> usersLookingToBeMatched;
 
-        MatchingService matchingService = new MatchingServiceImplementation();
-        matchingService.addUserMatchRequest(user1,location);
-        matchingService.addUserMatchRequest(user2,location);
-        matchingService.addUserMatchRequest(user3,location2);
+    @BeforeEach
+    void init() {
+        user1 = new User("Abraham", "Lincoln");
+        user2 = new User("Noel", "Noelsson");
+        user3 = new User("Bengt", "Bengan");
+        user4 = new User("Glenn", "Glennsson");
+        user5 = new User("Åke", "Åkesson");
+        user6 = new User("Sven", "Svensson");
+        location = "Stockholm";
+        location2 = "Göteborg";
+        usersLookingToBeMatched = new HashMap<>();
+
+        matchingService = new MatchingServiceImplementation();
+        matchingService.addUserMatchRequest(user1, location);
+        matchingService.addUserMatchRequest(user2, location);
+        matchingService.addUserMatchRequest(user3, location2);
         matchingService.addUserMatchRequest(user4, location2);
         matchingService.addUserMatchRequest(user5, location2);
         matchingService.addUserMatchRequest(user6, location2);
 
+
+    }
+
+    @Test
+    void testAddUserMatchRequest() {
+
+        usersLookingToBeMatched.put(user1, location);
+        assertFalse(usersLookingToBeMatched.containsValue("Göteborg"));
+        assertTrue(usersLookingToBeMatched.containsValue("Stockholm"));
+        // Lägger till samma user, ska ej läggas till i HashMapen.
+        usersLookingToBeMatched.put(user1, location2);
+        assertEquals(usersLookingToBeMatched.size(), 1);
+    }
+
+    @Test
+    void testRemoveUserMatchRequest() {
+        usersLookingToBeMatched.put(user2, location2);
+        assertEquals(usersLookingToBeMatched.size(), 1);
+
+        usersLookingToBeMatched.remove(user2);
+        assertEquals(usersLookingToBeMatched.size(), 0);
+    }
+
+    @Test
+    void testMatching() {
         matchingService.matchUsers();
+        assertTrue();
     }
 
     @Test
-    void testIntervalCheck(){
-        assertTrue(MatchingServiceImplementation.isWithinInterval(0.9,0.8,1.0));
-        assertFalse(MatchingServiceImplementation.isWithinInterval(8,9,10));
+    void testIntervalCheck() {
+        assertTrue(MatchingServiceImplementation.isWithinInterval(0.9, 0.8, 1.0));
+        assertFalse(MatchingServiceImplementation.isWithinInterval(8, 9, 10));
     }
 
     @Test
-    void testMatchingService(){
+    void testMatchingService() {
         //same spot, Gothenburg
         assertTrue(MatchingServiceImplementation.match(new GpsCoordinates(57.708870, 11.974560), new GpsCoordinates(57.708870, 11.974560)));
 
