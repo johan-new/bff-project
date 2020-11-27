@@ -1,6 +1,7 @@
 package com.yrgo.bff.project;
 
 import com.yrgo.bff.project.domain.GpsCoordinates;
+import com.yrgo.bff.project.domain.User;
 import com.yrgo.bff.project.service.MatchingService;
 import com.yrgo.bff.project.service.MatchingServiceImplementation;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,18 @@ public class GpsMatchingServiceTest {
 
     @Test
     void testMatching(){
-        MatchingService matchingService =
+        User user1 = new User("Abraham","Bengtsoon");
+        User user2 = new User("Noel","Jul");
+        User user3 = new User("Bengt","Jul");
+        String location = "Stockholm";
+        String location2 = "Göteborg";
+
+        MatchingService matchingService = new MatchingServiceImplementation();
+        matchingService.addUserMatchRequest(user1,location);
+        matchingService.addUserMatchRequest(user2,location);
+        matchingService.addUserMatchRequest(user3,location2);
+
+        matchingService.matchUsers();
     }
 
     @Test

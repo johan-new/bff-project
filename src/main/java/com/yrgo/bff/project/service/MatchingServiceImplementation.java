@@ -3,6 +3,7 @@ package com.yrgo.bff.project.service;
 import com.yrgo.bff.project.domain.GpsCoordinates;
 import com.yrgo.bff.project.domain.User;
 
+import javax.swing.text.html.HTMLDocument;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,20 +34,48 @@ public class MatchingServiceImplementation implements MatchingService, Runnable{
 
         Iterator iterator = usersLookingToBeMatched.entrySet().iterator();
 
+        //collecting locations UNIQUE values
         while (iterator.hasNext()){
             Map.Entry set = (Map.Entry)iterator.next();
             final String location = (String)set.getValue();
             if (!locationsOccurrences.contains(location)) {
                 locationsOccurrences.add(location);
+                System.out.println(location + " är tillagd!");
             }
-            System.out.println(location + " är tillagd!");
         }
 
+        System.out.println(locationsOccurrences);
+
         for (String location:locationsOccurrences) {
+            System.out.println("Går igenom " + location);
             List <Object> usersAtThatSpecificLocation;
             usersAtThatSpecificLocation = Arrays.asList(usersLookingToBeMatched.entrySet().stream().filter(s->s.getValue().equals(location)).toArray());
-
             usersAtThatSpecificLocation.stream().forEach(System.out::println);
+
+
+            System.out.println(usersAtThatSpecificLocation.getClass());
+
+            System.out.println("AAAAAA");
+            System.out.println(usersAtThatSpecificLocation.get(0) + "\t" + usersAtThatSpecificLocation.get(0).getClass().getSimpleName());
+
+
+
+
+            // iterator2 = hits.entrySet().iterator();
+            List<User> matchingUsers = new ArrayList<>();
+            User u = HashMap.entry(usersAtThatSpecificLocation.get(0)).getValue();
+
+            //while (iterator2.hasNext())
+            {
+                //Map.Entry set = (Map.Entry)iterator2.next();
+                //matchingUsers.add((User) set.getValue());
+            }
+
+            System.out.println("\nSamlat värden i denna");
+            System.out.println(matchingUsers);
+            System.out.println("\n");
+            match.put(location,matchingUsers);
+            System.out.println("----");
         }
 
         //Erik Göteborg
