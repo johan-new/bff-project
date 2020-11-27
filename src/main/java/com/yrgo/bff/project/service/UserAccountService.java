@@ -9,6 +9,7 @@ public interface UserAccountService {
     User removeUser(String username, String password);
     User updateUser(String username, String password, String newPassword);
     User readUser(String username, String password);
+    User readUser(String username);
 
     Set<User> findAll();
 }

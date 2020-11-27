@@ -21,8 +21,7 @@ public class UserAccountServiceImplementation implements UserAccountService {
      * @param username - String username of the user you want to create
      * @param password - String password of the user you want to create
      * @return An instance of User
-     *
-     * */
+     */
     @Override
     public User createUser(String username, String password) {
         User user = new User(username, password);
@@ -36,8 +35,7 @@ public class UserAccountServiceImplementation implements UserAccountService {
      * @param username - String username of the user you want to remove
      * @param password - String password of the user you want to remove
      * @return An instance of User that was deleted
-     *
-     * */
+     */
     @Override
     public User removeUser(String username, String password) {
         User user = userAccountDataAccess.findByUserName(username);
@@ -48,12 +46,11 @@ public class UserAccountServiceImplementation implements UserAccountService {
     /**
      * Updates a user with a new password and persists it in the database
      *
-     * @param username - String of the user you want to update
-     * @param password - String of the user you want to update
+     * @param username    - String of the user you want to update
+     * @param password    - String of the user you want to update
      * @param newPassword - String of the new password
      * @return An instance of User that was updated
-     *
-     * */
+     */
     @Override
     public User updateUser(String username, String password, String newPassword) {
         User user = userAccountDataAccess.findByUserName(username);
@@ -68,10 +65,20 @@ public class UserAccountServiceImplementation implements UserAccountService {
      * @param username - String username of the user you want to find
      * @param password - String password of the user you want to find
      * @return An instance of User that was found
-     *
-     * */
+     */
     @Override
     public User readUser(String username, String password) {
+        return userAccountDataAccess.findByUserName(username);
+    }
+
+    /**
+     * Searches for a user in the database
+     *
+     * @param username - String username of the user you want to find
+     * @return An instance of User that was found
+     */
+    @Override
+    public User readUser(String username) {
         return userAccountDataAccess.findByUserName(username);
     }
 
@@ -79,8 +86,7 @@ public class UserAccountServiceImplementation implements UserAccountService {
      * Fetches all users from database
      *
      * @return a Set of User
-     *
-     * */
+     */
     @Override
     public Set<User> findAll() {
         Set<User> users = new HashSet<User>();
