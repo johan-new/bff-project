@@ -1,5 +1,7 @@
 package com.yrgo.bff.project.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -9,11 +11,15 @@ import java.util.Set;
 @Entity
 public class User {
 
-    @ManyToMany (mappedBy = "participants")
+    //jsonignore due to infinite recursion otherwise when creating json object
+    @ManyToMany (mappedBy = "participants") @JsonIgnore
     Set<Game> previousGames;
 
     @Id
     private String userName;
+
+    //this should never be serialized by the web layer
+    @JsonIgnore
     private String password;
 
     public User(String userName, String password) {

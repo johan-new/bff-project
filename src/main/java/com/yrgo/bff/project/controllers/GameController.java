@@ -1,12 +1,11 @@
 package com.yrgo.bff.project.controllers;
 
+import com.yrgo.bff.project.domain.Game;
 import com.yrgo.bff.project.domain.User;
 import com.yrgo.bff.project.service.GameService;
 import com.yrgo.bff.project.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -38,4 +37,10 @@ public class GameController {
         }
         gameService.createGame(new Date(), venue, playersSet);
     }
+
+    @GetMapping(value = "/game/{gameId}")
+    Game readGame(@PathVariable("gameId") String gameId){
+        return gameService.readGame(Long.parseLong(gameId));
+    }
+
 }
