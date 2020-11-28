@@ -2,6 +2,7 @@ package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.User;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +24,16 @@ public class UserAccountServiceImplementation implements UserAccountService {
      * @return An instance of User
      */
     @Override
-    public User createUser(String username, String password) {
+    public User createUser(final String username, String password) {
+        password = hashThis(password);
         User user = new User(username, password);
+        System.out.println("Created user with password " + password);
         userAccountDataAccess.save(user);
         return user;
+    }
+
+    public static String hashThis(String password){
+        return new DigestUtils("SHA3-256").digestAsHex(password);
     }
 
     /**
