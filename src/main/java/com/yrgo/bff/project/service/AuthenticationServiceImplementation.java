@@ -28,6 +28,12 @@ public class AuthenticationServiceImplementation implements AuthenticationServic
     @Override
     public boolean authenticationSuccess(String username, String password) {
         User user = userAccountDataAccess.findByUserName(username);
+        password = hashThis(password);
         return user.getPassword().equals(password);
     }
+
+    protected static String hashThis(String password){
+        return new DigestUtils("SHA3-256").digestAsHex(password);
+    }
+
 }
