@@ -10,7 +10,6 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
 
     private Map<User, String> usersLookingToBeMatched = new HashMap<>();
     private List<Map.Entry<User, String>> usersAtThatSpecificLocation;
-    private Map<String, ArrayList<User>> locationAndUsers;
 
     private boolean interrupt = false;
 
@@ -26,13 +25,30 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
         usersLookingToBeMatched.remove(user);
     }
 
+    // TODO: Facade pattern???
     @Override
     public void matchUsers() {
-        //locations -> gbg -> users
+        Map<String, ArrayList<User>>  matchingUsers = categorizeUsersByVenue();
+        //sortOutSingles();
+        notifyUsersThatMatch(matchingUsers);
+    }
+
+
+    private void notifyUsersThatMatch(Map<String, ArrayList<User>> matchingUsers) {
+        Iterator iterator = matchingUsers.entrySet().iterator();
+        while (iterator.hasNext()){
+            Map.Entry set = (Map.Entry) iterator.next();
+            for (User u: (ArrayList<User>)set.getValue() ) {
+                u.notifyUser(set.getValue().toString());
+                removeUserMatchRequest(u);
+            }
+        }
+    }
+
+    public Map<String, ArrayList<User>>  categorizeUsersByVenue() {
+        //getting unique venue values
         List<String> locationsOccurrences = new ArrayList<>();
-
         Iterator iterator = usersLookingToBeMatched.entrySet().iterator();
-
         //collecting locations UNIQUE values
         while (iterator.hasNext()) {
             Map.Entry set = (Map.Entry) iterator.next();
@@ -42,28 +58,21 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
             }
         }
 
-        locationAndUsers = new HashMap<>();
 
+        Map<String, ArrayList<User>> locationAndUsers = new HashMap<>();
         for (String location : locationsOccurrences) {
             usersAtThatSpecificLocation = usersLookingToBeMatched.entrySet().stream().filter(s -> s.getValue().equals(location)).collect(Collectors.toList());
-            ArrayList<User> userino = new ArrayList<>();
-
+            ArrayList<User> usersAtSpecificVenue = new ArrayList<>();
+            //building a list of users at every unique venue
             for (Map.Entry<User, String> userStringEntry : usersAtThatSpecificLocation) {
                 if (userStringEntry.getValue().equals(location)) {
-                    userino.add(userStringEntry.getKey());
-                    locationAndUsers.put(location, userino);
+                    usersAtSpecificVenue.add(userStringEntry.getKey());
+                    locationAndUsers.put(location, usersAtSpecificVenue);
                 }
             }
         }
-        System.out.println("\n=======================================================================================\n");
-        System.out.println();
-        System.out.println("HashMap<String, ArrayList<User> :" + locationAndUsers);
-        System.out.println("\n=======================================================================================\n");
-        System.out.println("HashMap.get(\"Göteborg\") : " + locationAndUsers.get("Göteborg"));
-        System.out.println("\n=======================================================================================\n");
-        System.out.println("HashMap.get(\"Stockholm\") : " + locationAndUsers.get("Stockholm"));
-        System.out.println();
-        System.out.println("\n=======================================================================================\n");
+
+        return locationAndUsers;
     }
 
     public static boolean match(GpsCoordinates playerA, GpsCoordinates playerB) {

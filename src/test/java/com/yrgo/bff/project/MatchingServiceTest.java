@@ -12,7 +12,8 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GpsMatchingServiceTest {
+
+public class MatchingServiceTest {
 
     private MatchingService matchingService;
     private User user1;

@@ -58,8 +58,8 @@ public class User {
                 '}';
     }
 
-    void notfifyUser(String msg){
-        //TODO: Meddela användare
+    public void notifyUser(String msg){
+        System.out.println("USER MATCHED FOR "+ this.userName + "\n" + msg);
     }
 
     @Override

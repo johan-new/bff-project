@@ -64,9 +64,9 @@ public class CtrlrTest {
     }
 
 
-    @Test
+    /*@Test
     public void getMappingReadUser()  throws Exception {
 
         MockHttpServletResponse response = mvc.perform(getMappingReadUser("/user/name=ereko&password=password"));
-    }
+    }*/
 }
