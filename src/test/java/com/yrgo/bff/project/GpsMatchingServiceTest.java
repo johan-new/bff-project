@@ -71,7 +71,7 @@ public class GpsMatchingServiceTest {
     @Test
     void testMatching() {
         matchingService.matchUsers();
-        assertTrue();
+        // Fill in with test here
     }
 
     @Test
