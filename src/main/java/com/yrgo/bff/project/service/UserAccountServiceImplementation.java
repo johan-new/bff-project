@@ -25,15 +25,11 @@ public class UserAccountServiceImplementation implements UserAccountService {
      */
     @Override
     public User createUser(final String username, String password) {
-        password = hashThis(password);
+        password = AuthenticationServiceImplementation.hashThis(password);
         User user = new User(username, password);
         System.out.println("Created user with password " + password);
         userAccountDataAccess.save(user);
         return user;
-    }
-
-    public static String hashThis(String password){
-        return new DigestUtils("SHA3-256").digestAsHex(password);
     }
 
     /**

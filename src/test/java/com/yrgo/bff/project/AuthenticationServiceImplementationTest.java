@@ -27,10 +27,10 @@ public class AuthenticationServiceImplementationTest {
     void testAuthenticationSuccess(){
         final String username = "bill@microsoft.com";
         final String password = "Melinda";
-        final String hashedPassword = UserAccountServiceImplementation.hashThis(password);
+        final String wrongPasword = "Belinda";
 
         userAccountService.createUser(username,password);
-        assertFalse(authenticationService.authenticationSuccess(username,password));
-        assertTrue(authenticationService.authenticationSuccess(username,hashedPassword));
+        assertTrue(authenticationService.authenticationSuccess(username,password));
+        assertFalse(authenticationService.authenticationSuccess(username,wrongPasword));
     }
 }
