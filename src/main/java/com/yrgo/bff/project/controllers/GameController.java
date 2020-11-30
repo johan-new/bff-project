@@ -23,7 +23,29 @@ public class GameController {
     @PostMapping(value = "/game")
         //i.e. POST "http://localhost:8080/game?players=Johan,Erik,Simon,Greven&venue=Gbg"
     void createGame(@RequestParam("players") String[] players, @RequestParam("venue") String venue/*, User organizedBy, String password*/) throws Exception {
-        //TODO: Authenticate and use custom exception
+        //TODO: Authenticate and use custom exception, check max players 4
+        gameService.createGame(new Date(), venue, stringArrayToSet(players));
+    }
+
+    @GetMapping(value = "/game/{gameId}")
+    Game readGame(@PathVariable("gameId") String gameId){
+        return gameService.readGame(Long.parseLong(gameId));
+    }
+
+    @PutMapping(value = "/game/{gameId}")
+    void updateGame(@PathVariable("gameId") String gameId, @RequestParam("newPlayers") String[] newPlayers) throws Exception {
+        //TODO: Ability to change date?
+        Game game = gameService.readGame(Long.parseLong(gameId));
+        gameService.removeGame(Long.parseLong(gameId));
+        gameService.createGame(game.getWhen(),game.getVenue(),stringArrayToSet(newPlayers));
+    }
+
+    @DeleteMapping(value = "/game/{gameId}")
+    void deleteGame(@PathVariable("gameId") String gameId){
+        gameService.removeGame(Long.parseLong(gameId));
+    }
+
+    private Set<User> stringArrayToSet(String[] players) throws Exception {
         Set<User> playersSet = new HashSet<>();
 
         for (String username:players) {
@@ -35,12 +57,8 @@ public class GameController {
                 System.out.println("Adding " + username + "to game");
             }
         }
-        gameService.createGame(new Date(), venue, playersSet);
-    }
 
-    @GetMapping(value = "/game/{gameId}")
-    Game readGame(@PathVariable("gameId") String gameId){
-        return gameService.readGame(Long.parseLong(gameId));
+        return playersSet;
     }
 
 }
