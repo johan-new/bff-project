@@ -2,10 +2,12 @@ package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.domain.GpsCoordinates;
 import com.yrgo.bff.project.domain.User;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class MatchingServiceImplementation implements MatchingService, Runnable {
 
     private Map<User, String> usersLookingToBeMatched = new HashMap<>();
