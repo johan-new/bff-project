@@ -7,6 +7,7 @@ import com.yrgo.bff.project.service.MatchingServiceImplementation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ public class MatchingServiceTest {
     private String location = "Stockholm";
     private String location2 = "Göteborg";
     private Map<User, String> usersLookingToBeMatched;
+
 
     @BeforeEach
     void init() {
@@ -46,12 +48,28 @@ public class MatchingServiceTest {
         matchingService.addUserMatchRequest(user5, location2);
         matchingService.addUserMatchRequest(user6, location2);
 
+    }
 
+    @Test
+    public void testCategorizeUsersByVenue() {
+        MatchingServiceImplementation matchingServiceImplementation = new MatchingServiceImplementation();
+
+        User userTest1 = new User("Hej", "svej");
+        User userTest2 = new User("Hejdå", "re");
+        String loc = "GBG";
+
+        matchingServiceImplementation.addUserMatchRequest(userTest1, loc);
+        matchingServiceImplementation.addUserMatchRequest(userTest2, loc);
+
+        Map<String, ArrayList<User>> locationAndUsers = new HashMap<>();
+        locationAndUsers = matchingServiceImplementation.categorizeUsersByVenue();
+
+        assertEquals(locationAndUsers.size(), 1);
+        assertTrue(locationAndUsers.containsKey("GBG"));
     }
 
     @Test
     void testAddUserMatchRequest() {
-
         usersLookingToBeMatched.put(user1, location);
         assertFalse(usersLookingToBeMatched.containsValue("Göteborg"));
         assertTrue(usersLookingToBeMatched.containsValue("Stockholm"));

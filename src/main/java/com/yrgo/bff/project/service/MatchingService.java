@@ -6,4 +6,5 @@ public interface MatchingService {
     void addUserMatchRequest(User user, String location);
     void removeUserMatchRequest(User user);
     void matchUsers();
+
 }
