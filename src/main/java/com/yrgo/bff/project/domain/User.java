@@ -19,7 +19,7 @@ public class User {
     private String userName;
 
     //this should never be serialized by the web layer
-    @JsonIgnore
+//    @JsonIgnore
     private String password;
 
     public User(String userName, String password) {

@@ -15,5 +15,7 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.4.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.4.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:2.4.1" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.11.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.11.3" level="project" />
   </component>
 </module>
