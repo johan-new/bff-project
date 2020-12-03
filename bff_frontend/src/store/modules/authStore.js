@@ -8,27 +8,27 @@ const state = {
 const getters = {
 
 }
-const proxyurl = 'https://cors-anywhere.herokuapp.com/'
+var headers = {
+  'Content-Type': 'application/json'
+}
 
 const actions = {
-  addUser (context, email, password) {
-    axios.post(proxyurl + 'http://localhost:8080/user', {
-      name: email,
-      password: password
-    })
-      .then(data => {
+  addUser (context, { name, password }) {
+    axios.post('http://localhost:8080/user?name=' + name + '&password=' + password, { headers: headers })
+      .then((data) => {
         console.log(data.data)
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error.response)
+        console.log(error)
       })
       //  context.commit('addUser', email, password)
   }
 }
 const mutations = {
-  addUser (state, email, password) {
-    state.email = email
-    state.password = password
+  addUser (state, payload) {
+    state.email = payload.email
+    state.password = payload.password
   }
 }
 export default {
