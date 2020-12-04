@@ -12,15 +12,21 @@ var headers = {
   'Content-Type': 'application/json'
 }
 
+/*
+DETTA NEDAN FUNKAR, MEN EJ ATT SKICKA SOM JSON, NGT ÄR FEL PÅ SERVERN!!!
+*/
+
 const actions = {
   addUser (context, { name, password }) {
-    axios.post('http://localhost:8080/user?name=' + name + '&password=' + password, { headers: headers })
-      .then((data) => {
+    axios.post('http://localhost:8080/user', {
+      userName: name,
+      password: password
+    }, { headers: headers })
+      .then(data => {
         console.log(data.data)
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error.response)
-        console.log(error)
       })
       //  context.commit('addUser', email, password)
   }

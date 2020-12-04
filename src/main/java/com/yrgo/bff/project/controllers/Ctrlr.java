@@ -18,9 +18,6 @@ public class Ctrlr {
             "content-type=application/json"
     }, consumes =  MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
     void createUser(@RequestBody User user) {
-        System.out.println(user.getUserName() + "========================================================================n");
-        System.out.println(user.getPassword() + "========================================================================n");
-        System.out.println(user + "========================================================================n");
         userAccountService.createUser(user.getUserName(), user.getPassword());
     }
 
