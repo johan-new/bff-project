@@ -4,7 +4,7 @@ const state = {
   email: '',
   password: 'password',
   test: 'My state!',
-  location: ''
+  location: 'location'
 }
 const getters = {
 
@@ -33,6 +33,7 @@ const actions = {
     }, { headers: headers })
       .then(data => {
         console.log(data.data)
+        context.commit('SET_LOCATION', location)
       })
       .catch(error => {
         console.log(error.response)
@@ -40,13 +41,11 @@ const actions = {
   }
 }
 const mutations = {
-  addUser (state, payload) {
-    state.email = payload.name
-    state.password = payload.password
-  },
-  matchUser (state, payload) {
-    state.email = payload
+  SET_LOCATION (state, payload) {
     state.location = payload
+  },
+  addUser (state, payload) {
+    state.email = payload
   }
 }
 export default {
