@@ -23,7 +23,7 @@ public class MatchController {
         User u1 = new User("erik@mail.com", "pw");
         User u2 = new User("simon@mail.com", "pw");
         User u3 = new User("Johan@mail.com", "pw");
-        
+
     }
 
     @CrossOrigin
