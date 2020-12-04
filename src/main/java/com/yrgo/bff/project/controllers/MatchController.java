@@ -16,13 +16,6 @@ public class MatchController {
     @Autowired
     UserAccountService userAccountService;
 
-//    @CrossOrigin
-//    @RequestMapping( value="/user", headers = {
-//            "content-type=application/json"
-//    }, consumes =  MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-//    void createUser(@RequestBody User user) {
-//        userAccountService.createUser(user.getUserName(), user.getPassword());
-//    }
     @CrossOrigin
     @RequestMapping(value = "/match", headers = {
             "content-type=application/json"}, consumes =  MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
