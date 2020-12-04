@@ -4,6 +4,8 @@ import com.yrgo.bff.project.domain.User;
 import com.yrgo.bff.project.service.MatchingService;
 import com.yrgo.bff.project.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,14 @@ public class MatchController {
 
     @Autowired
     UserAccountService userAccountService;
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void doSomethingAfterStartup() {
+        User u1 = new User("erik@mail.com", "pw");
+        User u2 = new User("simon@mail.com", "pw");
+        User u3 = new User("Johan@mail.com", "pw");
+        
+    }
 
     @CrossOrigin
     @RequestMapping(value = "/match", headers = {
