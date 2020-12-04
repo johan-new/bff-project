@@ -13,6 +13,7 @@ public class Ctrlr {
     @Autowired
     UserAccountService userAccountService;
 
+    // Denna är ändrad för att fungera mot front-end
     @CrossOrigin
     @RequestMapping( value="/user", headers = {
             "content-type=application/json"

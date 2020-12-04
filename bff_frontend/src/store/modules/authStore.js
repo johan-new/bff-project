@@ -1,9 +1,10 @@
 import axios from 'axios'
 
 const state = {
-  email: 'email',
+  email: '',
   password: 'password',
-  test: 'My state!'
+  test: 'My state!',
+  location: ''
 }
 const getters = {
 
@@ -11,10 +12,6 @@ const getters = {
 var headers = {
   'Content-Type': 'application/json'
 }
-
-/*
-DETTA NEDAN FUNKAR, MEN EJ ATT SKICKA SOM JSON, NGT ÄR FEL PÅ SERVERN!!!
-*/
 
 const actions = {
   addUser (context, { name, password }) {
@@ -29,12 +26,27 @@ const actions = {
         console.log(error.response)
       })
       //  context.commit('addUser', email, password)
+  },
+  matchUser (context, { location }) {
+    axios.post('http://localhost:8080//match', {
+      location: location
+    }, { headers: headers })
+      .then(data => {
+        console.log(data.data)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
   }
 }
 const mutations = {
   addUser (state, payload) {
-    state.email = payload.email
+    state.email = payload.name
     state.password = payload.password
+  },
+  matchUser (state, payload) {
+    state.email = payload
+    state.location = payload
   }
 }
 export default {

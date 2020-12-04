@@ -4,10 +4,8 @@ import com.yrgo.bff.project.domain.User;
 import com.yrgo.bff.project.service.MatchingService;
 import com.yrgo.bff.project.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class MatchController {
@@ -18,10 +16,18 @@ public class MatchController {
     @Autowired
     UserAccountService userAccountService;
 
-
-    @PostMapping(value = "/match/{user}/{location}")
-    public void userWantTobeMatched(@PathVariable("user") String user, @PathVariable("location") String location) throws Exception {
-        User userObject = userAccountService.readUser(user);
+//    @CrossOrigin
+//    @RequestMapping( value="/user", headers = {
+//            "content-type=application/json"
+//    }, consumes =  MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+//    void createUser(@RequestBody User user) {
+//        userAccountService.createUser(user.getUserName(), user.getPassword());
+//    }
+    @CrossOrigin
+    @RequestMapping(value = "/match", headers = {
+            "content-type=application/json"}, consumes =  MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    public void userWantTobeMatched(@RequestBody String location) throws Exception {
+        User userObject = userAccountService.readUser("Erik");
         if (userObject!=null) {
             matchingService.addUserMatchRequest(userObject,location);
         } else {
