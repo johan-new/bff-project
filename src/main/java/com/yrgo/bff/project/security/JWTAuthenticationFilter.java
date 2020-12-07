@@ -21,6 +21,8 @@ import java.util.Date;
 
 import static com.yrgo.bff.project.security.SecurityConstants.EXPIRATION_TIME;
 import static com.yrgo.bff.project.security.SecurityConstants.SECRET;
+import static com.yrgo.bff.project.security.SecurityConstants.TOKEN_PREFIX;
+import static com.yrgo.bff.project.security.SecurityConstants.HEADER_STRING;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -41,7 +43,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            creds.getUserName(),
+                            creds.getUsername(),
                             creds.getPassword(),
                             new ArrayList<>())
             );
@@ -56,16 +58,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
         String token = JWT.create()
-                .withSubject(((User) auth.getPrincipal()).getUserName())
+                .withSubject(((User) auth.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(SECRET.getBytes()));
 
         // https://auth0.com/blog/implementing-jwt-authentication-on-spring-boot/ har nedan, ej Str body och de 2 andra nedan.
-        //res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
+        res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
 
-        String body = ((User) auth.getPrincipal()).getUserName() + " " + token;
-
-        res.getWriter().write(body);
-        res.getWriter().flush();
+//        String body = ((User) auth.getPrincipal()).getUserName() + " " + token;
+//
+//        res.getWriter().write(body);
+//        res.getWriter().flush();
     }
 }

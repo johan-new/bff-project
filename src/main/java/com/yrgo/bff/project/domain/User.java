@@ -16,14 +16,14 @@ public class User {
     Set<Game> previousGames;
 
     @Id
-    private String userName;
+    private String username;
 
     //this should never be serialized by the web layer
 //    @JsonIgnore
     private String password;
 
-    public User(String userName, String password) {
-        this.userName = userName;
+    public User(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 
@@ -38,8 +38,8 @@ public class User {
         this.previousGames = previousGames;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
     public String getPassword() {
@@ -53,13 +53,13 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userName='" + userName + '\'' +
+                "userName='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
 
     public void notifyUser(String msg){
-        System.out.println("USER MATCHED FOR "+ this.userName + "\n" + msg);
+        System.out.println("USER MATCHED FOR "+ this.username + "\n" + msg);
     }
 
     @Override
@@ -67,11 +67,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(userName, user.userName);
+        return Objects.equals(username, user.username);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userName);
+        return Objects.hash(username);
     }
 }

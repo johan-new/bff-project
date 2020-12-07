@@ -5,7 +5,6 @@ import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.Game;
 import com.yrgo.bff.project.domain.User;
 import com.yrgo.bff.project.service.GameServiceImplementation;
-import com.yrgo.bff.project.service.UserAccountService;
 import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.BooleanSupplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,7 +43,7 @@ public class GameServiceImplementationTest {
     @BeforeEach
     private void init() {
         simpassword = new User("Simon", "password");
-        Mockito.when(userAccountDataAccess.findByUserName(simpassword.getUserName())).thenReturn(simpassword);
+        Mockito.when(userAccountDataAccess.findByUsername(simpassword.getUsername())).thenReturn(simpassword);
         Mockito.when(userAccountDataAccess.save(simpassword)).thenReturn(simpassword);
 
         Set<User> users = new HashSet<>();

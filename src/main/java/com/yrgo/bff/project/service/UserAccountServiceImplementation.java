@@ -2,6 +2,7 @@ package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.User;
+import com.yrgo.bff.project.security.UserDetailed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,8 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import static java.util.Collections.emptyList;
-import org.springframework.security.core.userdetails.User;
 
 @Service
 public class UserAccountServiceImplementation implements UserAccountService, UserDetailsService {
@@ -29,7 +28,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      */
     @Override
     public User createUser(final String username, String password) {
-        password = AuthenticationServiceImplementation.hashThis(password);
+//        password = AuthenticationServiceImplementation.hashThis(password);
         User user = new User(username, password);
         System.out.println("Created user with password " + password);
         userAccountDataAccess.save(user);
@@ -45,7 +44,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      */
     @Override
     public User removeUser(String username, String password) {
-        User user = userAccountDataAccess.findByUserName(username);
+        User user = userAccountDataAccess.findByUsername(username);
         userAccountDataAccess.delete(user);
         return user;
     }
@@ -60,7 +59,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      */
     @Override
     public User updateUser(String username, String password, String newPassword) {
-        User user = userAccountDataAccess.findByUserName(username);
+        User user = userAccountDataAccess.findByUsername(username);
         user.setPassword(newPassword);
         userAccountDataAccess.save(user);
         return user;
@@ -75,7 +74,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      */
     @Override
     public User readUser(String username, String password) {
-        return userAccountDataAccess.findByUserName(username);
+        return userAccountDataAccess.findByUsername(username);
     }
 
     /**
@@ -86,7 +85,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      */
     @Override
     public User readUser(String username) {
-        return userAccountDataAccess.findByUserName(username);
+        return userAccountDataAccess.findByUsername(username);
     }
 
     /**
@@ -106,10 +105,12 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userAccountDataAccess.findByUserName(username);
+        User user = userAccountDataAccess.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
-        return new User(user.getUserName(), user.getPassword());
+        UserDetailed ud = new UserDetailed(user);
+        System.out.println(ud.getUsername() + ud.getPassword());
+        return new UserDetailed(user);
     }
 }

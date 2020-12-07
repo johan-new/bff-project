@@ -9,8 +9,8 @@ public interface UserAccountDataAccess extends CrudRepository<User, String> {
      *
      * Automagicly configured dao-method
      *
-     * @param userName - Username of the user you want to find
+     * @param username - Username of the user you want to find
      * @return a user, if found, otherwise null
      * */
-    User findByUserName(String userName);
+    User findByUsername(String username);
 }

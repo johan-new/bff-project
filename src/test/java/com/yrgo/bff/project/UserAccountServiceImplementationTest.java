@@ -32,7 +32,7 @@ public class UserAccountServiceImplementationTest {
     void init() {
 
         erekoPassword = new User("Ereko", "password");
-        Mockito.when(userAccountDataAccess.findByUserName(erekoPassword.getUserName())).thenReturn(erekoPassword);
+        Mockito.when(userAccountDataAccess.findByUsername(erekoPassword.getUsername())).thenReturn(erekoPassword);
         Mockito.when(userAccountDataAccess.save(erekoPassword)).thenReturn(erekoPassword);
 
         //For testMockFindAll
@@ -62,20 +62,20 @@ public class UserAccountServiceImplementationTest {
 
     @Test
     public void testMockCreateUser() {
-        User createdUser = userAccountServiceImplementation.createUser(erekoPassword.getUserName(), erekoPassword.getPassword());
+        User createdUser = userAccountServiceImplementation.createUser(erekoPassword.getUsername(), erekoPassword.getPassword());
         assertEquals(createdUser, erekoPassword);
     }
 
     @Test
     public void testMockRemoveUser() {
-        userAccountServiceImplementation.removeUser(erekoPassword.getUserName(), erekoPassword.getPassword());
+        userAccountServiceImplementation.removeUser(erekoPassword.getUsername(), erekoPassword.getPassword());
         Mockito.verify(userAccountDataAccess, Mockito.times(1)).delete(erekoPassword);
     }
 
     @Test
     public void testMockUpdateUser() {
         String newPassword = "newCoolPassword";
-        userAccountServiceImplementation.updateUser(erekoPassword.getUserName(), erekoPassword.getPassword(), newPassword);
+        userAccountServiceImplementation.updateUser(erekoPassword.getUsername(), erekoPassword.getPassword(), newPassword);
         assertEquals(erekoPassword.getPassword(), newPassword);
     }
 }

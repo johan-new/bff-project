@@ -27,7 +27,7 @@ public class AuthenticationServiceImplementation implements AuthenticationServic
      * */
     @Override
     public boolean authenticationSuccess(String username, String password) {
-        User user = userAccountDataAccess.findByUserName(username);
+        User user = userAccountDataAccess.findByUsername(username);
         password = hashThis(password);
         return user.getPassword().equals(password);
     }

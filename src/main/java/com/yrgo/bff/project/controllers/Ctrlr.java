@@ -3,7 +3,7 @@ package com.yrgo.bff.project.controllers;
 import com.yrgo.bff.project.domain.User;
 import com.yrgo.bff.project.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -12,14 +12,19 @@ public class Ctrlr {
 
     @Autowired
     UserAccountService userAccountService;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    public Ctrlr(UserAccountService userAccountService, BCryptPasswordEncoder bCryptPasswordEncoder)
+    {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userAccountService = userAccountService;
+    }
     // Denna är ändrad för att fungera mot front-end
-    @CrossOrigin
-    @RequestMapping( value="/user", headers = {
-            "content-type=application/json"
-    }, consumes =  MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-    void createUser(@RequestBody User user) {
-        userAccountService.createUser(user.getUserName(), user.getPassword());
+
+    @PostMapping("/user")
+    public void createUser(@RequestBody User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userAccountService.createUser(user.getUsername(), user.getPassword());
     }
 
     @GetMapping("/user")

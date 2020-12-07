@@ -22,8 +22,8 @@ public class UserAccountDataAccessTest {
         User user = new User(username,"password");
         userAccountDataAccess.save(user);
 
-        assertNotNull(userAccountDataAccess.findByUserName(username));
-        assertNull(userAccountDataAccess.findByUserName(username+"asdf"));
+        assertNotNull(userAccountDataAccess.findByUsername(username));
+        assertNull(userAccountDataAccess.findByUsername(username+"asdf"));
 
     }
 
