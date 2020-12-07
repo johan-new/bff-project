@@ -10,7 +10,7 @@ const state = {
   user: {}
 }
 const getters = {
-  isAthenticated: state => !!state.token,
+  isLoggedIn: state => !!state.token,
   authStatus: state => state.status
 }
 
@@ -26,7 +26,6 @@ const actions = {
       .catch(error => {
         console.log(error.response)
       })
-      //  context.commit('addUser', email, password)
   },
   matchUser (context, { location }) {
     axios.post('http://localhost:8080//match', {
@@ -40,32 +39,34 @@ const actions = {
         console.log(error.response)
       })
   },
-  login ({ commit }, user) {
+  login (context, user) {
     return new Promise((resolve, reject) => {
-      commit('auth_request')
-      console.log(user.name)
-      //  axios({ url: 'http://localhost:8080/login', data: { payload }, method: 'POST' })
+      context.commit('auth_request')
       axios.post('http://localhost:8080/login', {
         username: user.name,
         password: user.password
       })
         .then(resp => {
-          console.log(resp.headers)
           const token = resp.headers.authorization
-          const user = resp.data.user
-          console.log(token)
-          console.log(user)
           localStorage.setItem('token', token)
           axios.defaults.headers.common.Authorization = token
-          commit('auth_success', token, user)
+          context.commit('auth_success', token, user)
+          context.commit('SET_USERINFO', user)
           resolve(resp)
         })
         .catch(err => {
-          console.log('Nope!')
-          commit('auth_error')
+          context.commit('auth_error')
           localStorage.removeItem('token')
           reject(err)
         })
+    })
+  },
+  logout (context) {
+    return new Promise((resolve, reject) => {
+      context.commit('logout')
+      localStorage.removeItem('token')
+      delete axios.defaults.headers.common.Authorization
+      resolve()
     })
   }
 }
@@ -73,9 +74,9 @@ const mutations = {
   SET_LOCATION (state, payload) {
     state.location = payload
   },
-  SET_USERINFO (state, name, password) {
-    state.email = name
-    state.password = password
+  SET_USERINFO (state, user) {
+    state.email = user.name
+    state.password = user.password
   },
   addUser (state, payload) {
     state.email = payload
@@ -83,10 +84,9 @@ const mutations = {
   auth_request (state) {
     state.status = 'loading'
   },
-  auth_success (state, token, user) {
+  auth_success (state, token) {
     state.status = 'success'
     state.token = token
-    state.user = user
   },
   auth_error (state) {
     state.status = 'error'
@@ -94,6 +94,8 @@ const mutations = {
   logout (state) {
     state.status = ''
     state.token = ''
+    state.email = ''
+    state.password = ''
   }
 }
 export default {
