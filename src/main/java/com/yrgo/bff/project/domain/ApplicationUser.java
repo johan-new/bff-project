@@ -5,6 +5,8 @@ import com.yrgo.bff.project.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -65,7 +67,7 @@ public class ApplicationUser {
     }
 
     public void notifyUser(String msg){
-        notificationService.addNotification(getUsername(),msg);
+        System.out.println("USER MATCHED FOR "+ this.username + "\n" + msg);
     }
 
     @Override
