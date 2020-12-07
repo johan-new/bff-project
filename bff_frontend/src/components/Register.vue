@@ -31,6 +31,7 @@ export default {
         name: this.userData.email,
         password: this.userData.password
       }
+      console.log(payload)
       this.$store.dispatch('addUser', payload)
     }
   }

@@ -41,21 +41,17 @@ const actions = {
       })
   },
   login ({ commit }, user) {
-    console.log(user.payload.name)
     return new Promise((resolve, reject) => {
       commit('auth_request')
-      const payload = {
-        username: user.payload.name,
-        password: user.payload.password
-      }
-      console.log(payload)
+      console.log(user.name)
       //  axios({ url: 'http://localhost:8080/login', data: { payload }, method: 'POST' })
-      axios.post('http://localhost:8080//login', {
-        payload
+      axios.post('http://localhost:8080/login', {
+        username: user.name,
+        password: user.password
       })
         .then(resp => {
           console.log(resp.headers)
-          const token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlQGUuZSIsImV4cCI6MTYwODI1MTAxMH0.ZG7fAJ-UvYWGuXXnJEMGVYDTma391ztNqn_scW0-7W8u0r9Mz1TId0w5hX4bLtibyUxdq838pwN2Va7Z2ctADw'
+          const token = resp.headers.authorization
           const user = resp.data.user
           console.log(token)
           console.log(user)
