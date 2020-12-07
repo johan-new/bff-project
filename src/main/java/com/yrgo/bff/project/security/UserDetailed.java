@@ -1,6 +1,6 @@
 package com.yrgo.bff.project.security;
 
-import com.yrgo.bff.project.domain.User;
+import com.yrgo.bff.project.domain.ApplicationUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,9 +8,9 @@ import java.util.Collection;
 
 public class UserDetailed implements UserDetails {
 
-    private User user;
+    private ApplicationUser user;
 
-    public UserDetailed(User user) {
+    public UserDetailed(ApplicationUser user) {
         this.user = user;
     }
 

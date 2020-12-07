@@ -1,7 +1,7 @@
 package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.dao.UserAccountDataAccess;
-import com.yrgo.bff.project.domain.User;
+import com.yrgo.bff.project.domain.ApplicationUser;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class AuthenticationServiceImplementation implements AuthenticationServic
      * */
     @Override
     public boolean authenticationSuccess(String username, String password) {
-        User user = userAccountDataAccess.findByUsername(username);
+        ApplicationUser user = userAccountDataAccess.findByUsername(username);
         password = hashThis(password);
         return user.getPassword().equals(password);
     }

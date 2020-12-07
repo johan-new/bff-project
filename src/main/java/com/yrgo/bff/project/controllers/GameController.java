@@ -1,7 +1,7 @@
 package com.yrgo.bff.project.controllers;
 
 import com.yrgo.bff.project.domain.Game;
-import com.yrgo.bff.project.domain.User;
+import com.yrgo.bff.project.domain.ApplicationUser;
 import com.yrgo.bff.project.service.GameService;
 import com.yrgo.bff.project.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,11 +45,11 @@ public class GameController {
         gameService.removeGame(Long.parseLong(gameId));
     }
 
-    private Set<User> stringArrayToSet(String[] players) throws Exception {
-        Set<User> playersSet = new HashSet<>();
+    private Set<ApplicationUser> stringArrayToSet(String[] players) throws Exception {
+        Set<ApplicationUser> playersSet = new HashSet<>();
 
         for (String username:players) {
-            User u = userAccountService.readUser(username);
+            ApplicationUser u = userAccountService.readUser(username);
             if (u == null) {
                 throw new Exception("User doesn't exists!");
             } else {

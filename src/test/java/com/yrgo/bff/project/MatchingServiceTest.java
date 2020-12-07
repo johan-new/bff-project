@@ -1,7 +1,7 @@
 package com.yrgo.bff.project;
 
 import com.yrgo.bff.project.domain.GpsCoordinates;
-import com.yrgo.bff.project.domain.User;
+import com.yrgo.bff.project.domain.ApplicationUser;
 import com.yrgo.bff.project.service.MatchingService;
 import com.yrgo.bff.project.service.MatchingServiceImplementation;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,25 +17,25 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MatchingServiceTest {
 
     private MatchingService matchingService;
-    private User user1;
-    private User user2;
-    private User user3;
-    private User user4;
-    private User user5;
-    private User user6;
+    private ApplicationUser user1;
+    private ApplicationUser user2;
+    private ApplicationUser user3;
+    private ApplicationUser user4;
+    private ApplicationUser user5;
+    private ApplicationUser user6;
     private String location = "Stockholm";
     private String location2 = "Göteborg";
-    private Map<User, String> usersLookingToBeMatched;
+    private Map<ApplicationUser, String> usersLookingToBeMatched;
 
 
     @BeforeEach
     void init() {
-        user1 = new User("Abraham", "Lincoln");
-        user2 = new User("Noel", "Noelsson");
-        user3 = new User("Bengt", "Bengan");
-        user4 = new User("Glenn", "Glennsson");
-        user5 = new User("Åke", "Åkesson");
-        user6 = new User("Sven", "Svensson");
+        user1 = new ApplicationUser("Abraham", "Lincoln");
+        user2 = new ApplicationUser("Noel", "Noelsson");
+        user3 = new ApplicationUser("Bengt", "Bengan");
+        user4 = new ApplicationUser("Glenn", "Glennsson");
+        user5 = new ApplicationUser("Åke", "Åkesson");
+        user6 = new ApplicationUser("Sven", "Svensson");
         location = "Stockholm";
         location2 = "Göteborg";
         usersLookingToBeMatched = new HashMap<>();
@@ -54,14 +54,14 @@ public class MatchingServiceTest {
     public void testCategorizeUsersByVenue() {
         MatchingServiceImplementation matchingServiceImplementation = new MatchingServiceImplementation();
 
-        User userTest1 = new User("Hej", "svej");
-        User userTest2 = new User("Hejdå", "re");
+        ApplicationUser userTest1 = new ApplicationUser("Hej", "svej");
+        ApplicationUser userTest2 = new ApplicationUser("Hejdå", "re");
         String loc = "GBG";
 
         matchingServiceImplementation.addUserMatchRequest(userTest1, loc);
         matchingServiceImplementation.addUserMatchRequest(userTest2, loc);
 
-        Map<String, ArrayList<User>> locationAndUsers = new HashMap<>();
+        Map<String, ArrayList<ApplicationUser>> locationAndUsers = new HashMap<>();
         locationAndUsers = matchingServiceImplementation.categorizeUsersByVenue();
 
         assertEquals(locationAndUsers.size(), 1);

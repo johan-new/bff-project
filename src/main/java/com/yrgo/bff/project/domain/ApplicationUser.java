@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-public class User {
+public class ApplicationUser {
 
     //jsonignore due to infinite recursion otherwise when creating json object
     @ManyToMany (mappedBy = "participants") @JsonIgnore
@@ -22,12 +22,12 @@ public class User {
 //    @JsonIgnore
     private String password;
 
-    public User(String username, String password) {
+    public ApplicationUser(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    User(){}
+    ApplicationUser(){}
 
     public Set<Game> getPreviousGames() {
 
@@ -66,7 +66,7 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
+        ApplicationUser user = (ApplicationUser) o;
         return Objects.equals(username, user.username);
     }
 

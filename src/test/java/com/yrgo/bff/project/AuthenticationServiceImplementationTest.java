@@ -1,11 +1,7 @@
 package com.yrgo.bff.project;
 
-import com.yrgo.bff.project.dao.UserAccountDataAccess;
-import com.yrgo.bff.project.domain.User;
 import com.yrgo.bff.project.service.AuthenticationService;
 import com.yrgo.bff.project.service.UserAccountService;
-import com.yrgo.bff.project.service.UserAccountServiceImplementation;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

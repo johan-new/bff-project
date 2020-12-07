@@ -2,7 +2,7 @@ package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.dao.GameDataAccess;
 import com.yrgo.bff.project.domain.Game;
-import com.yrgo.bff.project.domain.User;
+import com.yrgo.bff.project.domain.ApplicationUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class GameServiceImplementation implements GameService {
      *
      * */
     @Override
-    public Game createGame(Date when, String venue, Set<User> users) {
+    public Game createGame(Date when, String venue, Set<ApplicationUser> users) {
         Game game = new Game(when, venue, users);
         gameDataAccess.save(game);
         return game;

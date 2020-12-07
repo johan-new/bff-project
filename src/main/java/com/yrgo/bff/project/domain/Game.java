@@ -16,14 +16,14 @@ public class Game {
     private String venue;
 
     @ManyToMany
-    Set<User> participants;
+    Set<ApplicationUser> participants;
 //    @JoinTable(
 //            name = "user_game",
 //            joinColumns = @JoinColumn(name = "userName"),
 //            inverseJoinColumns = @JoinColumn(name = "id")
 //    )
 
-    public Game(Date when, String venue, Set<User> participants) {
+    public Game(Date when, String venue, Set<ApplicationUser> participants) {
         this.when = when;
         this.venue = venue;
         this.participants = participants;
@@ -38,7 +38,7 @@ public class Game {
         return venue;
     }
 
-    public Set<User> getParticipants() {
+    public Set<ApplicationUser> getParticipants() {
         return participants;
     }
 

@@ -3,7 +3,7 @@ package com.yrgo.bff.project;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yrgo.bff.project.controllers.Ctrlr;
 import com.yrgo.bff.project.domain.Game;
-import com.yrgo.bff.project.domain.User;
+import com.yrgo.bff.project.domain.ApplicationUser;
 import com.yrgo.bff.project.service.GameServiceImplementation;
 import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,9 +41,9 @@ public class CtrlrTest {
     private Ctrlr ctrlr;
 
     // This object will be magically initialized by the initFields method below.
-    private JacksonTester<User> jsonUser;
+    private JacksonTester<ApplicationUser> jsonUser;
     private JacksonTester<Game> jsonGame;
-    private User ereko;
+    private ApplicationUser ereko;
     @BeforeEach
     void init() {
 
@@ -56,7 +56,7 @@ public class CtrlrTest {
                 .setControllerAdvice(new Exception())
                 .build();
 
-        ereko = new User("ereko", "password");
+        ereko = new ApplicationUser("ereko", "password");
         Mockito.when(userAccountServiceImplementation.readUser(ereko.getUsername(), ereko.getPassword())).thenReturn(ereko);
 
     }

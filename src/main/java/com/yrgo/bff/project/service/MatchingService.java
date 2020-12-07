@@ -1,10 +1,10 @@
 package com.yrgo.bff.project.service;
 
-import com.yrgo.bff.project.domain.User;
+import com.yrgo.bff.project.domain.ApplicationUser;
 
 public interface MatchingService {
-    void addUserMatchRequest(User user, String location);
-    void removeUserMatchRequest(User user);
+    void addUserMatchRequest(ApplicationUser user, String location);
+    void removeUserMatchRequest(ApplicationUser user);
     void matchUsers();
 
 }

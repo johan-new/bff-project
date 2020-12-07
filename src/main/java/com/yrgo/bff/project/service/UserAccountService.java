@@ -1,15 +1,15 @@
 package com.yrgo.bff.project.service;
 
-import com.yrgo.bff.project.domain.User;
+import com.yrgo.bff.project.domain.ApplicationUser;
 
 import java.util.Set;
 
 public interface UserAccountService {
-    User createUser(String username, String password);
-    User removeUser(String username, String password);
-    User updateUser(String username, String password, String newPassword);
-    User readUser(String username, String password);
-    User readUser(String username);
+    ApplicationUser createUser(String username, String password);
+    ApplicationUser removeUser(String username, String password);
+    ApplicationUser updateUser(String username, String password, String newPassword);
+    ApplicationUser readUser(String username, String password);
+    ApplicationUser readUser(String username);
 
-    Set<User> findAll();
+    Set<ApplicationUser> findAll();
 }

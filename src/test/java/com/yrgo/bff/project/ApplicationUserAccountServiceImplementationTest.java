@@ -1,7 +1,7 @@
 package com.yrgo.bff.project;
 
 import com.yrgo.bff.project.dao.UserAccountDataAccess;
-import com.yrgo.bff.project.domain.User;
+import com.yrgo.bff.project.domain.ApplicationUser;
 import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class UserAccountServiceImplementationTest {
+public class ApplicationUserAccountServiceImplementationTest {
 
     @MockBean
     private UserAccountDataAccess userAccountDataAccess;
@@ -25,18 +25,18 @@ public class UserAccountServiceImplementationTest {
     private UserAccountServiceImplementation userAccountServiceImplementation;
 
     // Variable name is the users name and password as camel notation.
-    private User erekoPassword;
-    private Set<User> userSet;
+    private ApplicationUser erekoPassword;
+    private Set<ApplicationUser> userSet;
 
     @BeforeEach
     void init() {
 
-        erekoPassword = new User("Ereko", "password");
+        erekoPassword = new ApplicationUser("Ereko", "password");
         Mockito.when(userAccountDataAccess.findByUsername(erekoPassword.getUsername())).thenReturn(erekoPassword);
         Mockito.when(userAccountDataAccess.save(erekoPassword)).thenReturn(erekoPassword);
 
         //For testMockFindAll
-        Set<User> users = new HashSet<>();
+        Set<ApplicationUser> users = new HashSet<>();
         users.add(erekoPassword);
         Mockito.when(userAccountDataAccess.findAll()).thenReturn(users);
 
@@ -44,7 +44,7 @@ public class UserAccountServiceImplementationTest {
 
     @Test
     void testMockReadUser() {
-        User found = userAccountServiceImplementation.readUser("Ereko", "password");
+        ApplicationUser found = userAccountServiceImplementation.readUser("Ereko", "password");
         assertEquals(found, erekoPassword);
     }
 
@@ -62,7 +62,7 @@ public class UserAccountServiceImplementationTest {
 
     @Test
     public void testMockCreateUser() {
-        User createdUser = userAccountServiceImplementation.createUser(erekoPassword.getUsername(), erekoPassword.getPassword());
+        ApplicationUser createdUser = userAccountServiceImplementation.createUser(erekoPassword.getUsername(), erekoPassword.getPassword());
         assertEquals(createdUser, erekoPassword);
     }
 

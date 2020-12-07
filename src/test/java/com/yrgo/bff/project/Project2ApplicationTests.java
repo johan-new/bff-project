@@ -1,7 +1,7 @@
 package com.yrgo.bff.project;
 
 import com.yrgo.bff.project.domain.Game;
-import com.yrgo.bff.project.domain.User;
+import com.yrgo.bff.project.domain.ApplicationUser;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
@@ -13,9 +13,9 @@ class Project2ApplicationTests {
 
     @Test
     void testTableJoin() {
-        User user = new User("Erik", "password");
-        User user1 = new User("Nahid", "password");
-        Set<User> u = new HashSet<User>();
+        ApplicationUser user = new ApplicationUser("Erik", "password");
+        ApplicationUser user1 = new ApplicationUser("Nahid", "password");
+        Set<ApplicationUser> u = new HashSet<ApplicationUser>();
         u.add(user);
         u.add(user1);
         Game game = new Game(new Date(), "Götlaborg", u);
