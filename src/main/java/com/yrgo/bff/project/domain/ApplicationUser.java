@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yrgo.bff.project.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -24,11 +21,11 @@ public class ApplicationUser {
     @Id
     private String username;
 
-    @ManyToOne
-    private Friends friends = new Friends();
-
     @Autowired @Transient
     NotificationService notificationService;
+
+    @ManyToOne
+    private Friends friends = new Friends();
 
     //this should never be serialized by the web layer
 //    @JsonIgnore
@@ -71,7 +68,7 @@ public class ApplicationUser {
     }
 
     public void notifyUser(String msg){
-        System.out.println("USER MATCHED FOR "+ this.username + "\n" + msg);
+        notificationService.addNotification(getUsername(),msg);
     }
 
     @Override
