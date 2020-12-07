@@ -60,12 +60,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(SECRET.getBytes()));
 
-        // https://auth0.com/blog/implementing-jwt-authentication-on-spring-boot/ har nedan, ej Str body och de 2 andra nedan.
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
 
-//        String body = ((User) auth.getPrincipal()).getUserName() + " " + token;
-//
-//        res.getWriter().write(body);
-//        res.getWriter().flush();
     }
 }
