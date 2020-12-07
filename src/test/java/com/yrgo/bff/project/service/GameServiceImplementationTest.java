@@ -1,4 +1,4 @@
-package com.yrgo.bff.project;
+package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.dao.GameDataAccess;
 import com.yrgo.bff.project.dao.UserAccountDataAccess;

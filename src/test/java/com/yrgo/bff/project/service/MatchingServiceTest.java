@@ -1,4 +1,4 @@
-package com.yrgo.bff.project;
+package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.domain.GpsCoordinates;
 import com.yrgo.bff.project.domain.ApplicationUser;
