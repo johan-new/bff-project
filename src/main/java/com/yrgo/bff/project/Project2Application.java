@@ -1,18 +1,17 @@
 package com.yrgo.bff.project;
 
-import com.yrgo.bff.project.domain.Game;
-import com.yrgo.bff.project.domain.User;
-import com.yrgo.bff.project.service.UserAccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class Project2Application {
+
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 	public static void main(String[] args) {
 

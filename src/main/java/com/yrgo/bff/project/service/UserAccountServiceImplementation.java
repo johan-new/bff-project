@@ -2,16 +2,20 @@ package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.User;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import static java.util.Collections.emptyList;
+import org.springframework.security.core.userdetails.User;
 
 @Service
-public class UserAccountServiceImplementation implements UserAccountService {
+public class UserAccountServiceImplementation implements UserAccountService, UserDetailsService {
 
     @Autowired
     UserAccountDataAccess userAccountDataAccess;
@@ -98,5 +102,14 @@ public class UserAccountServiceImplementation implements UserAccountService {
             users.add(ite.next());
         }
         return users;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userAccountDataAccess.findByUserName(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(username);
+        }
+        return new User(user.getUserName(), user.getPassword());
     }
 }
