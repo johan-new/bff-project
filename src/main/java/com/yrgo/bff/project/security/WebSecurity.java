@@ -29,12 +29,17 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
+                .antMatchers("/h2-console/**").permitAll() //TODO: Remove this line before prod
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        //TODO: Remove for production
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
     }
 
     @Override
@@ -50,7 +55,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 //        return source;
 //    }
 
-    @Bean
+    @Bean //TODO: Review before prod
     CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfig = new CorsConfiguration();
