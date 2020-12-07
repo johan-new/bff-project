@@ -1,7 +1,7 @@
-package com.yrgo.bff.project;
+package com.yrgo.bff.project.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yrgo.bff.project.controllers.Ctrlr;
+import com.yrgo.bff.project.controllers.ApplicationUserController;
 import com.yrgo.bff.project.domain.Game;
 import com.yrgo.bff.project.domain.ApplicationUser;
 import com.yrgo.bff.project.service.GameServiceImplementation;
@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
 @WebMvcTest
-public class CtrlrTest {
+public class UserApplicationControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -38,7 +38,7 @@ public class CtrlrTest {
     private UserAccountServiceImplementation userAccountServiceImplementation;
 
     @InjectMocks
-    private Ctrlr ctrlr;
+    private ApplicationUserController ctrlr;
 
     // This object will be magically initialized by the initFields method below.
     private JacksonTester<ApplicationUser> jsonUser;

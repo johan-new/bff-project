@@ -1,10 +1,13 @@
 package com.yrgo.bff.project.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.yrgo.bff.project.service.NotificationService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
 import java.util.Objects;
 import java.util.Set;
 
@@ -17,6 +20,9 @@ public class ApplicationUser {
 
     @Id
     private String username;
+
+    @Autowired @Transient
+    NotificationService notificationService;
 
     //this should never be serialized by the web layer
 //    @JsonIgnore
@@ -59,7 +65,7 @@ public class ApplicationUser {
     }
 
     public void notifyUser(String msg){
-        System.out.println("USER MATCHED FOR "+ this.username + "\n" + msg);
+        notificationService.addNotification(getUsername(),msg);
     }
 
     @Override

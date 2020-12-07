@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-public class Ctrlr {
+public class ApplicationUserController {
 
     @Autowired
     UserAccountService userAccountService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Ctrlr(UserAccountService userAccountService, BCryptPasswordEncoder bCryptPasswordEncoder)
+    public ApplicationUserController(UserAccountService userAccountService, BCryptPasswordEncoder bCryptPasswordEncoder)
     {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userAccountService = userAccountService;
