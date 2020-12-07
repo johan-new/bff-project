@@ -19,7 +19,6 @@ export default {
   data () {
     return {
       userData: {
-        email: 'user@name.se',
         location: ''
       },
       successMessage: '',
@@ -31,7 +30,6 @@ export default {
       console.log('matchUser code is ready to go...')
       console.log(this.userData)
       const payload = {
-        name: this.userData.email,
         location: this.userData.location
       }
       this.$store.dispatch('matchUser', payload)
