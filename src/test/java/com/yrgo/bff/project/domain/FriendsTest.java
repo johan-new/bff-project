@@ -61,8 +61,3 @@ public class FriendsTest {
     }
 
 }
-
-// skapa vänner i lokal lista i metoden
-// skapa en använadere i applikationen
-// lägga till vänner hos denna användare
-// jämföra lokal "vännerlista" med använaders vännerlista
