@@ -22,3 +22,13 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+
+### Trouble shooting
+
+Indent or other formatting error when trying to run?
+```
+./node_modules/.bin/eslint src --fix
+```
+
