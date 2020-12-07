@@ -3,6 +3,7 @@ package com.yrgo.bff.project.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import java.util.Objects;
@@ -17,6 +18,28 @@ public class ApplicationUser {
 
     @Id
     private String username;
+
+    @ManyToMany(mappedBy = "friendsGroup")
+    private Set<Friends> friendsGroup;
+
+    @ManyToMany(mappedBy = "friendsGroup")
+    private Set<Friends> otherFriends;
+
+    public Set<Friends> getOtherFriends() {
+        return otherFriends;
+    }
+
+    public void setOtherFriends(Set<Friends> otherFriends) {
+        this.otherFriends = otherFriends;
+    }
+
+    public Set<Friends> getFriendsGroup() {
+        return friendsGroup;
+    }
+
+    public void setFriendsGroup(Set<Friends> friendsGroup) {
+        this.friendsGroup = friendsGroup;
+    }
 
     //this should never be serialized by the web layer
 //    @JsonIgnore
