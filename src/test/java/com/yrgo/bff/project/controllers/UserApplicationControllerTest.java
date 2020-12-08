@@ -57,7 +57,7 @@ public class UserApplicationControllerTest {
                 .build();
 
         ereko = new ApplicationUser("ereko", "password");
-        Mockito.when(userAccountServiceImplementation.readUser(ereko.getUsername(), ereko.getPassword())).thenReturn(ereko);
+        Mockito.when(userAccountServiceImplementation.readUser(ereko.getUsername())).thenReturn(ereko);
 
     }
 

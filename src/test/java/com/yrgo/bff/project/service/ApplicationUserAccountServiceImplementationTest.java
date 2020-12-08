@@ -2,7 +2,6 @@ package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.ApplicationUser;
-import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -44,7 +43,7 @@ public class ApplicationUserAccountServiceImplementationTest {
 
     @Test
     void testMockReadUser() {
-        ApplicationUser found = userAccountServiceImplementation.readUser("Ereko", "password");
+        ApplicationUser found = userAccountServiceImplementation.readUser("Ereko");
         assertEquals(found, erekoPassword);
     }
 
@@ -68,14 +67,14 @@ public class ApplicationUserAccountServiceImplementationTest {
 
     @Test
     public void testMockRemoveUser() {
-        userAccountServiceImplementation.removeUser(erekoPassword.getUsername(), erekoPassword.getPassword());
+        userAccountServiceImplementation.removeUser(erekoPassword.getUsername());
         Mockito.verify(userAccountDataAccess, Mockito.times(1)).delete(erekoPassword);
     }
 
     @Test
     public void testMockUpdateUser() {
         String newPassword = "newCoolPassword";
-        userAccountServiceImplementation.updateUser(erekoPassword.getUsername(), erekoPassword.getPassword(), newPassword);
+        userAccountServiceImplementation.updateUser(newPassword);
         assertEquals(erekoPassword.getPassword(), newPassword);
     }
 }

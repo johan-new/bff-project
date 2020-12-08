@@ -35,17 +35,22 @@ public class ApplicationUserController {
         return userAccountService.readUser(name);
     }
 
-    @PutMapping("/user")
-    void updateUser(@RequestParam(name="name",required = true) String name,
-                    @RequestParam(name="password",required = true) String password,
-                    @RequestParam(name="newPassword",required = true) String newPassword){
-        userAccountService.updateUser(name,password,newPassword);
+    @GetMapping("/loggedinuser")
+    ApplicationUser readUser() {
+        return userAccountService.readLoggedInUser();
     }
 
+    //used to change password or email adress(username)
+    @PutMapping("/user")
+    void updateUser(@RequestParam(name="newPassword",required = true) String newPassword){
+        userAccountService.updateUser(newPassword);
+    }
+
+    //TODO: admin can delete anyone, regular user just themselves
     @DeleteMapping("/user")
     void removeUser(@RequestParam(name="name",required = true) String name,
                     @RequestParam(name="password",required = true) String password){
-        userAccountService.removeUser(name,password);
+        userAccountService.removeUser(name);
     }
 
 }
