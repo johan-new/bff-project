@@ -85,15 +85,24 @@ public class ApplicationUser {
     }
 
     public JSONObject getPreviousGamesAsJSON() {
-        Map<String, List<String>> previousGamesMapped = new HashMap<>();
+        Map<String, Map<String,String>> previousGamesMapped = new HashMap<>();
 
         for (Game game: previousGames) {
+            final String key = game.getId().toString();
+
+            Map<String,String> gameDetails = new HashMap<>();
             List<String> players = new ArrayList<>();
+
             for (ApplicationUser user: game.participants) {
                 players.add(user.getUsername());
             }
-            final String key = game.getId() + " " + game.getWhen() + " @ " + game.getVenue();
-            previousGamesMapped.put(key,players);
+
+            gameDetails.put("id",key);
+            gameDetails.put("when",game.getWhen().toString());
+            gameDetails.put("venue",game.getVenue());
+            gameDetails.put("players", players.toString());
+
+            previousGamesMapped.put(key,gameDetails);
         }
 
         return new JSONObject(previousGamesMapped);

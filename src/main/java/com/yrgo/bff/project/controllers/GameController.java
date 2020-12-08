@@ -62,8 +62,10 @@ public class GameController {
 
         //adding the rest of the participants
         for (String username:players) {
+            System.err.println(username);
             ApplicationUser u = userAccountService.readUser(username);
             if (u == null) {
+                System.out.println("********** " + u);
                 throw new Exception("User doesn't exists!");
             } else {
                 playersSet.add(u);
