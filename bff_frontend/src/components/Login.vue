@@ -27,15 +27,13 @@ export default {
   },
   methods: {
     login () {
-      console.log('Login code is ready to go...')
-      console.log(this.userData)
       const payload = {
         name: this.userData.email,
         password: this.userData.password
       }
-      this.$store.dispatch('loginUser', payload).then(() => {
-        this.$router.push('/')
-      })
+      this.$store.dispatch('login', payload)
+        .then(() => this.$router.push('/'))
+        .catch(err => console.log(err))
     }
   }
 }
