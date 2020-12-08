@@ -27,11 +27,9 @@ public class ApplicationUser {
 
     @ManyToOne
     private Friends friends = new Friends();
+
     @Autowired @Transient
     NotificationService notificationService;
-
-    @ManyToOne
-    private Friends friends = new Friends();
 
     //this should never be serialized by the web layer
 //    @JsonIgnore
