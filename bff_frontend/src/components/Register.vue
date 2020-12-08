@@ -25,13 +25,10 @@ export default {
   },
   methods: {
     registerUser () {
-      console.log('Register code is ready to go...')
-      console.log(this.userData)
       const payload = {
         name: this.userData.email,
         password: this.userData.password
       }
-      console.log(payload)
       this.$store.dispatch('addUser', payload)
     }
   }

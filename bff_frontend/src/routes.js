@@ -1,6 +1,8 @@
 import Home from './components/Home'
 import Login from './components/Login'
 import Register from './components/Register'
+import Secure from './components/Secure.vue'
+
 export const routes = [
   {
     path: '/',
@@ -14,5 +16,12 @@ export const routes = [
     path: '/register',
     name: 'Register',
     component: Register
+  }, {
+    path: '/secure',
+    name: 'Secure',
+    component: Secure,
+    meta: {
+      requiresAuth: true
+    }
   }
 ]
