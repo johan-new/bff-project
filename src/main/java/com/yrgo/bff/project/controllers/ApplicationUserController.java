@@ -1,6 +1,5 @@
 package com.yrgo.bff.project.controllers;
 
-import com.yrgo.bff.project.domain.ApplicationUser;
 import com.yrgo.bff.project.service.UserAccountService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ public class ApplicationUserController {
 
         if (userAccountService.readUser(username)==null) {
         userAccountService.createUser(username, password);
-        return userAccountService.readUser(username).getAsJSON();
+        return userAccountService.readUser(username).toJSON();
         } else {
             throw new Exception("User already exists!");
         }
@@ -37,7 +36,7 @@ public class ApplicationUserController {
 
     @GetMapping("/user")
     JSONObject readUser(@RequestBody JSONObject user) {
-        return userAccountService.readLoggedInUser().getAsJSON();
+        return userAccountService.readLoggedInUser().toJSON();
     }
 
     @GetMapping("/user/previousgames")
@@ -47,7 +46,7 @@ public class ApplicationUserController {
 
     @GetMapping("/loggedinuser")
     JSONObject readUser() {
-        return userAccountService.readLoggedInUser().getAsJSON();
+        return userAccountService.readLoggedInUser().toJSON();
     }
 
     //used to change password or email adress(username)

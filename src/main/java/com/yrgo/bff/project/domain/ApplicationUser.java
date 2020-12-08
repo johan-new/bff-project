@@ -78,7 +78,7 @@ public class ApplicationUser {
     }
 
     //used to not expose passwords
-    public JSONObject getAsJSON(){
+    public JSONObject toJSON(){
         JSONObject json = new JSONObject();
         json.put("username",getUsername());
 
@@ -96,21 +96,7 @@ public class ApplicationUser {
             Map<String, Map<String, String>> previousGamesMapped = new HashMap<>();
 
             for (Game game : previousGames) {
-                final String key = game.getId().toString();
-
-                Map<String, String> gameDetails = new HashMap<>();
-                List<String> players = new ArrayList<>();
-
-                for (ApplicationUser user : game.participants) {
-                    players.add(user.getUsername());
-                }
-
-                gameDetails.put("id", key);
-                gameDetails.put("when", game.getWhen().toString());
-                gameDetails.put("venue", game.getVenue());
-                gameDetails.put("players", players.toString());
-
-                previousGamesMapped.put(key, gameDetails);
+                previousGamesMapped.put(game.getId().toString(), game.mapGameDetails());
             }
 
             return new JSONObject(previousGamesMapped);

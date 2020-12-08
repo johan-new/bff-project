@@ -4,6 +4,7 @@ import com.yrgo.bff.project.domain.Game;
 import com.yrgo.bff.project.domain.ApplicationUser;
 import com.yrgo.bff.project.service.GameService;
 import com.yrgo.bff.project.service.UserAccountService;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,10 +29,9 @@ public class GameController {
     }
 
     // TODO: for a future admin portal, or remove? A user get the games from ApplicationUserController
-    // TODO: leaks passwords!
     @GetMapping(value = "/game/{gameId}")
-    Game readGame(@PathVariable("gameId") String gameId){
-        return gameService.readGame(Long.parseLong(gameId));
+    JSONObject readGame(@PathVariable("gameId") String gameId){
+        return gameService.readGame(Long.parseLong(gameId)).toJSON();
     }
 
     @PutMapping(value = "/game/{gameId}")
