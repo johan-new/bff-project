@@ -29,7 +29,7 @@ export default {
           if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
             this.$store.dispatch('logout')
           }
-          throw err
+          throw err // Skapar error i consolen när man försöker nå reqAuth-sidor
         })
       })
     }
