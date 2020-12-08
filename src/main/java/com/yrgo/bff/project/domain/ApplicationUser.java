@@ -33,10 +33,6 @@ public class ApplicationUser {
     }
 
     ApplicationUser(){
-        //generating dummy data
-        Set<ApplicationUser> participants = new HashSet<>();
-        participants.add(this);
-        previousGames.add(new Game(new Date(),"Gbg",participants));
     }
 
     public Set<Game> getPreviousGames() {
