@@ -92,7 +92,7 @@ public class ApplicationUser {
             for (ApplicationUser user: game.participants) {
                 players.add(user.getUsername());
             }
-            final String key = game.getWhen() + " @ " + game.getVenue();
+            final String key = game.getId() + " " + game.getWhen() + " @ " + game.getVenue();
             previousGamesMapped.put(key,players);
         }
 
