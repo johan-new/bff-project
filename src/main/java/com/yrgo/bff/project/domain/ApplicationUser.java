@@ -81,6 +81,7 @@ public class ApplicationUser {
     public JSONObject getAsJSON(){
         JSONObject json = new JSONObject();
         json.put("username",getUsername());
+        json.put("games",getPreviousGamesAsJSON());
         return json;
     }
 

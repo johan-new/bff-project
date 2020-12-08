@@ -22,13 +22,13 @@ public class ApplicationUserController {
     }
 
     @PostMapping("/user")
-    public void createUser(@RequestBody JSONObject user) throws Exception {
+    public JSONObject createUser(@RequestBody JSONObject user) throws Exception {
         //parsing
         final String username = (String)user.get("username");
         final String password = bCryptPasswordEncoder.encode((String)user.get("password"));
 
         if (userAccountService.readUser(username)==null) {
-        userAccountService.createUser(username, password);
+        return userAccountService.createUser(username, password).getAsJSON();
         } else {
             throw new Exception("User already exists!");
         }
@@ -36,8 +36,7 @@ public class ApplicationUserController {
 
     @GetMapping("/user")
     JSONObject readUser(@RequestBody JSONObject user) {
-        final String username = user.get("username").toString();
-        return userAccountService.readUser(username).getAsJSON();
+        return userAccountService.readLoggedInUser().getAsJSON();
     }
 
     @GetMapping("/user/previousgames")
