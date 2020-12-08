@@ -28,7 +28,8 @@ public class ApplicationUserController {
         final String password = bCryptPasswordEncoder.encode((String)user.get("password"));
 
         if (userAccountService.readUser(username)==null) {
-        return userAccountService.createUser(username, password).getAsJSON();
+        userAccountService.createUser(username, password);
+        return userAccountService.readUser(username).getAsJSON();
         } else {
             throw new Exception("User already exists!");
         }

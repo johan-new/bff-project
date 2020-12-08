@@ -81,31 +81,41 @@ public class ApplicationUser {
     public JSONObject getAsJSON(){
         JSONObject json = new JSONObject();
         json.put("username",getUsername());
+
+        JSONObject games = getPreviousGamesAsJSON();
+
+        if (!games.isEmpty()) {
         json.put("games",getPreviousGamesAsJSON());
+        }
+
         return json;
     }
 
     public JSONObject getPreviousGamesAsJSON() {
-        Map<String, Map<String,String>> previousGamesMapped = new HashMap<>();
+        try {
+            Map<String, Map<String, String>> previousGamesMapped = new HashMap<>();
 
-        for (Game game: previousGames) {
-            final String key = game.getId().toString();
+            for (Game game : previousGames) {
+                final String key = game.getId().toString();
 
-            Map<String,String> gameDetails = new HashMap<>();
-            List<String> players = new ArrayList<>();
+                Map<String, String> gameDetails = new HashMap<>();
+                List<String> players = new ArrayList<>();
 
-            for (ApplicationUser user: game.participants) {
-                players.add(user.getUsername());
+                for (ApplicationUser user : game.participants) {
+                    players.add(user.getUsername());
+                }
+
+                gameDetails.put("id", key);
+                gameDetails.put("when", game.getWhen().toString());
+                gameDetails.put("venue", game.getVenue());
+                gameDetails.put("players", players.toString());
+
+                previousGamesMapped.put(key, gameDetails);
             }
 
-            gameDetails.put("id",key);
-            gameDetails.put("when",game.getWhen().toString());
-            gameDetails.put("venue",game.getVenue());
-            gameDetails.put("players", players.toString());
-
-            previousGamesMapped.put(key,gameDetails);
+            return new JSONObject(previousGamesMapped);
+        } catch (NullPointerException e) {
+            return new JSONObject();
         }
-
-        return new JSONObject(previousGamesMapped);
     }
 }
