@@ -28,6 +28,7 @@ public class GameController {
     }
 
     // TODO: for a future admin portal, or remove? A user get the games from ApplicationUserController
+    // TODO: leaks passwords!
     @GetMapping(value = "/game/{gameId}")
     Game readGame(@PathVariable("gameId") String gameId){
         return gameService.readGame(Long.parseLong(gameId));
