@@ -21,9 +21,13 @@ public class ApplicationUserController {
     }
 
     @PostMapping("/user")
-    public void createUser(@RequestBody ApplicationUser user) {
+    public void createUser(@RequestBody ApplicationUser user) throws Exception {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        if (userAccountService.readUser(user.getUsername())==null) {
         userAccountService.createUser(user.getUsername(), user.getPassword());
+        } else {
+            throw new Exception("User already exists!");
+        }
     }
 
     @GetMapping("/user")
