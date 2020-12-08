@@ -2,14 +2,14 @@ package com.yrgo.bff.project.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yrgo.bff.project.service.NotificationService;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class ApplicationUser {
@@ -25,7 +25,6 @@ public class ApplicationUser {
     NotificationService notificationService;
 
     //this should never be serialized by the web layer
-//    @JsonIgnore
     private String password;
 
     public ApplicationUser(String username, String password) {
@@ -33,10 +32,14 @@ public class ApplicationUser {
         this.password = password;
     }
 
-    ApplicationUser(){}
+    ApplicationUser(){
+        //generating dummy data
+        Set<ApplicationUser> participants = new HashSet<>();
+        participants.add(this);
+        previousGames.add(new Game(new Date(),"Gbg",participants));
+    }
 
     public Set<Game> getPreviousGames() {
-
         return previousGames;
     }
 
@@ -58,10 +61,7 @@ public class ApplicationUser {
 
     @Override
     public String toString() {
-        return "User{" +
-                "userName='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+        return username;
     }
 
     public void notifyUser(String msg){
@@ -79,5 +79,27 @@ public class ApplicationUser {
     @Override
     public int hashCode() {
         return Objects.hash(username);
+    }
+
+    //used to not expose passwords
+    public JSONObject getAsJSON(){
+        JSONObject json = new JSONObject();
+        json.put("username",getUsername());
+        return json;
+    }
+
+    public JSONObject getPreviousGamesAsJSON() {
+        Map<String, List<String>> previousGamesMapped = new HashMap<>();
+
+        for (Game game: previousGames) {
+            List<String> players = new ArrayList<>();
+            for (ApplicationUser user: game.participants) {
+                players.add(user.getUsername());
+            }
+            final String key = game.getWhen() + " @ " + game.getVenue();
+            previousGamesMapped.put(key,players);
+        }
+
+        return new JSONObject(previousGamesMapped);
     }
 }
