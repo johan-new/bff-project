@@ -5,16 +5,6 @@ import com.yrgo.bff.project.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import java.util.Objects;
 import java.util.Set;
 
