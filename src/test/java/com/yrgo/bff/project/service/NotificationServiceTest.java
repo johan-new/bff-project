@@ -15,12 +15,12 @@ public class NotificationServiceTest {
     NotificationService notificationService;
 
     @Test
-    @WithMockUser(username="Johan")
+    @WithMockUser(username="Testuser")
     void testAddingNotifications(){
         final String greeting = "Hejsan!";
-        notificationService.addNotification("Johan",greeting);
+        notificationService.addNotification("Testuser",greeting,NotificationService.Type.GENERAL);
         //is the notification there?
-        assertEquals(notificationService.getNotifications().get(0),greeting);
+        assertEquals(notificationService.getNotifications().get(1),greeting);
         //once fetched - it should be deleted :)
         assertNull(notificationService.getNotifications());
 

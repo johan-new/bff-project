@@ -53,7 +53,7 @@ public class MatchingServiceImplementation implements MatchingService {
             Map.Entry set = (Map.Entry) iterator.next();
             for (ApplicationUser u: (ArrayList<ApplicationUser>)set.getValue() ) {
                 //u.notifyUser(set.getValue().toString());
-                notificationService.addNotification(u.getUsername(),set.getValue().toString());
+                notificationService.addNotification(u.getUsername(),set.getValue().toString(), NotificationService.Type.MATCH_SUCCESS);
                 removeUserMatchRequest(u);
             }
         }
