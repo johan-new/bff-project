@@ -4,8 +4,10 @@
             <router-link to="/">Hem</router-link>
             <router-link to="/login" v-if="!isLoggedIn">Logga in</router-link>
             <router-link to="/register" v-if="!isLoggedIn">Registrera dig</router-link>
-            <router-link to="/secure" v-if="isLoggedIn">Spela padel</router-link>
+            <router-link to="/padel" v-if="isLoggedIn">Spela padel</router-link>
             <router-link to="/userprofile" v-if="isLoggedIn">Profil</router-link>
+            <a v-if="isLoggedIn" @click="logout">Logga ut</a>
+
         </div>
     </header>
 </template>
@@ -15,6 +17,14 @@ export default {
   name: 'Header-component',
   computed: {
     isLoggedIn () { return this.$store.getters.isLoggedIn }
+  },
+  methods: {
+    logout () {
+      this.$store.dispatch('logout')
+        .then(() => {
+          this.$router.push('/login')
+        })
+    }
   }
 }
 </script>

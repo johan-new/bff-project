@@ -5,9 +5,17 @@
             <input type="username" placeholder="Username" v-model="user" /><br>
           <button>Search</button>
         </form>
-        <p>Username: {{ this.$store.state.userStore.user.username }}</p>
-        <p>User as an object: {{ this.$store.state.userStore.user }}</p>
+        <p>Användarnamn: {{ this.$store.state.userStore.user.username }}</p>
+        <p>Användarobjekt: {{ this.$store.state.userStore.user }}</p>
 
+        <div>
+          <h2>Ändra lösenord:</h2>
+            <form @submit.prevent="changePassword">
+            <input type="password" placeholder="Gammalt lösenord" v-model="oldPassword" />
+            <input type="password" placeholder="Nytt lösenord" v-model="newPassword" />
+          <button>Ändra lösenord</button>
+        </form>
+        </div>
     </div>
 </template>
 
@@ -16,7 +24,9 @@ export default {
   name: 'Userprofile',
   data () {
     return {
-      user: ''
+      user: '',
+      oldPassword: '',
+      newPassword: ''
     }
   },
   created () {
@@ -28,6 +38,13 @@ export default {
         user: this.user
       }
       this.$store.dispatch('fetchUser', payload)
+    },
+    changePassword () {
+      const payload = {
+        oldPassword: this.oldPassword,
+        newPassword: this.newPassword
+      }
+      this.$store.dispatch('changePassword', payload)
     }
   }
 }

@@ -34,6 +34,25 @@ const actions = {
       .catch(error => {
         console.log(error.response)
       })
+  },
+  changePassword ({ context, state }, { oldPassword, newPassword }) {
+    console.log(state.user.username)
+    console.log(localStorage.getItem('token'))
+    axios.put('http://localhost:8080/user', {
+      username: state.user.username,
+      oldPassword,
+      newPassword
+    }, {
+      headers: {
+        Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJFcmlrQGEuYSIsImV4cCI6MTYwODQzNDc1Nn0.nbklpynT0yeSYk4cUaHQjuz873WiRrav_yrwlnFH4hqXWNs0sq3YsX_tOze4FLzqfxYRQyuTldjrAllSMFmPcQ'
+      }
+    })
+      .then(data => {
+        console.log(data.data)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
   }
 }
 

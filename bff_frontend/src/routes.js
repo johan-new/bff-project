@@ -1,7 +1,7 @@
 import Home from './components/Home'
 import Login from './components/Login'
 import Register from './components/Register'
-import Secure from './components/Secure.vue'
+import Game from './components/Game.vue'
 import Userprofile from './components/Userprofile.vue'
 
 export const routes = [
@@ -18,9 +18,9 @@ export const routes = [
     name: 'Register',
     component: Register
   }, {
-    path: '/secure',
-    name: 'Secure',
-    component: Secure,
+    path: '/padel',
+    name: 'Game',
+    component: Game,
     meta: {
       requiresAuth: true
     }
