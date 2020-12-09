@@ -2,16 +2,21 @@ package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.domain.GpsCoordinates;
 import com.yrgo.bff.project.domain.ApplicationUser;
+import org.aspectj.weaver.ast.Not;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class MatchingServiceImplementation implements MatchingService, Runnable {
+public class MatchingServiceImplementation implements MatchingService {
 
     private Map<ApplicationUser, String> usersLookingToBeMatched = new HashMap<>();
     private List<Map.Entry<ApplicationUser, String>> usersAtThatSpecificLocation;
+
+    @Autowired
+    NotificationService notificationService;
 
     private boolean interrupt = false;
 
@@ -19,6 +24,7 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
     public void addUserMatchRequest(ApplicationUser user, String location) {
         if (!usersLookingToBeMatched.containsKey(user)) {
             usersLookingToBeMatched.put(user, location);
+            matchUsers();
         }
     }
 
@@ -30,9 +36,14 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
     // TODO: Facade pattern???
     @Override
     public void matchUsers() {
+        if (usersLookingToBeMatched.size()>=4) {
+        System.out.println("TRYING TO MATCH USERS");
         Map<String, ArrayList<ApplicationUser>>  matchingUsers = categorizeUsersByVenue();
-        //sortOutSingles();
+
+        //TODO: match 4 users per venue
+
         notifyUsersThatMatch(matchingUsers);
+        }
     }
 
 
@@ -41,7 +52,8 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
         while (iterator.hasNext()){
             Map.Entry set = (Map.Entry) iterator.next();
             for (ApplicationUser u: (ArrayList<ApplicationUser>)set.getValue() ) {
-                u.notifyUser(set.getValue().toString());
+                //u.notifyUser(set.getValue().toString());
+                notificationService.addNotification(u.getUsername(),set.getValue().toString(), NotificationService.Type.MATCH_SUCCESS);
                 removeUserMatchRequest(u);
             }
         }
@@ -94,14 +106,5 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
         return valueToCheck >= minvalue && valueToCheck <= maxvalue;
     }
 
-    @Override
-    public void run() {
-        while (!interrupt) {
-            matchUsers();
-            try {
-                Thread.sleep(10000);
-            } catch (Exception silent) {
-            }
-        }
-    }
+
 }

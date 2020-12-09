@@ -6,12 +6,13 @@
         <div class="main-navigation">
             <router-link to="/login">Login</router-link>
             <router-link to="/register">Register</router-link>
+            <router-link to="/secure">Secure</router-link>
         </div>
     </header>
 </template>
 
 <script>
 export default {
-    name: "Header-component"
+  name: 'Header-component'
 }
 </script>

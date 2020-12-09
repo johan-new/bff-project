@@ -1,9 +1,10 @@
 package com.yrgo.bff.project.domain;
 
 
+import org.json.simple.JSONObject;
+
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Game {
@@ -44,5 +45,25 @@ public class Game {
 
     public Long getId() {
         return id;
+    }
+
+    public JSONObject toJSON(){
+        return new JSONObject(mapGameDetails());
+    }
+
+    public Map<String, String> mapGameDetails() {
+        Map<String, String> gameDetails = new HashMap<>();
+        List<String> players = new ArrayList<>();
+
+        for (ApplicationUser user : participants) {
+            players.add(user.getUsername());
+        }
+
+        gameDetails.put("id", getId().toString());
+        gameDetails.put("when", getWhen().toString());
+        gameDetails.put("venue", getVenue());
+        gameDetails.put("players", players.toString());
+
+        return gameDetails;
     }
 }

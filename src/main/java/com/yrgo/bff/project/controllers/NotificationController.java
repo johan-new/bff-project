@@ -14,6 +14,8 @@ public class NotificationController {
     @Autowired
     NotificationService notificationService;
 
+
+
     @GetMapping("/notifications")
     List<String> getNotifications(){
         return notificationService.getNotifications();

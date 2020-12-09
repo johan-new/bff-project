@@ -2,7 +2,6 @@ package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.ApplicationUser;
-import com.yrgo.bff.project.security.UserDetailed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -99,8 +98,6 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
-        UserDetailed ud = new UserDetailed(user);
-        System.out.println(ud.getUsername() + ud.getPassword());
         return new User(user.getUsername(), user.getPassword(), emptyList());
     }
 

@@ -1,7 +1,7 @@
 package com.yrgo.bff.project.controllers;
 
-import com.yrgo.bff.project.domain.ApplicationUser;
 import com.yrgo.bff.project.service.UserAccountService;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -21,23 +21,32 @@ public class ApplicationUserController {
     }
 
     @PostMapping("/user")
-    public void createUser(@RequestBody ApplicationUser user) throws Exception {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        if (userAccountService.readUser(user.getUsername())==null) {
-        userAccountService.createUser(user.getUsername(), user.getPassword());
+    public JSONObject createUser(@RequestBody JSONObject user) throws Exception {
+        //parsing
+        final String username = (String)user.get("username");
+        final String password = bCryptPasswordEncoder.encode((String)user.get("password"));
+
+        if (userAccountService.readUser(username)==null) {
+        userAccountService.createUser(username, password);
+        return userAccountService.readUser(username).toJSON();
         } else {
             throw new Exception("User already exists!");
         }
     }
 
     @GetMapping("/user")
-    ApplicationUser readUser(@RequestParam(name="name",required = true) String name) {
-        return userAccountService.readUser(name);
+    JSONObject readUser(@RequestBody JSONObject user) {
+        return userAccountService.readLoggedInUser().toJSON();
+    }
+
+    @GetMapping("/user/previousgames")
+    JSONObject readUsersPreviousGames() {
+        return userAccountService.readLoggedInUser().getPreviousGamesAsJSON();
     }
 
     @GetMapping("/loggedinuser")
-    ApplicationUser readUser() {
-        return userAccountService.readLoggedInUser();
+    JSONObject readUser() {
+        return userAccountService.readLoggedInUser().toJSON();
     }
 
     //used to change password or email adress(username)

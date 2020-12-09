@@ -1,12 +1,19 @@
 package com.yrgo.bff.project.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.yrgo.bff.project.controllers.ApplicationUserController;
 import com.yrgo.bff.project.service.NotificationService;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
+import java.util.*;
 
 @Entity
 public class ApplicationUser {
@@ -33,7 +40,8 @@ public class ApplicationUser {
         this.password = password;
     }
 
-    ApplicationUser(){}
+    ApplicationUser(){
+    }
 
     public Set<Game> getPreviousGames() {
 
@@ -58,14 +66,7 @@ public class ApplicationUser {
 
     @Override
     public String toString() {
-        return "User{" +
-                "userName='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
-
-    public void notifyUser(String msg){
-        notificationService.addNotification(getUsername(),msg);
+        return username;
     }
 
     @Override
@@ -79,6 +80,34 @@ public class ApplicationUser {
     @Override
     public int hashCode() {
         return Objects.hash(username);
+    }
+
+    //used to not expose passwords
+    public JSONObject toJSON(){
+        JSONObject json = new JSONObject();
+        json.put("username",getUsername());
+
+        JSONObject games = getPreviousGamesAsJSON();
+
+        if (!games.isEmpty()) {
+        json.put("games",getPreviousGamesAsJSON());
+        }
+
+        return json;
+    }
+
+    public JSONObject getPreviousGamesAsJSON() {
+        try {
+            Map<String, Map<String, String>> previousGamesMapped = new HashMap<>();
+
+            for (Game game : previousGames) {
+                previousGamesMapped.put(game.getId().toString(), game.mapGameDetails());
+            }
+
+            return new JSONObject(previousGamesMapped);
+        } catch (NullPointerException e) {
+            return new JSONObject();
+        }
     }
 
     public void addFriend(ApplicationUser user) {
