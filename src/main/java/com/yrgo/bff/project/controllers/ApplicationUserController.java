@@ -52,7 +52,6 @@ public class ApplicationUserController {
 
     //used to change password or email adress(username)
 
-    @CrossOrigin
     @PutMapping("/user")
     void updateUser(@RequestBody JSONObject user) throws Exception {
         final String oldPassword = (String)user.get("oldPassword");
@@ -61,10 +60,9 @@ public class ApplicationUserController {
 
         if (bCryptPasswordEncoder.matches(oldPassword, u.getPassword()) && !oldPassword.equals(newPassword)) {
             userAccountService.updateUser(oldPassword, newPassword);
-            System.out.println("Password changed!");
         }
         else {
-            throw new Exception("Password was not changed!");
+            throw new Exception("ERROR: Password was not changed!");
         }
     }
 

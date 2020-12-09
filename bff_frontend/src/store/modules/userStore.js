@@ -36,8 +36,6 @@ const actions = {
       })
   },
   changePassword ({ context, state }, { oldPassword, newPassword }) {
-    console.log(state.user.username)
-    console.log(localStorage.getItem('token'))
     axios.put('http://localhost:8080/user', {
       username: state.user.username,
       oldPassword,
