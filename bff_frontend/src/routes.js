@@ -2,7 +2,7 @@ import Home from './components/Home'
 import Login from './components/Login'
 import Register from './components/Register'
 import Secure from './components/Secure.vue'
-import User from './components/User.vue'
+import Userprofile from './components/Userprofile.vue'
 
 export const routes = [
   {
@@ -25,9 +25,9 @@ export const routes = [
       requiresAuth: true
     }
   }, {
-    path: '/user',
-    name: 'user',
-    component: User,
+    path: '/userprofile',
+    name: 'userprofile',
+    component: Userprofile,
     meta: {
       requiresAuth: true
     }

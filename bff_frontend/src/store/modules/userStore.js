@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const state = {
-  username: '',
+  user: '',
   friendlist: {},
   gamelist: {}
 }
@@ -14,11 +14,11 @@ const getters = {
 
 const actions = {
   fetchUser (context, username) {
+    username = username.user
     axios.get('http://localhost:8080/user', {
-      username: username
+      params: { username }
     })
       .then(data => {
-        console.log(data.data)
         context.commit('set_user', data.data)
       })
       .catch(error => {
@@ -29,7 +29,7 @@ const actions = {
 
 const mutations = {
   set_user (state, user) {
-    state.username = user
+    state.user = user
   }
 }
 

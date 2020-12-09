@@ -35,8 +35,8 @@ public class ApplicationUserController {
     }
 
     @GetMapping("/user")
-    JSONObject readUser(@RequestBody JSONObject user) {
-        return userAccountService.readLoggedInUser().toJSON();
+    JSONObject readUser(@RequestParam String username) {
+        return userAccountService.readUser(username).toJSON();
     }
 
     @GetMapping("/user/previousgames")
