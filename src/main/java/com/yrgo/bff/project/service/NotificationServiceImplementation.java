@@ -12,7 +12,11 @@ import java.util.Map;
 @Service
 public class NotificationServiceImplementation implements NotificationService {
 
-    Map<String,List<String>> notifications = new HashMap();
+    Map<String,List<String>> notifications;
+
+    public NotificationServiceImplementation() {
+        this.notifications =  new HashMap();
+    }
 
     @Override
     public List<String> getNotifications() {
@@ -35,5 +39,6 @@ public class NotificationServiceImplementation implements NotificationService {
             newNotification.add(notification);
             notifications.put(username,newNotification);
         }
+        System.out.println("Added new notification for " + username + "\n" + notification);
     }
 }

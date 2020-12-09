@@ -1,6 +1,7 @@
 package com.yrgo.bff.project.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.yrgo.bff.project.controllers.ApplicationUserController;
 import com.yrgo.bff.project.service.NotificationService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,6 @@ public class ApplicationUser {
     @Id
     private String username;
 
-    @Autowired @Transient
-    NotificationService notificationService;
 
     //this should never be serialized by the web layer
     private String password;
@@ -58,10 +57,6 @@ public class ApplicationUser {
     @Override
     public String toString() {
         return username;
-    }
-
-    public void notifyUser(String msg){
-        notificationService.addNotification(getUsername(),msg);
     }
 
     @Override

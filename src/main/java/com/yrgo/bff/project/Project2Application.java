@@ -66,10 +66,10 @@ public class Project2Application {
 
 			gameService.createGame(new Date(),"Göteborg",users);
 
-			/*matchingService.addUserMatchRequest(userAccountService.readUser(user),venue);
+			matchingService.addUserMatchRequest(userAccountService.readUser(user),venue);
 			matchingService.addUserMatchRequest(userAccountService.readUser(user2),venue);
 			matchingService.addUserMatchRequest(userAccountService.readUser(user3),venue);
-			matchingService.addUserMatchRequest(userAccountService.readUser(user4),venue);*/
+			matchingService.addUserMatchRequest(userAccountService.readUser(user4),venue);
 
 
 		}
