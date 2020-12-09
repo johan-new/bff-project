@@ -1,5 +1,6 @@
 package com.yrgo.bff.project.controllers;
 
+import com.yrgo.bff.project.domain.ApplicationUser;
 import com.yrgo.bff.project.service.UserAccountService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +51,21 @@ public class ApplicationUserController {
     }
 
     //used to change password or email adress(username)
+
+    @CrossOrigin
     @PutMapping("/user")
-    void updateUser(@RequestParam(name="newPassword",required = true) String newPassword){
-        userAccountService.updateUser(newPassword);
+    void updateUser(@RequestBody JSONObject user) throws Exception {
+        final String oldPassword = (String)user.get("oldPassword");
+        ApplicationUser u = userAccountService.readUser((String)user.get("username"));
+        final String newPassword = bCryptPasswordEncoder.encode((String)user.get("newPassword"));
+
+        if (bCryptPasswordEncoder.matches(oldPassword, u.getPassword()) && !oldPassword.equals(newPassword)) {
+            userAccountService.updateUser(oldPassword, newPassword);
+            System.out.println("Password changed!");
+        }
+        else {
+            throw new Exception("Password was not changed!");
+        }
     }
 
     //TODO: admin can delete anyone, regular user just themselves

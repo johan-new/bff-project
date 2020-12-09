@@ -60,9 +60,10 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      * @return An instance of User that was updated
      */
     @Override
-    public ApplicationUser updateUser(String newPassword) {
+    public ApplicationUser updateUser(String oldPassword, String newPassword) {
         //change password
         readLoggedInUser().setPassword(newPassword);
+        userAccountDataAccess.save(readLoggedInUser());
         return readLoggedInUser();
     }
 
