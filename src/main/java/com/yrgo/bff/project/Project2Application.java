@@ -3,7 +3,6 @@ package com.yrgo.bff.project;
 import com.yrgo.bff.project.domain.ApplicationUser;
 import com.yrgo.bff.project.service.GameService;
 import com.yrgo.bff.project.service.MatchingService;
-import com.yrgo.bff.project.service.NotificationService;
 import com.yrgo.bff.project.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -46,10 +45,10 @@ public class Project2Application {
 
 		@Override
 		public void run(ApplicationArguments args) throws Exception {
-			final String user = "Erik";
-			final String user2 = "Simon";
-			final String user3 = "Johan";
-			final String user4 = "Greven";
+			final String user = "Erik@a.a";
+			final String user2 = "Simon@a.a";
+			final String user3 = "Johan@a.a";
+			final String user4 = "Greven@a.a";
 			final String password = "a";
 			final String venue = "Mölndal";
 

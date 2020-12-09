@@ -34,7 +34,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     public ApplicationUser createUser(final String username, String password) {
 //        password = AuthenticationServiceImplementation.hashThis(password);
         ApplicationUser user = new ApplicationUser(username, password);
-        System.out.println("Created user with password " + password);
+        System.out.println("Created user" + user.getUsername()+ " with password " + password);
         userAccountDataAccess.save(user);
         return user;
     }
