@@ -22,6 +22,10 @@ import java.util.Date;
 
 import static com.yrgo.bff.project.security.SecurityConstants.*;
 
+/**
+ * Code source and credit:
+ * https://auth0.com/blog/implementing-jwt-authentication-on-spring-boot/
+*/
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     @Autowired
@@ -29,8 +33,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-
-//        setFilterProcessesUrl("/api/services/controller/user/login");
     }
 
     @Override

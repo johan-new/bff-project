@@ -1,5 +1,9 @@
 package com.yrgo.bff.project.security;
 
+/**
+ * Code source and credit:
+ * https://auth0.com/blog/implementing-jwt-authentication-on-spring-boot/
+ */
 public class SecurityConstants {
 
     public static final String SECRET = "SECRETKEY";

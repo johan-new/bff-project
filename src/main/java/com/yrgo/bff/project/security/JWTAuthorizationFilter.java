@@ -18,6 +18,10 @@ import static com.yrgo.bff.project.security.SecurityConstants.HEADER_STRING;
 import static com.yrgo.bff.project.security.SecurityConstants.SECRET;
 import static com.yrgo.bff.project.security.SecurityConstants.TOKEN_PREFIX;
 
+/**
+ * Code source and credit:
+ * https://auth0.com/blog/implementing-jwt-authentication-on-spring-boot/
+ */
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     public JWTAuthorizationFilter(AuthenticationManager authManager) {

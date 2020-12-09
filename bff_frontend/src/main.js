@@ -21,14 +21,7 @@ const router = new VueRouter({
   routes
 })
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
-
 router.beforeEach((to, from, next) => {
-  console.log('router before each running')
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (store.getters.isLoggedIn) {
       next()
@@ -39,3 +32,9 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
+
+new Vue({
+  router,
+  store,
+  render: h => h(App)
+}).$mount('#app')
