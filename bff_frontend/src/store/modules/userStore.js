@@ -19,7 +19,17 @@ const actions = {
       params: { username }
     })
       .then(data => {
-        context.commit('set_user', data.data)
+        console.log(data.data)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+  },
+  fetchUserprofile (context) {
+    axios.get('http://localhost:8080/loggedinuser')
+      .then(data => {
+        console.log(data.data)
+        context.commit('userprofile', data.data)
       })
       .catch(error => {
         console.log(error.response)
@@ -28,7 +38,7 @@ const actions = {
 }
 
 const mutations = {
-  set_user (state, user) {
+  userprofile (state, user) {
     state.user = user
   }
 }

@@ -49,8 +49,9 @@ public class Project2Application {
 			final String user2 = "Simon@a.a";
 			final String user3 = "Johan@a.a";
 			final String user4 = "Greven@a.a";
-			final String password = "a";
+			final String password = bCryptPasswordEncoder().encode("a");
 			final String venue = "Mölndal";
+
 
 			userAccountService.createUser(user,password);
 			userAccountService.createUser(user2,password);

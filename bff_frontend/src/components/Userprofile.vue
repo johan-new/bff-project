@@ -20,7 +20,7 @@ export default {
     }
   },
   created () {
-    console.log('Hej!')
+    this.$store.dispatch('fetchUserprofile')
   },
   methods: {
     fetchUser () {
