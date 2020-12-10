@@ -4,9 +4,7 @@ Projektarbete ht20 JAVA19 @ YRGO
 ### End-points
 
 `GET /notifications`
-Hämtar notiser för inloggad användare. 
-
-Exempeldata:
+Hämtar notiser för inloggad användare. Ex
 
 ``` 
 {
@@ -24,10 +22,9 @@ Exempeldata:
   } 
   ```
   
+  
 `GET /loggedinuser`
-Hämtar notiser för inloggad användare. 
-
-Exempeldata:
+Hämtar notiser för inloggad användare. Ex
 
 ``` 
 {
