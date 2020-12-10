@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -33,8 +34,9 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     @Override
     public ApplicationUser createUser(final String username, String password) {
 //        password = AuthenticationServiceImplementation.hashThis(password);
-        ApplicationUser user = new ApplicationUser(username, password);
-        System.out.println("Created user with password " + password);
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        ApplicationUser user = new ApplicationUser(username,bCryptPasswordEncoder.encode(password));
+        System.out.println("Created user " + username);
         userAccountDataAccess.save(user);
         return user;
     }
@@ -43,7 +45,6 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      * Removes a user from the database
      *
      * @param username - String username of the user you want to remove
-     * @param password - String password of the user you want to remove
      * @return An instance of User that was deleted
      */
     @Override

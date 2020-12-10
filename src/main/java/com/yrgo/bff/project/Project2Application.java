@@ -35,6 +35,9 @@ public class Project2Application {
 	@Autowired
 	MatchingService matchingService;
 
+	@Autowired
+	NotificationService notificationService;
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(Project2Application.class, args);
@@ -70,6 +73,8 @@ public class Project2Application {
 			matchingService.addUserMatchRequest(userAccountService.readUser(user2),venue);
 			matchingService.addUserMatchRequest(userAccountService.readUser(user3),venue);
 			matchingService.addUserMatchRequest(userAccountService.readUser(user4),venue);
+
+			notificationService.addNotification("Johan","Detta är en notis!", NotificationService.Type.GENERAL);
 
 
 		}

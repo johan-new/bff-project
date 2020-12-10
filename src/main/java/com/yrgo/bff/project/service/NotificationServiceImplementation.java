@@ -1,48 +1,47 @@
 package com.yrgo.bff.project.service;
 
-import org.json.simple.JSONObject;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class NotificationServiceImplementation implements NotificationService {
 
-    Map<String,List<String>> notifications;
+    Map<String,Map<Integer,Map<String,String>>> notifications;
 
     public NotificationServiceImplementation() {
         this.notifications =  new HashMap();
     }
 
     @Override
-    public List<String> getNotifications() {
+    public Map<Integer, Map<String, String>> getNotifications() {
         try {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return notifications.remove(username);
         } catch (Exception e) {
             return null;
-        } finally {
         }
     }
 
     @Override
-    public void addNotification(String username, String notification, Type type) {
+    public void addNotification(String username, String content, Type type) {
+        Map<String,String> notificationContent = new HashMap<>();
+        notificationContent.put("type",type.name());
+        notificationContent.put("timestamp",new Date().toString());
+        notificationContent.put("content", content);
+
         if (notifications.containsKey(username)) {
-            notifications.get(username).add(type.name());
-            notifications.get(username).add(notification);
+            notifications.get(username).put(notificationContent.hashCode(),notificationContent);
         } else {
-            List<String> newNotification = new ArrayList<>();
-            newNotification.add(type.name());
-            newNotification.add(notification);
-            notifications.put(username,newNotification);
+            Map<Integer,Map<String,String>> notificationsMapForSpecificUser = new HashMap<>();
+            notificationsMapForSpecificUser.put(notificationContent.hashCode(),notificationContent);
+
+            notifications.put(username,notificationsMapForSpecificUser);
         }
-        System.out.println("Added new " + type.name() + " notification for " + username + "\n" + notification);
+        System.out.println("Added new " + type.name() + " notification for " + username);
     }
 /*
     private JSONObject buildNotification(String notification, Type type) {
