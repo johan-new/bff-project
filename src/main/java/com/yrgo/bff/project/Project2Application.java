@@ -49,10 +49,10 @@ public class Project2Application {
 
 		@Override
 		public void run(ApplicationArguments args) throws Exception {
-			final String user = "Erik";
-			final String user2 = "Simon";
-			final String user3 = "Johan";
-			final String user4 = "Greven";
+			final String user = "Erik@mail.com";
+			final String user2 = "Simon@mail.com";
+			final String user3 = "Johan@mail.com";
+			final String user4 = "Greven@mail.com";
 			final String password = "a";
 			final String venue = "Mölndal";
 
@@ -74,7 +74,7 @@ public class Project2Application {
 			matchingService.addUserMatchRequest(userAccountService.readUser(user3),venue);
 			matchingService.addUserMatchRequest(userAccountService.readUser(user4),venue);
 
-			notificationService.addNotification("Johan","Detta är en notis!", NotificationService.Type.GENERAL);
+			notificationService.addNotification(user3,"Detta är en notis!", NotificationService.Type.GENERAL);
 
 
 		}

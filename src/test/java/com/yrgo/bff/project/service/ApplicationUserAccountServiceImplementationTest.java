@@ -8,11 +8,12 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class ApplicationUserAccountServiceImplementationTest {
@@ -27,10 +28,12 @@ public class ApplicationUserAccountServiceImplementationTest {
     private ApplicationUser erekoPassword;
     private Set<ApplicationUser> userSet;
 
+    private final String username = "Ereko@mail.com";
+
     @BeforeEach
     void init() {
 
-        erekoPassword = new ApplicationUser("Ereko", "password");
+        erekoPassword = new ApplicationUser(username, "password");
         Mockito.when(userAccountDataAccess.findByUsername(erekoPassword.getUsername())).thenReturn(erekoPassword);
         Mockito.when(userAccountDataAccess.save(erekoPassword)).thenReturn(erekoPassword);
 
@@ -43,7 +46,7 @@ public class ApplicationUserAccountServiceImplementationTest {
 
     @Test
     void testMockReadUser() {
-        ApplicationUser found = userAccountServiceImplementation.readUser("Ereko");
+        ApplicationUser found = userAccountServiceImplementation.readUser(username);
         assertEquals(found, erekoPassword);
     }
 
@@ -71,10 +74,19 @@ public class ApplicationUserAccountServiceImplementationTest {
         Mockito.verify(userAccountDataAccess, Mockito.times(1)).delete(erekoPassword);
     }
 
-    @Test
+    @Test  @WithMockUser(username=username)
     public void testMockUpdateUser() {
         String newPassword = "newCoolPassword";
         userAccountServiceImplementation.updateUser(newPassword);
         assertEquals(erekoPassword.getPassword(), newPassword);
+    }
+
+    @Test
+    public void testValidEmailAddress(){
+        assertTrue(UserAccountServiceImplementation.validEmailAddress("hej@mail.com"));
+        assertFalse(UserAccountServiceImplementation.validEmailAddress("asdf"));
+        assertFalse(UserAccountServiceImplementation.validEmailAddress("@"));
+        assertFalse(UserAccountServiceImplementation.validEmailAddress("."));
+
     }
 }

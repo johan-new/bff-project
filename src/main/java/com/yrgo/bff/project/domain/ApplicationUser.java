@@ -3,6 +3,7 @@ package com.yrgo.bff.project.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yrgo.bff.project.controllers.ApplicationUserController;
 import com.yrgo.bff.project.service.NotificationService;
+import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,7 +28,7 @@ public class ApplicationUser {
     private String password;
 
     public ApplicationUser(String username, String password) {
-        this.username = username;
+        setUsername(username);
         this.password = password;
     }
 
@@ -44,6 +45,12 @@ public class ApplicationUser {
 
     public String getUsername() {
         return username;
+    }
+
+    private void setUsername(String username) {
+        if (UserAccountServiceImplementation.validEmailAddress(username)) {
+            this.username = username;
+        }
     }
 
     public String getPassword() {

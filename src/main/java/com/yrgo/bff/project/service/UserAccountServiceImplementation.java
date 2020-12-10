@@ -107,4 +107,14 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return readUser(authentication.getName());
     }
+
+    public static boolean validEmailAddress(String email){
+        if (email.contains("@") && email.contains(".") &&
+                !email.startsWith("@") && !email.endsWith("@") &&
+                !email.startsWith(".") && !email.endsWith(".")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
