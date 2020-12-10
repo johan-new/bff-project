@@ -1,8 +1,8 @@
 package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.domain.ApplicationUser;
-import org.springframework.context.ApplicationContext;
 
+import java.util.List;
 import java.util.Set;
 
 public interface UserAccountService {
@@ -13,4 +13,10 @@ public interface UserAccountService {
     ApplicationUser readLoggedInUser();
 
     Set<ApplicationUser> findAll();
+
+    void addFriend(ApplicationUser user);
+    void removeFriend(ApplicationUser user);
+
+    List<ApplicationUser> loadFriends();
+
 }

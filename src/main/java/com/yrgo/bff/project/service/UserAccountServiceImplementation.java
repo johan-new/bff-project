@@ -11,9 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Collections.emptyList;
 
@@ -43,7 +41,6 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      * Removes a user from the database
      *
      * @param username - String username of the user you want to remove
-     * @param password - String password of the user you want to remove
      * @return An instance of User that was deleted
      */
     @Override
@@ -106,4 +103,24 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return readUser(authentication.getName());
     }
+
+    @Override
+    public void addFriend(ApplicationUser user) {
+        userAccountDataAccess.delete(user);
+    }
+
+    @Override
+    public List<ApplicationUser> loadFriends() {
+       List<ApplicationUser> friendsList = new ArrayList<>();
+        for (ApplicationUser u : friendsList) {
+            friendsList.add(u);
+        }
+        return friendsList;
+    }
+
+    @Override
+    public void removeFriend(ApplicationUser user) {
+        userAccountDataAccess.delete(user);
+    }
+
 }

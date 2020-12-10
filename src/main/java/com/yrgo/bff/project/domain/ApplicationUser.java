@@ -28,7 +28,7 @@ public class ApplicationUser {
     @Autowired @Transient
     NotificationService notificationService;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Friends friends = new Friends();
 
     //this should never be serialized by the web layer
