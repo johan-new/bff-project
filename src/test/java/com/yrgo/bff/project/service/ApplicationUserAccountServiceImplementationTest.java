@@ -77,7 +77,8 @@ public class ApplicationUserAccountServiceImplementationTest {
     @Test  @WithMockUser(username=username)
     public void testMockUpdateUser() {
         String newPassword = "newCoolPassword";
-        userAccountServiceImplementation.updateUser(newPassword);
+        String oldPassword = erekoPassword.getPassword();
+        userAccountServiceImplementation.updateUser(oldPassword, newPassword);
         assertEquals(erekoPassword.getPassword(), newPassword);
     }
 

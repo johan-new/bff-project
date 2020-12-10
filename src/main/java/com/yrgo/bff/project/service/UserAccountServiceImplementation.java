@@ -33,10 +33,10 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      */
     @Override
     public ApplicationUser createUser(final String username, String password) {
-//        password = AuthenticationServiceImplementation.hashThis(password);
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         ApplicationUser user = new ApplicationUser(username,bCryptPasswordEncoder.encode(password));
-        System.out.println("Created user " + username);
+        System.out.println("Created user " + user.getUsername()+ " with password " + password);
+
         userAccountDataAccess.save(user);
         return user;
     }
@@ -61,9 +61,10 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      * @return An instance of User that was updated
      */
     @Override
-    public ApplicationUser updateUser(String newPassword) {
+    public ApplicationUser updateUser(String oldPassword, String newPassword) {
         //change password
         readLoggedInUser().setPassword(newPassword);
+        userAccountDataAccess.save(readLoggedInUser());
         return readLoggedInUser();
     }
 

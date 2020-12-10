@@ -49,12 +49,15 @@ public class Project2Application {
 
 		@Override
 		public void run(ApplicationArguments args) throws Exception {
-			final String user = "Erik@mail.com";
-			final String user2 = "Simon@mail.com";
-			final String user3 = "Johan@mail.com";
-			final String user4 = "Greven@mail.com";
-			final String password = "a";
+
+			final String user = "erik@a.a";
+			final String user2 = "simon@a.a";
+			final String user3 = "sohan@a.a";
+			final String user4 = "sreven@a.a";
+			final String password = bCryptPasswordEncoder().encode("a");
+
 			final String venue = "Mölndal";
+
 
 			userAccountService.createUser(user,password);
 			userAccountService.createUser(user2,password);

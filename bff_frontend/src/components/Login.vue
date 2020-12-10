@@ -20,9 +20,7 @@ export default {
       userData: {
         email: '',
         password: ''
-      },
-      successMessage: '',
-      errorMessage: ''
+      }
     }
   },
   methods: {
