@@ -1,11 +1,9 @@
 package com.yrgo.bff.project.service;
 
-import org.aspectj.weaver.ast.Not;
-
-import java.util.List;
+import java.util.Map;
 
 public interface NotificationService {
-    List<String> getNotifications();
+    Map<Integer, Map<String, String>> getNotifications();
     void addNotification(String username, String notification, NotificationService.Type type);
 
     enum Type {

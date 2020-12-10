@@ -35,6 +35,9 @@ public class Project2Application {
 	@Autowired
 	MatchingService matchingService;
 
+	@Autowired
+	NotificationService notificationService;
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(Project2Application.class, args);
@@ -46,12 +49,15 @@ public class Project2Application {
 
 		@Override
 		public void run(ApplicationArguments args) throws Exception {
-			final String user = "Erik";
-			final String user2 = "Simon";
-			final String user3 = "Johan";
-			final String user4 = "Greven";
+
+			final String user = "erik@a.a";
+			final String user2 = "simon@a.a";
+			final String user3 = "sohan@a.a";
+			final String user4 = "sreven@a.a";
 			final String password = "a";
+
 			final String venue = "Mölndal";
+
 
 			userAccountService.createUser(user,password);
 			userAccountService.createUser(user2,password);
@@ -70,6 +76,8 @@ public class Project2Application {
 			matchingService.addUserMatchRequest(userAccountService.readUser(user2),venue);
 			matchingService.addUserMatchRequest(userAccountService.readUser(user3),venue);
 			matchingService.addUserMatchRequest(userAccountService.readUser(user4),venue);
+
+			notificationService.addNotification(user3,"Detta är en notis!", NotificationService.Type.GENERAL);
 
 
 		}

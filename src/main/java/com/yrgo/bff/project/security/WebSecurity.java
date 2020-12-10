@@ -15,6 +15,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 /**
  * Code source and credit:
  * https://auth0.com/blog/implementing-jwt-authentication-on-spring-boot/
@@ -35,6 +38,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers("/h2-console/**").permitAll() //TODO: Remove this line before prod
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
+                .antMatchers(HttpMethod.PUT, "/user").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
@@ -46,28 +50,36 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
     }
 
+
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userAccountService).passwordEncoder(bCryptPasswordEncoder);
     }
 //    https://www.freecodecamp.org/news/how-to-setup-jwt-authorization-and-authentication-in-spring/
 
-//    @Bean
+
+//    @Bean //TODO: Review before prod
 //    CorsConfigurationSource corsConfigurationSource() {
 //        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+//        CorsConfiguration corsConfig = new CorsConfiguration();
+//        corsConfig.applyPermitDefaultValues();
+//        corsConfig.addExposedHeader(SecurityConstants.HEADER_STRING);
+//        source.registerCorsConfiguration("/**", corsConfig);
 //        return source;
 //    }
 
-    @Bean //TODO: Review before prod
+    @Bean   //TODO: Review before prod
     CorsConfigurationSource corsConfigurationSource() {
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.applyPermitDefaultValues();
-        corsConfig.addExposedHeader(SecurityConstants.HEADER_STRING);
-        source.registerCorsConfiguration("/**", corsConfig);
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:9090"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "content-type"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "content-type"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 
     //Kanske ej behövs?
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)

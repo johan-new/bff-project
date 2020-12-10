@@ -20,9 +20,7 @@ export default {
     return {
       userData: {
         location: ''
-      },
-      successMessage: '',
-      errorMessage: ''
+      }
     }
   },
   methods: {

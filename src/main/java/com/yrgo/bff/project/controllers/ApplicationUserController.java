@@ -1,6 +1,8 @@
 package com.yrgo.bff.project.controllers;
 
+import com.yrgo.bff.project.domain.ApplicationUser;
 import com.yrgo.bff.project.service.UserAccountService;
+import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,6 +28,10 @@ public class ApplicationUserController {
         final String username = (String)user.get("username");
         final String password = bCryptPasswordEncoder.encode((String)user.get("password"));
 
+        if (!UserAccountServiceImplementation.validEmailAddress(username)) {
+            throw new Exception("Invalid email address!");
+        }
+
         if (userAccountService.readUser(username)==null) {
         userAccountService.createUser(username, password);
         return userAccountService.readUser(username).toJSON();
@@ -35,8 +41,8 @@ public class ApplicationUserController {
     }
 
     @GetMapping("/user")
-    JSONObject readUser(@RequestBody JSONObject user) {
-        return userAccountService.readLoggedInUser().toJSON();
+    JSONObject readUser(@RequestParam String username) {
+        return userAccountService.readUser(username).toJSON();
     }
 
     @GetMapping("/user/previousgames")
@@ -50,9 +56,19 @@ public class ApplicationUserController {
     }
 
     //used to change password or email adress(username)
+
     @PutMapping("/user")
-    void updateUser(@RequestParam(name="newPassword",required = true) String newPassword){
-        userAccountService.updateUser(newPassword);
+    void updateUser(@RequestBody JSONObject user) throws Exception {
+        final String oldPassword = (String)user.get("oldPassword");
+        ApplicationUser u = userAccountService.readUser((String)user.get("username"));
+        final String newPassword = (String)user.get("newPassword");
+
+        if (bCryptPasswordEncoder.matches(oldPassword, u.getPassword()) && !oldPassword.equals(newPassword)) {
+            userAccountService.updateUser(oldPassword, newPassword);
+        }
+        else {
+            throw new Exception("ERROR: Password was not changed!");
+        }
     }
 
     //TODO: admin can delete anyone, regular user just themselves

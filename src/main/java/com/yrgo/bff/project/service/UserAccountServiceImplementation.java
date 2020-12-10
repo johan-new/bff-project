@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -21,6 +22,11 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     @Autowired
     UserAccountDataAccess userAccountDataAccess;
 
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public UserAccountServiceImplementation(BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
     /**
      * Creates a user and persists it in the database
      *
@@ -30,9 +36,9 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      */
     @Override
     public ApplicationUser createUser(final String username, String password) {
-//        password = AuthenticationServiceImplementation.hashThis(password);
-        ApplicationUser user = new ApplicationUser(username, password);
-        System.out.println("Created user with password " + password);
+        ApplicationUser user = new ApplicationUser(username,bCryptPasswordEncoder.encode(password));
+        System.out.println("Created user " + user.getUsername()+ " with password " + password);
+
         userAccountDataAccess.save(user);
         return user;
     }
@@ -57,9 +63,10 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      * @return An instance of User that was updated
      */
     @Override
-    public ApplicationUser updateUser(String newPassword) {
-        //change password
+    public ApplicationUser updateUser(String oldPassword, String newPassword) {
+        bCryptPasswordEncoder.encode(newPassword);
         readLoggedInUser().setPassword(newPassword);
+        userAccountDataAccess.save(readLoggedInUser());
         return readLoggedInUser();
     }
 
@@ -123,4 +130,14 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
         userAccountDataAccess.delete(user);
     }
 
+
+    public static boolean validEmailAddress(String email){
+        if (email.contains("@") && email.contains(".") &&
+                !email.startsWith("@") && !email.endsWith("@") &&
+                !email.startsWith(".") && !email.endsWith(".")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

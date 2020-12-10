@@ -2,7 +2,6 @@
   <div id="app">
     <Header />
     <router-view></router-view>
-    <router-link to="/about">About</router-link><span v-if="isLoggedIn"> | <a @click="logout">Logout</a></span>
   </div>
 </template>
 
@@ -17,12 +16,6 @@ export default {
     isLoggedIn () { return this.$store.getters.isLoggedIn }
   },
   methods: {
-    logout () {
-      this.$store.dispatch('logout')
-        .then(() => {
-          this.$router.push('/login')
-        })
-    },
     created () {
       this.$http.interceptors.response.use(undefined, function (err) {
         return new Promise(function (resolve, reject) {

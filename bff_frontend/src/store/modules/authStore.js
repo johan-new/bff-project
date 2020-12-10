@@ -11,7 +11,8 @@ const state = {
 }
 const getters = {
   isLoggedIn: state => !!state.token,
-  authStatus: state => state.status
+  authStatus: state => state.status,
+  loggedInUser: state => state.email
 }
 
 const actions = {
@@ -40,6 +41,7 @@ const actions = {
       })
   },
   login (context, user) {
+    console.log(user)
     return new Promise((resolve, reject) => {
       context.commit('auth_request')
       axios.post('http://localhost:8080/login', {
