@@ -61,7 +61,7 @@ public class ApplicationUserController {
     void updateUser(@RequestBody JSONObject user) throws Exception {
         final String oldPassword = (String)user.get("oldPassword");
         ApplicationUser u = userAccountService.readUser((String)user.get("username"));
-        final String newPassword = bCryptPasswordEncoder.encode((String)user.get("newPassword"));
+        final String newPassword = (String)user.get("newPassword");
 
         if (bCryptPasswordEncoder.matches(oldPassword, u.getPassword()) && !oldPassword.equals(newPassword)) {
             userAccountService.updateUser(oldPassword, newPassword);

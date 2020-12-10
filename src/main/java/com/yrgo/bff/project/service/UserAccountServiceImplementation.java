@@ -24,6 +24,11 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     @Autowired
     UserAccountDataAccess userAccountDataAccess;
 
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public UserAccountServiceImplementation(BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
     /**
      * Creates a user and persists it in the database
      *
@@ -33,7 +38,6 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      */
     @Override
     public ApplicationUser createUser(final String username, String password) {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         ApplicationUser user = new ApplicationUser(username,bCryptPasswordEncoder.encode(password));
         System.out.println("Created user " + user.getUsername()+ " with password " + password);
 
@@ -62,7 +66,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      */
     @Override
     public ApplicationUser updateUser(String oldPassword, String newPassword) {
-        //change password
+        bCryptPasswordEncoder.encode(newPassword);
         readLoggedInUser().setPassword(newPassword);
         userAccountDataAccess.save(readLoggedInUser());
         return readLoggedInUser();

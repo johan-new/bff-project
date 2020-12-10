@@ -68,7 +68,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 //        return source;
 //    }
 
-    @Bean
+    @Bean   //TODO: Review before prod
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Collections.singletonList("http://localhost:9090"));

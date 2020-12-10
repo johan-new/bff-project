@@ -54,7 +54,7 @@ public class Project2Application {
 			final String user2 = "simon@a.a";
 			final String user3 = "sohan@a.a";
 			final String user4 = "sreven@a.a";
-			final String password = bCryptPasswordEncoder().encode("a");
+			final String password = "a";
 
 			final String venue = "Mölndal";
 

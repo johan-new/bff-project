@@ -3,7 +3,8 @@ import axios from 'axios'
 const state = {
   user: '',
   friendlist: {},
-  gamelist: {}
+  gamelist: {},
+  statuscode: ''
 }
 
 const getters = {
@@ -40,13 +41,10 @@ const actions = {
       username: state.user.username,
       oldPassword,
       newPassword
-    }, {
-      headers: {
-        Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJFcmlrQGEuYSIsImV4cCI6MTYwODQzNDc1Nn0.nbklpynT0yeSYk4cUaHQjuz873WiRrav_yrwlnFH4hqXWNs0sq3YsX_tOze4FLzqfxYRQyuTldjrAllSMFmPcQ'
-      }
     })
       .then(data => {
-        console.log(data.data)
+        console.log(data.status)
+        context.commit('set_status', data.status)
       })
       .catch(error => {
         console.log(error.response)
@@ -57,6 +55,9 @@ const actions = {
 const mutations = {
   userprofile (state, user) {
     state.user = user
+  },
+  set_status (state, status) {
+    state.statuscode = status
   }
 }
 
