@@ -1,6 +1,8 @@
 package com.yrgo.bff.project.controllers;
 
+import com.yrgo.bff.project.domain.ApplicationUser;
 import com.yrgo.bff.project.service.UserAccountService;
+import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,6 +27,10 @@ public class ApplicationUserController {
         //parsing
         final String username = (String)user.get("username");
         final String password = bCryptPasswordEncoder.encode((String)user.get("password"));
+
+        if (!UserAccountServiceImplementation.validEmailAddress(username)) {
+            throw new Exception("Invalid email address!");
+        }
 
         if (userAccountService.readUser(username)==null) {
         userAccountService.createUser(username, password);
