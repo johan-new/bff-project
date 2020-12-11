@@ -52,11 +52,20 @@ public class Project2Application {
 			final String password = bCryptPasswordEncoder().encode("a");
 			final String venue = "Mölndal";
 
+			final String user5 = "e@e.e";
+			final String user6 = "s@s.s";
+			final String user7 = "j@j.j";
+			final String user8 = "f@f.f";
 
 			userAccountService.createUser(user,password);
 			userAccountService.createUser(user2,password);
 			userAccountService.createUser(user3,password);
 			userAccountService.createUser(user4,password);
+
+			userAccountService.createUser(user5,password);
+			userAccountService.createUser(user6,password);
+			userAccountService.createUser(user7,password);
+			userAccountService.createUser(user8,password);
 
 			Set<ApplicationUser> users = new HashSet<>();
 
@@ -71,6 +80,15 @@ public class Project2Application {
 			matchingService.addUserMatchRequest(userAccountService.readUser(user3),venue);
 			matchingService.addUserMatchRequest(userAccountService.readUser(user4),venue);*/
 
+			ApplicationUser u1 = new ApplicationUser(user5, password);
+			ApplicationUser u2 = new ApplicationUser(user6, password);
+			ApplicationUser u3 = new ApplicationUser(user7, password);
+			ApplicationUser u4 = new ApplicationUser(user8, password);
+
+			matchingService.addUserMatchRequest(u1, "Stockholm");
+			matchingService.addUserMatchRequest(u2, "Norrut");
+			matchingService.addUserMatchRequest(u3, "Skåne");
+			matchingService.addUserMatchRequest(u4, "Pajala");
 
 		}
 

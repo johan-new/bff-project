@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
 public class MatchingServiceImplementation implements MatchingService, Runnable {
 
     private Map<ApplicationUser, String> usersLookingToBeMatched = new HashMap<>();
-    private List<Map.Entry<ApplicationUser, String>> usersAtThatSpecificLocation;
+    //Denna Mapen är den "slutgiltiga" över location - lista av folk på stället
+    private Map<String, ArrayList<ApplicationUser>> locationAndUsers;
 
     private boolean interrupt = false;
 
@@ -19,6 +20,7 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
     public void addUserMatchRequest(ApplicationUser user, String location) {
         if (!usersLookingToBeMatched.containsKey(user)) {
             usersLookingToBeMatched.put(user, location);
+            System.out.println("MatchingServiceImplementation.addUserMatchRequest "+ user + " " + location);
         }
     }
 
@@ -27,12 +29,14 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
         usersLookingToBeMatched.remove(user);
     }
 
-    // TODO: Facade pattern???
+    // TODO: Facade pattern??? -> Tanke här, låt matchUsers returnera matchingUsers mapen, så kallar man den på @GetMapping("/match/queue/venue").
+    // TODO: forts... Just nu anropar den metoden matchUsers, sedan hämtar via getter samma lista.
     @Override
     public void matchUsers() {
         Map<String, ArrayList<ApplicationUser>>  matchingUsers = categorizeUsersByVenue();
         //sortOutSingles();
-        notifyUsersThatMatch(matchingUsers);
+        // TODO: notifyUsers funkar ej, Null ptrexception
+//        notifyUsersThatMatch(matchingUsers);
     }
 
 
@@ -48,6 +52,7 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
     }
 
     public Map<String, ArrayList<ApplicationUser>>  categorizeUsersByVenue() {
+        System.out.println("Körs jag?");
         //getting unique venue values
         List<String> locationsOccurrences = new ArrayList<>();
         Iterator iterator = usersLookingToBeMatched.entrySet().iterator();
@@ -60,10 +65,9 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
             }
         }
 
-
-        Map<String, ArrayList<ApplicationUser>> locationAndUsers = new HashMap<>();
+        locationAndUsers = new HashMap<>();
         for (String location : locationsOccurrences) {
-            usersAtThatSpecificLocation = usersLookingToBeMatched.entrySet().stream().filter(s -> s.getValue().equals(location)).collect(Collectors.toList());
+            List<Map.Entry<ApplicationUser, String>> usersAtThatSpecificLocation = usersLookingToBeMatched.entrySet().stream().filter(s -> s.getValue().equals(location)).collect(Collectors.toList());
             ArrayList<ApplicationUser> usersAtSpecificVenue = new ArrayList<>();
             //building a list of users at every unique venue
             for (Map.Entry<ApplicationUser, String> userStringEntry : usersAtThatSpecificLocation) {
@@ -73,7 +77,6 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
                 }
             }
         }
-
         return locationAndUsers;
     }
 
@@ -103,5 +106,13 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
             } catch (Exception silent) {
             }
         }
+    }
+
+    public Map<ApplicationUser, String> getUsersLookingToBeMatched() {
+        return usersLookingToBeMatched;
+    }
+
+    public Map<String, ArrayList<ApplicationUser>> getLocationAndUsers() {
+        return locationAndUsers;
     }
 }
