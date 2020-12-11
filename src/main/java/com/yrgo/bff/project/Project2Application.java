@@ -1,6 +1,6 @@
 package com.yrgo.bff.project;
 
-import com.yrgo.bff.project.domain.ApplicationUser;
+import com.yrgo.bff.project.domain.UserAccount;
 import com.yrgo.bff.project.service.GameService;
 import com.yrgo.bff.project.service.MatchingService;
 import com.yrgo.bff.project.service.NotificationService;
@@ -64,7 +64,7 @@ public class Project2Application {
 			userAccountService.createUser(user3,password);
 			userAccountService.createUser(user4,password);
 
-			Set<ApplicationUser> users = new HashSet<>();
+			Set<UserAccount> users = new HashSet<>();
 
 			users.add(userAccountService.readUser(user));
 			users.add(userAccountService.readUser(user2));

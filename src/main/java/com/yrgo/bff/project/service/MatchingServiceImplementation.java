@@ -1,8 +1,7 @@
 package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.domain.GpsCoordinates;
-import com.yrgo.bff.project.domain.ApplicationUser;
-import org.aspectj.weaver.ast.Not;
+import com.yrgo.bff.project.domain.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +11,8 @@ import java.util.stream.Collectors;
 @Service
 public class MatchingServiceImplementation implements MatchingService {
 
-    private Map<ApplicationUser, String> usersLookingToBeMatched = new HashMap<>();
-    private List<Map.Entry<ApplicationUser, String>> usersAtThatSpecificLocation;
+    private Map<UserAccount, String> usersLookingToBeMatched = new HashMap<>();
+    private List<Map.Entry<UserAccount, String>> usersAtThatSpecificLocation;
 
     @Autowired
     NotificationService notificationService;
@@ -21,7 +20,7 @@ public class MatchingServiceImplementation implements MatchingService {
     private boolean interrupt = false;
 
     @Override
-    public void addUserMatchRequest(ApplicationUser user, String location) {
+    public void addUserMatchRequest(UserAccount user, String location) {
         if (!usersLookingToBeMatched.containsKey(user)) {
             usersLookingToBeMatched.put(user, location);
             matchUsers();
@@ -29,7 +28,7 @@ public class MatchingServiceImplementation implements MatchingService {
     }
 
     @Override
-    public void removeUserMatchRequest(ApplicationUser user) {
+    public void removeUserMatchRequest(UserAccount user) {
         usersLookingToBeMatched.remove(user);
     }
 
@@ -38,7 +37,7 @@ public class MatchingServiceImplementation implements MatchingService {
     public void matchUsers() {
         if (usersLookingToBeMatched.size()>=4) {
         System.out.println("TRYING TO MATCH USERS");
-        Map<String, ArrayList<ApplicationUser>>  matchingUsers = categorizeUsersByVenue();
+        Map<String, ArrayList<UserAccount>>  matchingUsers = categorizeUsersByVenue();
 
         //TODO: match 4 users per venue
 
@@ -47,11 +46,11 @@ public class MatchingServiceImplementation implements MatchingService {
     }
 
 
-    private void notifyUsersThatMatch(Map<String, ArrayList<ApplicationUser>> matchingUsers) {
+    private void notifyUsersThatMatch(Map<String, ArrayList<UserAccount>> matchingUsers) {
         Iterator iterator = matchingUsers.entrySet().iterator();
         while (iterator.hasNext()){
             Map.Entry set = (Map.Entry) iterator.next();
-            for (ApplicationUser u: (ArrayList<ApplicationUser>)set.getValue() ) {
+            for (UserAccount u: (ArrayList<UserAccount>)set.getValue() ) {
                 //u.notifyUser(set.getValue().toString());
                 notificationService.addNotification(u.getUsername(),set.getValue().toString(), NotificationService.Type.MATCH_SUCCESS);
                 removeUserMatchRequest(u);
@@ -59,7 +58,7 @@ public class MatchingServiceImplementation implements MatchingService {
         }
     }
 
-    public Map<String, ArrayList<ApplicationUser>>  categorizeUsersByVenue() {
+    public Map<String, ArrayList<UserAccount>>  categorizeUsersByVenue() {
         //getting unique venue values
         List<String> locationsOccurrences = new ArrayList<>();
         Iterator iterator = usersLookingToBeMatched.entrySet().iterator();
@@ -73,12 +72,12 @@ public class MatchingServiceImplementation implements MatchingService {
         }
 
 
-        Map<String, ArrayList<ApplicationUser>> locationAndUsers = new HashMap<>();
+        Map<String, ArrayList<UserAccount>> locationAndUsers = new HashMap<>();
         for (String location : locationsOccurrences) {
             usersAtThatSpecificLocation = usersLookingToBeMatched.entrySet().stream().filter(s -> s.getValue().equals(location)).collect(Collectors.toList());
-            ArrayList<ApplicationUser> usersAtSpecificVenue = new ArrayList<>();
+            ArrayList<UserAccount> usersAtSpecificVenue = new ArrayList<>();
             //building a list of users at every unique venue
-            for (Map.Entry<ApplicationUser, String> userStringEntry : usersAtThatSpecificLocation) {
+            for (Map.Entry<UserAccount, String> userStringEntry : usersAtThatSpecificLocation) {
                 if (userStringEntry.getValue().equals(location)) {
                     usersAtSpecificVenue.add(userStringEntry.getKey());
                     locationAndUsers.put(location, usersAtSpecificVenue);

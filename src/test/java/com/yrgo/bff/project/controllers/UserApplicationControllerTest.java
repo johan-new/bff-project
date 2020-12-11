@@ -1,9 +1,8 @@
 package com.yrgo.bff.project.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yrgo.bff.project.controllers.ApplicationUserController;
 import com.yrgo.bff.project.domain.Game;
-import com.yrgo.bff.project.domain.ApplicationUser;
+import com.yrgo.bff.project.domain.UserAccount;
 import com.yrgo.bff.project.service.GameServiceImplementation;
 import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,9 +40,9 @@ public class UserApplicationControllerTest {
     private ApplicationUserController ctrlr;
 
     // This object will be magically initialized by the initFields method below.
-    private JacksonTester<ApplicationUser> jsonUser;
+    private JacksonTester<UserAccount> jsonUser;
     private JacksonTester<Game> jsonGame;
-    private ApplicationUser ereko;
+    private UserAccount ereko;
     @BeforeEach
     void init() {
 
@@ -56,7 +55,7 @@ public class UserApplicationControllerTest {
                 .setControllerAdvice(new Exception())
                 .build();
 
-        ereko = new ApplicationUser("ereko", "password");
+        ereko = new UserAccount("ereko", "password");
         Mockito.when(userAccountServiceImplementation.readUser(ereko.getUsername())).thenReturn(ereko);
 
     }

@@ -3,7 +3,7 @@ package com.yrgo.bff.project.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yrgo.bff.project.domain.ApplicationUser;
+import com.yrgo.bff.project.domain.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,7 +39,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {
         try {
-            ApplicationUser creds = new ObjectMapper().readValue(req.getInputStream(), ApplicationUser.class);
+            UserAccount creds = new ObjectMapper().readValue(req.getInputStream(), UserAccount.class);
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
