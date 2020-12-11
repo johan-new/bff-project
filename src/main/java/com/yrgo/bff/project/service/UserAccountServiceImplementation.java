@@ -113,7 +113,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
 
     @Override
     public void addFriend(ApplicationUser user) {
-        userAccountDataAccess.delete(user);
+        userAccountDataAccess.save(user);
     }
 
     @Override
