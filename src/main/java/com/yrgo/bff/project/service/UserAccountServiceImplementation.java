@@ -115,15 +115,15 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     @Override
     public void addFriend(String username) {
         //Tar in den nya vännen som argument
-        ApplicationUser user = readLoggedInUser();
+        UserAccount user = readLoggedInUser();
         //Lägger till den nya vännen på användaren
         user.addFriend(readUser(username));
     }
 
     @Override
-    public List<ApplicationUser> loadFriends() {
-       List<ApplicationUser> friendsList = new ArrayList<>();
-        for (ApplicationUser u : friendsList) {
+    public List<UserAccount> loadFriends() {
+       List<UserAccount> friendsList = new ArrayList<>();
+        for (UserAccount u : friendsList) {
             friendsList.add(u);
         }
         return friendsList;
@@ -131,7 +131,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
 
     @Override
     public void removeFriend(String username) {
-        ApplicationUser user = readLoggedInUser();
+        UserAccount user = readLoggedInUser();
         user.removeFriend(readUser(username));
     }
 

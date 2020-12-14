@@ -1,8 +1,10 @@
 package com.yrgo.bff.project.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.yrgo.bff.project.service.NotificationService;
 import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -22,7 +24,8 @@ public class UserAccount {
     @Id
     private String username;
 
-    @Autowired @Transient
+    @Autowired
+    @Transient
     NotificationService notificationService;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -113,11 +116,11 @@ public class UserAccount {
         }
     }
 
-    public void addFriend(ApplicationUser user) {
+    public void addFriend(UserAccount user) {
         this.friends.addFriend(user);
     }
 
-    public void removeFriend(ApplicationUser user) {
+    public void removeFriend(UserAccount user) {
         this.friends.removeFriend(user);
     }
 

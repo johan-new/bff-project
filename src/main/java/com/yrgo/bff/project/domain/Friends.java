@@ -12,20 +12,20 @@ public class Friends {
     private Long id;
 
     @ManyToMany
-    private List<ApplicationUser> friendsGroup = new ArrayList<>();
+    private List<UserAccount> friendsGroup = new ArrayList<>();
 
     public Friends() {}
 
-    public Friends(Long friendShipId, List<ApplicationUser> friendsGroup) {
+    public Friends(Long friendShipId, List<UserAccount> friendsGroup) {
         this.id=id;
         this.friendsGroup=friendsGroup;
     }
 
-    public List<ApplicationUser> getFriendsGroup() {
+    public List<UserAccount> getFriendsGroup() {
         return this.friendsGroup;
     }
 
-    public void setFriendsGroup(List<ApplicationUser> friendsGroup) {
+    public void setFriendsGroup(List<UserAccount> friendsGroup) {
         this.friendsGroup = friendsGroup;
     }
 
@@ -37,11 +37,11 @@ public class Friends {
         this.id = friendShipId;
     }
 
-    void addFriend(ApplicationUser user) {
+    void addFriend(UserAccount user) {
         this.friendsGroup.add(user);
     }
 
-    void removeFriend(ApplicationUser user) {
+    void removeFriend(UserAccount user) {
         this.friendsGroup.remove(user);
     }
 }

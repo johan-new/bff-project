@@ -1,6 +1,6 @@
 package com.yrgo.bff.project.controllers;
 
-import com.yrgo.bff.project.domain.ApplicationUser;
+import com.yrgo.bff.project.domain.UserAccount;
 import com.yrgo.bff.project.service.UserAccountService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class FriendsController {
     }
 
     @GetMapping(value = "/friend")
-    public List<ApplicationUser> loadFriends() {
+    public List<UserAccount> loadFriends() {
         return userAccountService.loadFriends();
     }
 

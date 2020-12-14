@@ -1,6 +1,6 @@
 package com.yrgo.bff.project.service;
 
-import com.yrgo.bff.project.domain.ApplicationUser;
+import com.yrgo.bff.project.domain.UserAccount;
 
 import java.util.List;
 import java.util.Set;
@@ -12,7 +12,6 @@ public interface UserAccountService {
     UserAccount readUser(String username);
     UserAccount readLoggedInUser();
 
-    Set<UserAccount> findAll();
     Set<UserAccount> findAll();
 
     void addFriend(String username);

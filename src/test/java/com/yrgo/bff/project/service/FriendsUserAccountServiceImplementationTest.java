@@ -1,6 +1,6 @@
 package com.yrgo.bff.project.service;
 
-import com.yrgo.bff.project.domain.ApplicationUser;
+import com.yrgo.bff.project.domain.UserAccount;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,12 +19,12 @@ public class FriendsUserAccountServiceImplementationTest {
     UserAccountServiceImplementation userAccountServiceImplementation;
 
     @BeforeAll
-    private List<ApplicationUser> init() {
-        ApplicationUser user = new ApplicationUser("Simon", "hej");
-        ApplicationUser user2 = new ApplicationUser("Johan", "yo");
-        ApplicationUser user3 = new ApplicationUser("Erik", "yalla");
+    private List<UserAccount> init() {
+        UserAccount user = new UserAccount("Simon", "hej");
+        UserAccount user2 = new UserAccount("Johan", "yo");
+        UserAccount user3 = new UserAccount("Erik", "yalla");
 
-        List<ApplicationUser> ar = new ArrayList<>();
+        List<UserAccount> ar = new ArrayList<>();
         ar.add(user);
         ar.add(user2);
         ar.add(user3);
@@ -34,7 +34,7 @@ public class FriendsUserAccountServiceImplementationTest {
 
     @BeforeEach
     private void addFriends() {
-        ApplicationUser user = userAccountServiceImplementation.readUser("Simon");
+        UserAccount user = userAccountServiceImplementation.readUser("Simon");
         user.addFriend(userAccountServiceImplementation.readUser("Johan"));
     }
 

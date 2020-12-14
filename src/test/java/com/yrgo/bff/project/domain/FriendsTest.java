@@ -12,16 +12,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class FriendsTest {
 
-    List<ApplicationUser> ar;
-    ApplicationUser user;
-    ApplicationUser user2;
-    ApplicationUser user3;
+    List<UserAccount> ar;
+    UserAccount user;
+    UserAccount user2;
+    UserAccount user3;
 
     @BeforeEach
      void init() {
-        user = new ApplicationUser("Simon", "hej");
-        user2 = new ApplicationUser("Johan", "yo");
-        user3 = new ApplicationUser("Erik", "yalla");
+        user = new UserAccount("Simon", "hej");
+        user2 = new UserAccount("Johan", "yo");
+        user3 = new UserAccount("Erik", "yalla");
 
 
         ar = new ArrayList<>();
@@ -34,8 +34,8 @@ public class FriendsTest {
 
     @Test
     public void addFriendsTest() {
-        ApplicationUser userWithFriendsList = new ApplicationUser("Göte", "lol");
-        ApplicationUser user01 = new ApplicationUser("Georg","lolzz");
+        UserAccount userWithFriendsList = new UserAccount("Göte", "lol");
+        UserAccount user01 = new UserAccount("Georg","lolzz");
 //        for (ApplicationUser u: ar) {
 //            userWithFriendsList.addFriend(u);
 //        }
@@ -49,8 +49,8 @@ public class FriendsTest {
 
     @Test
     public void removeFriendsTest() {
-        ApplicationUser userWithFriendsListAgain = new ApplicationUser("Gösta", "lolz");
-        for (ApplicationUser u: ar) {
+        UserAccount userWithFriendsListAgain = new UserAccount("Gösta", "lolz");
+        for (UserAccount u: ar) {
             userWithFriendsListAgain.addFriend(u);
         }
         userWithFriendsListAgain.removeFriend(ar.get(1));
@@ -61,8 +61,8 @@ public class FriendsTest {
 
     @Test
     public void getAllFriendsTest() {
-        ApplicationUser userWithFriendsListYetAgain = new ApplicationUser("Pål", "lolz");
-        for (ApplicationUser u: ar) {
+        UserAccount userWithFriendsListYetAgain = new UserAccount("Pål", "lolz");
+        for (UserAccount u: ar) {
             userWithFriendsListYetAgain.addFriend(u);
         }
         assertNotNull(userWithFriendsListYetAgain.getFriends().getFriendsGroup());
