@@ -51,15 +51,18 @@ public class MatchMakingController {
         }
     }
 
-    //EJ param
-    @DeleteMapping(value = "/match/{user}")
-    public void cancelMatchingRequest(@PathVariable("user") String user) throws Exception {
-            UserAccount userObject = userAccountService.readUser(user);
-        if (userObject!=null) {
+    @DeleteMapping(value = "/match")
+    public ResponseEntity cancelMatchingRequest() throws Exception {
+        UserAccount userObject = userAccountService.readLoggedInUser();
+        if (userObject !=null) {
             matchMakingService.removeUserMatchRequest(userObject);
-        } else {
+            return ResponseEntity.status(HttpStatus.OK).body("Match request cancelled!");
+        }
+        else {
             throw new Exception("No such user");
         }
 
+        }
+
     }
-}
+

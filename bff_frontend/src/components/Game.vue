@@ -1,31 +1,29 @@
 <template>
     <div class="wrapper">
         <h1>Padel/Game component</h1>
-        <p>Sök användare</p>
-        <form @submit.prevent="fetchUser">
-            <input type="username" placeholder="Username" v-model="user" /><br>
-          <button>Search</button>
+        <h2>Spela padel: Ange location</h2>
+                <form @submit.prevent="submitMatchRequest">
+            <input type="location" placeholder="location" v-model="location" /><br>
+          <button>Play padel</button>
         </form>
-        <p>Username: {{ this.$store.state.userStore.user.username }}</p>
-        <p>User as an object: {{ this.$store.state.userStore.user }}</p>
 
     </div>
 </template>
 
 <script>
 export default {
-  name: 'Userprofile',
+  name: 'Game',
   data () {
     return {
-      user: ''
+      location: ''
     }
   },
   methods: {
-    fetchUser () {
+    submitMatchRequest () {
       const payload = {
-        user: this.user
+        location: this.location
       }
-      this.$store.dispatch('fetchUser', payload)
+      this.$store.dispatch('submitMatchRequest', payload)
     }
   }
 }
