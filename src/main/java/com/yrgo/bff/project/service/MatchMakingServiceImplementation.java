@@ -32,15 +32,17 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         usersLookingToBeMatched.remove(user);
     }
 
+
     // TODO: Facade pattern???
+    // TODO: match 4 users per venue
     private void matchUsers() {
-        if (usersLookingToBeMatched.size()>=4) {
+        if (usersLookingToBeMatched.size()>1) {
             System.out.println("TRYING TO MATCH USERS");
             Map<String, ArrayList<UserAccount>>  matchingUsers = categorizeUsersByVenue();
-//TODO: match 4 users per venue
             notifyUsersThatMatch(matchingUsers);
         }
-        }
+    }
+
     private void notifyUsersThatMatch(Map<String, ArrayList<UserAccount>> matchingUsers) {
         Iterator iterator = matchingUsers.entrySet().iterator();
         while (iterator.hasNext()){
@@ -81,8 +83,17 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
                 }
             }
         }
+
+        //sorting out singles
+        locationAndUsers=locationAndUsers.entrySet().stream().filter(s->s.getValue().size()>1).collect(Collectors.toMap(
+                Map.Entry::getKey,
+                Map.Entry::getValue,
+                (oldValue,newValue)->oldValue,HashMap::new));
+
+
         return locationAndUsers;
     }
+
 
     public Map<UserAccount, String> getUsersLookingToBeMatched() {
         return usersLookingToBeMatched;

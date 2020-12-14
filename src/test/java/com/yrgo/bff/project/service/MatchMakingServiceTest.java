@@ -3,85 +3,111 @@ package com.yrgo.bff.project.service;
 import com.yrgo.bff.project.domain.UserAccount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
+@SpringBootTest
 public class MatchMakingServiceTest {
 
-    private MatchMakingService matchMakingService;
-    private UserAccount user1;
-    private UserAccount user2;
-    private UserAccount user3;
-    private UserAccount user4;
-    private UserAccount user5;
-    private UserAccount user6;
-    private String location = "Stockholm";
-    private String location2 = "Göteborg";
-    private Map<UserAccount, String> usersLookingToBeMatched;
+    private static final String user1 = "alfa@mail.com";
+    private static final String user2 = "beta@mail.com";
+    private static final String user3 = "gamma@mail.com";
+    private static final String user4 = "epsilon@mail.com";
+    private static final String user5 = "zeta@mail.com";
+    private static final String user6 = "eta@mail.com";
+    private static final String user7 = "theta@mail.com";
 
+    private static final String somePassword = "asdf";
 
-    @BeforeEach
-    void init() {
-        user1 = new UserAccount("Abraham", "Lincoln");
-        user2 = new UserAccount("Noel", "Noelsson");
-        user3 = new UserAccount("Bengt", "Bengan");
-        user4 = new UserAccount("Glenn", "Glennsson");
-        user5 = new UserAccount("Åke", "Åkesson");
-        user6 = new UserAccount("Sven", "Svensson");
-        location = "Stockholm";
-        location2 = "Göteborg";
-        usersLookingToBeMatched = new HashMap<>();
+    @Autowired
+    MatchMakingService matchMakingService;
 
-        matchMakingService = new MatchMakingServiceImplementation();
-        matchMakingService.addUserMatchRequest(user1, location);
-        matchMakingService.addUserMatchRequest(user2, location);
-        matchMakingService.addUserMatchRequest(user3, location2);
-        matchMakingService.addUserMatchRequest(user4, location2);
-        matchMakingService.addUserMatchRequest(user5, location2);
-        matchMakingService.addUserMatchRequest(user6, location2);
+    @Autowired
+    UserAccountService userAccountService;
 
-    }
+    @Autowired
+    NotificationService notificationService;
 
+    @WithMockUser(username=user1)
     @Test
     public void testCategorizeUsersByVenue() {
-        MatchMakingServiceImplementation matchingServiceImplementation = new MatchMakingServiceImplementation();
+        String location = Double.toString(Math.random());
+        String location2 = Double.toString(Math.random());
+        userAccountService.createUser(user1,somePassword);
+        userAccountService.createUser(user2,somePassword);
+        userAccountService.createUser(user3,somePassword);
 
-        UserAccount userTest1 = new UserAccount("Hej", "svej");
-        UserAccount userTest2 = new UserAccount("Hejdå", "re");
-        String loc = "GBG";
+        //sthlm
+        matchMakingService.addUserMatchRequest(userAccountService.readUser(user1), location);
+        matchMakingService.addUserMatchRequest(userAccountService.readUser(user2), location);
+        //gbg
+        matchMakingService.addUserMatchRequest(userAccountService.readUser(user3), location2);
 
-        matchingServiceImplementation.addUserMatchRequest(userTest1, loc);
-        matchingServiceImplementation.addUserMatchRequest(userTest2, loc);
+        String notifications = notificationService.getNotifications().toString();
 
-        Map<String, ArrayList<UserAccount>> locationAndUsers = new HashMap<>();
-        locationAndUsers = matchingServiceImplementation.categorizeUsersByVenue();
+        assertTrue(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
 
-        assertEquals(locationAndUsers.size(), 1);
-        assertTrue(locationAndUsers.containsKey("GBG"));
+        //clean up
+        userAccountService.removeUser(user1);
+        userAccountService.removeUser(user2);
+        userAccountService.removeUser(user3);
+
+        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user1));
+        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user2));
+        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user3));
     }
 
+    @WithMockUser(username=user3)
     @Test
-    void testAddUserMatchRequest() {
-        usersLookingToBeMatched.put(user1, location);
-        assertFalse(usersLookingToBeMatched.containsValue("Göteborg"));
-        assertTrue(usersLookingToBeMatched.containsValue("Stockholm"));
-        // Lägger till samma user, ska ej läggas till i HashMapen.
-        usersLookingToBeMatched.put(user1, location2);
-        assertEquals(usersLookingToBeMatched.size(), 1);
+    void testFalseNotification(){
+        String location2 = Double.toString(Math.random());
+
+        userAccountService.createUser(user3,somePassword);
+        matchMakingService.addUserMatchRequest(userAccountService.readUser(user3), location2);
+        String notifications = "";
+
+        try{
+            notifications = notificationService.getNotifications().toString();
+        } catch(NullPointerException e)  {}
+
+        assertFalse(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
+
+        userAccountService.removeUser(user3);
+        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user3));
     }
 
+    @WithMockUser(username=user4)
     @Test
-    void testRemoveUserMatchRequest() {
-        usersLookingToBeMatched.put(user2, location2);
-        assertEquals(usersLookingToBeMatched.size(), 1);
+    void testFalseNotificationSeveralUsers(){
+        String location = Double.toString(Math.random());
+        String location2 = Double.toString(Math.random());
+        userAccountService.createUser(user4,somePassword);
+        userAccountService.createUser(user5,somePassword);
 
-        usersLookingToBeMatched.remove(user2);
-        assertEquals(usersLookingToBeMatched.size(), 0);
+        //sthlm
+        matchMakingService.addUserMatchRequest(userAccountService.readUser(user4), location);
+        //gbg
+        matchMakingService.addUserMatchRequest(userAccountService.readUser(user5), location2);
+
+        String notifications = "";
+
+        try{
+            notifications = notificationService.getNotifications().toString();
+        } catch(NullPointerException e)  {}
+
+        assertFalse(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
+
+
+        userAccountService.removeUser(user4);
+        userAccountService.removeUser(user5);
+        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user4));
+        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user5));
     }
 
 

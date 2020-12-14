@@ -43,29 +43,5 @@ public class NotificationServiceImplementation implements NotificationService {
         }
         System.out.println("Added new " + type.name() + " notification for " + username);
     }
-/*
-    private JSONObject buildNotification(String notification, Type type) {
-        if (type == Type.MATCH_SUCCESS) {
-            return matchingSuccessNotification(notification);
-        } else {
-            return  genericNotification(notification);
-        }
-    }
-
-    private JSONObject matchingSuccessNotification(String notification) {
-        Map<String,Map<String,String>> object = new HashMap<>();
-        Map<String,String> data = new HashMap<>();
-        data.put("type",Type.MATCH_SUCCESS.toString());
-        data.put("participants", notification);
-        object.put("data",data);
-        return new JSONObject(object);
-    }
-
-    private JSONObject genericNotification(String notification) {
-        Map<String,String> data = new HashMap<>();
-        data.put("data",notification);
-        return new JSONObject(data);
-    }
-*/
 
 }
