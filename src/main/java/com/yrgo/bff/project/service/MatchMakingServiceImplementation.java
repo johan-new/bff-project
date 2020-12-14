@@ -1,6 +1,7 @@
 package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.domain.UserAccount;
+import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -95,12 +96,53 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
     }
 
 
-    public Map<UserAccount, String> getUsersLookingToBeMatched() {
-        return usersLookingToBeMatched;
-    }
+//    public Map<UserAccount, String> getUsersLookingToBeMatched() {
+    public JSONArray getUsersLookingToBeMatched() {
+        System.out.println("usersLookingToBM i getU... " + usersLookingToBeMatched);
+//        Map<String, Map<String, String>> theQueue = new HashMap<>();
 
-    public Map<String, ArrayList<UserAccount>> getLocationAndUsers() {
-        return locationAndUsers;
+        JSONArray a = new JSONArray();
+
+        for (Map.Entry<UserAccount, String> queueingUser : usersLookingToBeMatched.entrySet()) {
+            Map<String, String> playerQueue = new HashMap<>();
+            playerQueue.put("username", queueingUser.getKey().getUsername());
+            playerQueue.put("location", queueingUser.getValue());
+            a.add(playerQueue);
+        }
+        return a;
+
+
     }
+//    Map<String, String> gameDetails = new HashMap<>();
+//    List<String> players = new ArrayList<>();
+//
+//        for (UserAccount user : participants) {
+//        players.add(user.getUsername());
+//    }
+//
+//        gameDetails.put("id", getId().toString());
+//        gameDetails.put("when", getWhen().toString());
+//        gameDetails.put("venue", getVenue());
+//        gameDetails.put("players", players.toString());
+//
+//        return gameDetails;
+
+
+//    public JSONObject getPreviousGamesAsJSON() {
+//        try {
+//            Map<String, Map<String, String>> previousGamesMapped = new HashMap<>();
+//
+//            for (Game game : previousGames) {
+//                previousGamesMapped.put(game.getId().toString(), game.mapGameDetails());
+//            }
+//
+//            return new JSONObject(previousGamesMapped);
+//        } catch (NullPointerException e) {
+//            return new JSONObject();
+//        }
+//    }
+
+
+
 
 }

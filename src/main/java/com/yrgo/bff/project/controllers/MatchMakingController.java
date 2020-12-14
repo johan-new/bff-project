@@ -33,11 +33,14 @@ public class MatchMakingController {
     public ResponseEntity usersLookingToBeMatched() {
         return ResponseEntity.status(HttpStatus.OK).body(matchMakingService.getUsersLookingToBeMatched());
     }
+    /*
+    Används ej nu, vi ska skapa en egen lista/map
+
     @GetMapping("/match/queue/venue")
     public ResponseEntity locationAndUsers() {
         return ResponseEntity.status(HttpStatus.OK).body(matchMakingService.getLocationAndUsers());
     }
-
+    */
 
     @PostMapping("/match")
     public ResponseEntity submitMatchingRequest(@RequestBody JSONObject location) throws Exception {
