@@ -108,27 +108,7 @@ public class MatchMakingServiceTest {
         userAccountService.removeUser(user5);
         matchMakingService.removeUserMatchRequest(userAccountService.readUser(user4));
         matchMakingService.removeUserMatchRequest(userAccountService.readUser(user5));
-
     }
-/*
-    @Test
-    void testAddUserMatchRequest() {
-        usersLookingToBeMatched.put(user1, location);
-        assertFalse(usersLookingToBeMatched.containsValue("Göteborg"));
-        assertTrue(usersLookingToBeMatched.containsValue("Stockholm"));
-        // Lägger till samma user, ska ej läggas till i HashMapen.
-        usersLookingToBeMatched.put(user1, location2);
-        assertEquals(usersLookingToBeMatched.size(), 1);
-    }
-
-    @Test
-    void testRemoveUserMatchRequest() {
-        usersLookingToBeMatched.put(user2, location2);
-        assertEquals(usersLookingToBeMatched.size(), 1);
-
-        usersLookingToBeMatched.remove(user2);
-        assertEquals(usersLookingToBeMatched.size(), 0);
-    }*/
 
 
 }
