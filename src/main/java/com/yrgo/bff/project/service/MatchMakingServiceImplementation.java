@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class MatchingServiceImplementation implements MatchingService {
+public class MatchMakingServiceImplementation implements MatchMakingService {
 
     private Map<UserAccount, String> usersLookingToBeMatched = new HashMap<>();
 

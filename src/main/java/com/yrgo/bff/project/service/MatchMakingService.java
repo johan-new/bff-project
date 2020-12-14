@@ -5,7 +5,7 @@ import com.yrgo.bff.project.domain.UserAccount;
 import java.util.ArrayList;
 import java.util.Map;
 
-public interface MatchingService {
+public interface MatchMakingService {
 
     void addUserMatchRequest(UserAccount user, String location);
     void removeUserMatchRequest(UserAccount user);

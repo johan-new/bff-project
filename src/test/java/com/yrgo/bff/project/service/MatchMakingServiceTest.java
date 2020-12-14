@@ -12,9 +12,9 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class MatchingServiceTest {
+public class MatchMakingServiceTest {
 
-    private MatchingService matchingService;
+    private MatchMakingService matchMakingService;
     private UserAccount user1;
     private UserAccount user2;
     private UserAccount user3;
@@ -38,19 +38,19 @@ public class MatchingServiceTest {
         location2 = "Göteborg";
         usersLookingToBeMatched = new HashMap<>();
 
-        matchingService = new MatchingServiceImplementation();
-        matchingService.addUserMatchRequest(user1, location);
-        matchingService.addUserMatchRequest(user2, location);
-        matchingService.addUserMatchRequest(user3, location2);
-        matchingService.addUserMatchRequest(user4, location2);
-        matchingService.addUserMatchRequest(user5, location2);
-        matchingService.addUserMatchRequest(user6, location2);
+        matchMakingService = new MatchMakingServiceImplementation();
+        matchMakingService.addUserMatchRequest(user1, location);
+        matchMakingService.addUserMatchRequest(user2, location);
+        matchMakingService.addUserMatchRequest(user3, location2);
+        matchMakingService.addUserMatchRequest(user4, location2);
+        matchMakingService.addUserMatchRequest(user5, location2);
+        matchMakingService.addUserMatchRequest(user6, location2);
 
     }
 
     @Test
     public void testCategorizeUsersByVenue() {
-        MatchingServiceImplementation matchingServiceImplementation = new MatchingServiceImplementation();
+        MatchMakingServiceImplementation matchingServiceImplementation = new MatchMakingServiceImplementation();
 
         UserAccount userTest1 = new UserAccount("Hej", "svej");
         UserAccount userTest2 = new UserAccount("Hejdå", "re");
@@ -88,30 +88,30 @@ public class MatchingServiceTest {
 
     @Test
     void testIntervalCheck() {
-        assertTrue(MatchingServiceImplementation.isWithinInterval(0.9, 0.8, 1.0));
-        assertFalse(MatchingServiceImplementation.isWithinInterval(8, 9, 10));
+        assertTrue(MatchMakingServiceImplementation.isWithinInterval(0.9, 0.8, 1.0));
+        assertFalse(MatchMakingServiceImplementation.isWithinInterval(8, 9, 10));
     }
 
     @Test
     void testMatchingService() {
         //same spot, Gothenburg
-        assertTrue(MatchingServiceImplementation.match(new GpsCoordinates(57.708870, 11.974560), new GpsCoordinates(57.708870, 11.974560)));
+        assertTrue(MatchMakingServiceImplementation.match(new GpsCoordinates(57.708870, 11.974560), new GpsCoordinates(57.708870, 11.974560)));
 
         //Gothenburg vs Landvetter
-        assertTrue(MatchingServiceImplementation.match(new GpsCoordinates(57.708870, 11.974560), new GpsCoordinates(57.395015, 12.165695)));
+        assertTrue(MatchMakingServiceImplementation.match(new GpsCoordinates(57.708870, 11.974560), new GpsCoordinates(57.395015, 12.165695)));
 
         //Gothenburg vs Boras
-        assertTrue(MatchingServiceImplementation.match(new GpsCoordinates(57.708870, 11.974560), new GpsCoordinates(57.72101, 12.9401)));
+        assertTrue(MatchMakingServiceImplementation.match(new GpsCoordinates(57.708870, 11.974560), new GpsCoordinates(57.72101, 12.9401)));
 
         //Gothenburg vs Linköping
-        assertFalse(MatchingServiceImplementation.match(new GpsCoordinates(57.708870, 11.974560), new GpsCoordinates(58.41086, 15.62157)));
+        assertFalse(MatchMakingServiceImplementation.match(new GpsCoordinates(57.708870, 11.974560), new GpsCoordinates(58.41086, 15.62157)));
 
 
         //edge cases
-        assertFalse(MatchingServiceImplementation.match(new GpsCoordinates(600, 60), new GpsCoordinates(60, 60)));
-        assertFalse(MatchingServiceImplementation.match(new GpsCoordinates(60, 600), new GpsCoordinates(60, 60)));
-        assertFalse(MatchingServiceImplementation.match(new GpsCoordinates(60, 60), new GpsCoordinates(600, 60)));
-        assertFalse(MatchingServiceImplementation.match(new GpsCoordinates(60, 60), new GpsCoordinates(60, 600)));
+        assertFalse(MatchMakingServiceImplementation.match(new GpsCoordinates(600, 60), new GpsCoordinates(60, 60)));
+        assertFalse(MatchMakingServiceImplementation.match(new GpsCoordinates(60, 600), new GpsCoordinates(60, 60)));
+        assertFalse(MatchMakingServiceImplementation.match(new GpsCoordinates(60, 60), new GpsCoordinates(600, 60)));
+        assertFalse(MatchMakingServiceImplementation.match(new GpsCoordinates(60, 60), new GpsCoordinates(60, 600)));
 
 
     }

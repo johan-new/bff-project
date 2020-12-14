@@ -1,7 +1,7 @@
 package com.yrgo.bff.project.controllers;
 
 import com.yrgo.bff.project.domain.UserAccount;
-import com.yrgo.bff.project.service.MatchingService;
+import com.yrgo.bff.project.service.MatchMakingService;
 import com.yrgo.bff.project.service.UserAccountService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class MatchController {
+public class MatchMakingController {
 
     @Autowired
-    MatchingService matchingService;
+    MatchMakingService matchMakingService;
 
     @Autowired
     UserAccountService userAccountService;
@@ -31,11 +31,11 @@ public class MatchController {
 
     @GetMapping("/match/queue")
     public ResponseEntity usersLookingToBeMatched() {
-        return ResponseEntity.status(HttpStatus.OK).body(matchingService.getUsersLookingToBeMatched());
+        return ResponseEntity.status(HttpStatus.OK).body(matchMakingService.getUsersLookingToBeMatched());
     }
     @GetMapping("/match/queue/venue")
     public ResponseEntity locationAndUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body(matchingService.getLocationAndUsers());
+        return ResponseEntity.status(HttpStatus.OK).body(matchMakingService.getLocationAndUsers());
     }
 
 
@@ -44,7 +44,7 @@ public class MatchController {
         UserAccount userObject = userAccountService.readLoggedInUser();
         String venue = (String)location.get("location");
         if (userObject!=null) {
-            matchingService.addUserMatchRequest(userObject,venue);
+            matchMakingService.addUserMatchRequest(userObject,venue);
             return ResponseEntity.status(HttpStatus.CREATED).body("search added");
         } else {
             throw new Exception("No such user");
@@ -56,7 +56,7 @@ public class MatchController {
     public void cancelMatchingRequest(@PathVariable("user") String user) throws Exception {
             UserAccount userObject = userAccountService.readUser(user);
         if (userObject!=null) {
-            matchingService.removeUserMatchRequest(userObject);
+            matchMakingService.removeUserMatchRequest(userObject);
         } else {
             throw new Exception("No such user");
         }

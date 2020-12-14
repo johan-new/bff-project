@@ -2,7 +2,7 @@ package com.yrgo.bff.project;
 
 import com.yrgo.bff.project.domain.UserAccount;
 import com.yrgo.bff.project.service.GameService;
-import com.yrgo.bff.project.service.MatchingService;
+import com.yrgo.bff.project.service.MatchMakingService;
 import com.yrgo.bff.project.service.NotificationService;
 import com.yrgo.bff.project.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class Project2Application {
 	GameService gameService;
 
 	@Autowired
-	MatchingService matchingService;
+	MatchMakingService matchMakingService;
 
 	@Autowired
 	NotificationService notificationService;
@@ -82,10 +82,10 @@ public class Project2Application {
 
 			gameService.createGame(new Date(),"Göteborg",users);
 
-			matchingService.addUserMatchRequest(userAccountService.readUser(user),venue);
-			matchingService.addUserMatchRequest(userAccountService.readUser(user2),venue);
-			matchingService.addUserMatchRequest(userAccountService.readUser(user3),venue);
-			matchingService.addUserMatchRequest(userAccountService.readUser(user4),venue);
+			matchMakingService.addUserMatchRequest(userAccountService.readUser(user),venue);
+			matchMakingService.addUserMatchRequest(userAccountService.readUser(user2),venue);
+			matchMakingService.addUserMatchRequest(userAccountService.readUser(user3),venue);
+			matchMakingService.addUserMatchRequest(userAccountService.readUser(user4),venue);
 
 			notificationService.addNotification(user3,"Detta är en notis!", NotificationService.Type.GENERAL);
 
@@ -94,10 +94,10 @@ public class Project2Application {
 			UserAccount u3 = new UserAccount(user7, password);
 			UserAccount u4 = new UserAccount(user8, password);
 
-			matchingService.addUserMatchRequest(u1, "Stockholm");
-			matchingService.addUserMatchRequest(u2, "Norrut");
-			matchingService.addUserMatchRequest(u3, "Skåne");
-			matchingService.addUserMatchRequest(u4, "Pajala");
+			matchMakingService.addUserMatchRequest(u1, "Stockholm");
+			matchMakingService.addUserMatchRequest(u2, "Norrut");
+			matchMakingService.addUserMatchRequest(u3, "Skåne");
+			matchMakingService.addUserMatchRequest(u4, "Pajala");
 
 		}
 
