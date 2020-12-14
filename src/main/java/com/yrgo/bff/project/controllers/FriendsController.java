@@ -1,8 +1,8 @@
 package com.yrgo.bff.project.controllers;
 
 import com.yrgo.bff.project.domain.ApplicationUser;
-import com.yrgo.bff.project.domain.Friends;
 import com.yrgo.bff.project.service.UserAccountService;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,17 +16,19 @@ public class FriendsController {
 
 
     @PostMapping("/friend")
-    public void addFriend(ApplicationUser user) {
-        userAccountService.addFriend(user);
+    public void addFriend(@RequestBody JSONObject user) {
+        final String username = (String)user.get("username");
+                userAccountService.addFriend(username);
     }
 
-    @GetMapping("/friend")
+    @GetMapping(value = "/friend")
     public List<ApplicationUser> loadFriends() {
-       return userAccountService.loadFriends();
+        return userAccountService.loadFriends();
     }
 
     @DeleteMapping("/friend")
-    void removeFriend(ApplicationUser user) {
-        userAccountService.removeFriend(user);
+    void removeFriend(@RequestBody JSONObject user) {
+        final String username = (String)user.get("username");
+        userAccountService.removeFriend(username);
     }
 }

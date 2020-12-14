@@ -1,64 +1,72 @@
 package com.yrgo.bff.project.domain;
 
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
 
 @SpringBootTest
 public class FriendsTest {
 
-    private List<ApplicationUser> myTestArray() {
-        ApplicationUser user = new ApplicationUser("Simon", "hej");
-        ApplicationUser user2 = new ApplicationUser("Johan", "yo");
-        ApplicationUser user3 = new ApplicationUser("Erik", "yalla");
+    List<ApplicationUser> ar;
+    ApplicationUser user;
+    ApplicationUser user2;
+    ApplicationUser user3;
 
-        List<ApplicationUser> ar = new ArrayList<>();
+    @BeforeEach
+     void init() {
+        user = new ApplicationUser("Simon", "hej");
+        user2 = new ApplicationUser("Johan", "yo");
+        user3 = new ApplicationUser("Erik", "yalla");
+
+
+        ar = new ArrayList<>();
         ar.add(user);
         ar.add(user2);
         ar.add(user3);
 
-        return ar;
+        System.out.println(ar);
     }
 
     @Test
     public void addFriendsTest() {
         ApplicationUser userWithFriendsList = new ApplicationUser("Göte", "lol");
-        List<ApplicationUser> dummyList = myTestArray();
-        for (ApplicationUser u: dummyList) {
-            userWithFriendsList.addFriend(u);
-        }
+        ApplicationUser user01 = new ApplicationUser("Georg","lolzz");
+//        for (ApplicationUser u: ar) {
+//            userWithFriendsList.addFriend(u);
+//        }
+        userWithFriendsList.addFriend(user01);
 
-        assertEquals(userWithFriendsList.getFriends().getFriendsGroup().size(), 3);
-        System.out.println(userWithFriendsList.getFriends().getFriendsGroup());
+
+        assertEquals(userWithFriendsList.getFriends().getFriendsGroup().size(), 1);
+        assertEquals(userWithFriendsList.getFriends().getFriendsGroup().get(0), user01);
+        System.out.println(userWithFriendsList.getFriends().toString());
     }
 
     @Test
     public void removeFriendsTest() {
         ApplicationUser userWithFriendsListAgain = new ApplicationUser("Gösta", "lolz");
-        List<ApplicationUser> dummyList2 = myTestArray();
-        for (ApplicationUser u: dummyList2) {
+        for (ApplicationUser u: ar) {
             userWithFriendsListAgain.addFriend(u);
         }
-        userWithFriendsListAgain.removeFriend(myTestArray().remove(1));
+        userWithFriendsListAgain.removeFriend(ar.get(1));
 
         assertNotEquals(userWithFriendsListAgain.getFriends().getFriendsGroup().size(), 3);
- //       System.out.println(userWithFriendsListAgain.getFriends().getFriendsGroup());
+        System.out.println(userWithFriendsListAgain.getFriends().getFriendsGroup());
     }
 
     @Test
     public void getAllFriendsTest() {
         ApplicationUser userWithFriendsListYetAgain = new ApplicationUser("Pål", "lolz");
-        List<ApplicationUser> dummyList2 = myTestArray();
-        for (ApplicationUser u: dummyList2) {
+        for (ApplicationUser u: ar) {
             userWithFriendsListYetAgain.addFriend(u);
         }
         assertNotNull(userWithFriendsListYetAgain.getFriends().getFriendsGroup());
-//        System.out.println(userWithFriendsListYetAgain.getUsername() + " vänner är: " + userWithFriendsListYetAgain.getFriends().getFriendsGroup());
+        System.out.println(userWithFriendsListYetAgain.getUsername() + " vänner är: " + userWithFriendsListYetAgain.getFriends().getFriendsGroup());
     }
 
 }
-

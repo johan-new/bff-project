@@ -14,8 +14,8 @@ public interface UserAccountService {
 
     Set<ApplicationUser> findAll();
 
-    void addFriend(ApplicationUser user);
-    void removeFriend(ApplicationUser user);
+    void addFriend(String username);
+    void removeFriend(String username);
 
     List<ApplicationUser> loadFriends();
 

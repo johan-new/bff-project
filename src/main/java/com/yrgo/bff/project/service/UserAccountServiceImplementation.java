@@ -112,8 +112,11 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     }
 
     @Override
-    public void addFriend(ApplicationUser user) {
-        userAccountDataAccess.save(user);
+    public void addFriend(String username) {
+        //Tar in den nya vännen som argument
+        ApplicationUser user = readLoggedInUser();
+        //Lägger till den nya vännen på användaren
+        user.addFriend(readUser(username));
     }
 
     @Override
@@ -126,8 +129,9 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     }
 
     @Override
-    public void removeFriend(ApplicationUser user) {
-        userAccountDataAccess.delete(user);
+    public void removeFriend(String username) {
+        ApplicationUser user = readLoggedInUser();
+        user.removeFriend(readUser(username));
     }
 
 
