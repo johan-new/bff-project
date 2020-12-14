@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const state = {
-  queue: {},
+  queue: [],
   inQueue: false
 }
 
@@ -12,24 +12,27 @@ const getters = {
 
 const actions = {
   submitMatchRequest (context, location) {
-    location = location.location
-    axios.post('http://localhost:8080/match', {
-      location: location
+    return new Promise((resolve, reject) => {
+      location = location.location
+      axios.post('http://localhost:8080/match', {
+        location: location
+      })
+        .then(data => {
+          console.log(data)
+          context.commit('queue_status', true)
+          resolve(data)
+        })
+        .catch(error => {
+          console.log(error.response)
+          reject(error)
+        })
     })
-      .then(data => {
-        console.log(data.data)
-        context.commit('queue_status', true)
-      })
-      .catch(error => {
-        console.log(error.response)
-      })
   },
   matchingQueue (context) {
     axios.get('http://localhost:8080/match/queue')
       .then(data => {
         console.log(data.data)
         context.commit('matching_queue', data.data)
-      //  context.commit('queue_status', true)
       })
       .catch(error => {
         console.log(error.response)
@@ -37,14 +40,18 @@ const actions = {
       })
   },
   cancelMatchRequest (context) {
-    axios.delete('http://localhost:8080/match')
-      .then(data => {
-        console.log(data.data)
-        context.commit('queue_status', false)
-      })
-      .catch(error => {
-        console.log(error.response)
-      })
+    return new Promise((resolve, reject) => {
+      axios.delete('http://localhost:8080/match')
+        .then(data => {
+          console.log(data.data)
+          context.commit('queue_status', false)
+          resolve(data)
+        })
+        .catch(error => {
+          console.log(error.response)
+          reject(error)
+        })
+    })
   }
 }
 const mutations = {

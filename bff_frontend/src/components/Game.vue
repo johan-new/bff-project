@@ -11,7 +11,7 @@
           <button v-if="inQueue">Cancel match request</button>
         </form>
         <div class="mmQueue" style="border:1px solid black"><h2>MM queue:</h2>
-        <div v-for="(item, mmQueue) in getQueue" :key="mmQueue" >Username: {{ item.username }} Location: {{ item.location }}</div>
+        <div v-for="item in getQueue" :key="item.username" >Username: {{ item }}</div>
 </div>
     </div>
 </template>
@@ -22,7 +22,6 @@ export default {
   computed: {
     inQueue () { return this.$store.getters.inQueue },
     getQueue () { return this.$store.getters.getQueue }
-  //  newQueueItem () { return this.$store.state.queue }
   },
   data () {
     return {
@@ -38,9 +37,11 @@ export default {
         location: this.location
       }
       this.$store.dispatch('submitMatchRequest', payload)
+        .then(() => this.$store.dispatch('matchingQueue'))
     },
     cancelMatchRequest () {
       this.$store.dispatch('cancelMatchRequest')
+        .then(() => this.$store.dispatch('matchingQueue'))
     }
   }
 }
