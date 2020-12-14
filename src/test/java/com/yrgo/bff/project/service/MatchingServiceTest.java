@@ -85,11 +85,6 @@ public class MatchingServiceTest {
         assertEquals(usersLookingToBeMatched.size(), 0);
     }
 
-    @Test
-    void testMatching() {
-        matchingService.matchUsers();
-        // Fill in with test here
-    }
 
     @Test
     void testIntervalCheck() {

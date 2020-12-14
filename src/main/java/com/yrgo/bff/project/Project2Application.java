@@ -58,13 +58,23 @@ public class Project2Application {
 
 			final String venue = "Mölndal";
 
+			final String user5 = "e@e.e";
+			final String user6 = "s@s.s";
+			final String user7 = "j@j.j";
+			final String user8 = "f@f.f";
 
 			userAccountService.createUser(user,password);
 			userAccountService.createUser(user2,password);
 			userAccountService.createUser(user3,password);
 			userAccountService.createUser(user4,password);
 
+
 			Set<UserAccount> users = new HashSet<>();
+
+			userAccountService.createUser(user5,password);
+			userAccountService.createUser(user6,password);
+			userAccountService.createUser(user7,password);
+			userAccountService.createUser(user8,password);
 
 			users.add(userAccountService.readUser(user));
 			users.add(userAccountService.readUser(user2));
@@ -79,6 +89,15 @@ public class Project2Application {
 
 			notificationService.addNotification(user3,"Detta är en notis!", NotificationService.Type.GENERAL);
 
+			UserAccount u1 = new UserAccount(user5, password);
+			UserAccount u2 = new UserAccount(user6, password);
+			UserAccount u3 = new UserAccount(user7, password);
+			UserAccount u4 = new UserAccount(user8, password);
+
+			matchingService.addUserMatchRequest(u1, "Stockholm");
+			matchingService.addUserMatchRequest(u2, "Norrut");
+			matchingService.addUserMatchRequest(u3, "Skåne");
+			matchingService.addUserMatchRequest(u4, "Pajala");
 
 		}
 

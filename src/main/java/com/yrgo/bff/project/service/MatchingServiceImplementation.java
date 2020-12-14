@@ -12,18 +12,19 @@ import java.util.stream.Collectors;
 public class MatchingServiceImplementation implements MatchingService {
 
     private Map<UserAccount, String> usersLookingToBeMatched = new HashMap<>();
-    private List<Map.Entry<UserAccount, String>> usersAtThatSpecificLocation;
 
     @Autowired
     NotificationService notificationService;
 
-    private boolean interrupt = false;
+    private Map<String, ArrayList<UserAccount>> locationAndUsers;
 
     @Override
     public void addUserMatchRequest(UserAccount user, String location) {
         if (!usersLookingToBeMatched.containsKey(user)) {
             usersLookingToBeMatched.put(user, location);
             matchUsers();
+            System.out.println("MatchingServiceImplementation.addUserMatchRequest "+ user + " " + location);
+
         }
     }
 
@@ -33,19 +34,13 @@ public class MatchingServiceImplementation implements MatchingService {
     }
 
     // TODO: Facade pattern???
-    @Override
-    public void matchUsers() {
+    private void matchUsers() {
         if (usersLookingToBeMatched.size()>=4) {
-        System.out.println("TRYING TO MATCH USERS");
-        Map<String, ArrayList<UserAccount>>  matchingUsers = categorizeUsersByVenue();
-
-        //TODO: match 4 users per venue
-
-        notifyUsersThatMatch(matchingUsers);
+            System.out.println("TRYING TO MATCH USERS");
+            Map<String, ArrayList<UserAccount>> matchingUsers = categorizeUsersByVenue();
         }
-    }
-
-
+            //TODO: match 4 users per venue
+        }
     private void notifyUsersThatMatch(Map<String, ArrayList<UserAccount>> matchingUsers) {
         Iterator iterator = matchingUsers.entrySet().iterator();
         while (iterator.hasNext()){
@@ -59,6 +54,8 @@ public class MatchingServiceImplementation implements MatchingService {
     }
 
     public Map<String, ArrayList<UserAccount>>  categorizeUsersByVenue() {
+        System.out.println("Körs jag?");
+
         //getting unique venue values
         List<String> locationsOccurrences = new ArrayList<>();
         Iterator iterator = usersLookingToBeMatched.entrySet().iterator();
@@ -71,11 +68,11 @@ public class MatchingServiceImplementation implements MatchingService {
             }
         }
 
-
-        Map<String, ArrayList<UserAccount>> locationAndUsers = new HashMap<>();
+        locationAndUsers = new HashMap<>();
         for (String location : locationsOccurrences) {
-            usersAtThatSpecificLocation = usersLookingToBeMatched.entrySet().stream().filter(s -> s.getValue().equals(location)).collect(Collectors.toList());
+            List<Map.Entry<UserAccount, String>> usersAtThatSpecificLocation = usersLookingToBeMatched.entrySet().stream().filter(s -> s.getValue().equals(location)).collect(Collectors.toList());
             ArrayList<UserAccount> usersAtSpecificVenue = new ArrayList<>();
+
             //building a list of users at every unique venue
             for (Map.Entry<UserAccount, String> userStringEntry : usersAtThatSpecificLocation) {
                 if (userStringEntry.getValue().equals(location)) {
@@ -84,7 +81,6 @@ public class MatchingServiceImplementation implements MatchingService {
                 }
             }
         }
-
         return locationAndUsers;
     }
 
@@ -105,5 +101,13 @@ public class MatchingServiceImplementation implements MatchingService {
         return valueToCheck >= minvalue && valueToCheck <= maxvalue;
     }
 
+
+    public Map<UserAccount, String> getUsersLookingToBeMatched() {
+        return usersLookingToBeMatched;
+    }
+
+    public Map<String, ArrayList<UserAccount>> getLocationAndUsers() {
+        return locationAndUsers;
+    }
 
 }
