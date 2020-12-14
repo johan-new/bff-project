@@ -37,9 +37,10 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
     private void matchUsers() {
         if (usersLookingToBeMatched.size()>=4) {
             System.out.println("TRYING TO MATCH USERS");
-            Map<String, ArrayList<UserAccount>> matchingUsers = categorizeUsersByVenue();
+            Map<String, ArrayList<UserAccount>>  matchingUsers = categorizeUsersByVenue();
+//TODO: match 4 users per venue
+            notifyUsersThatMatch(matchingUsers);
         }
-            //TODO: match 4 users per venue
         }
     private void notifyUsersThatMatch(Map<String, ArrayList<UserAccount>> matchingUsers) {
         Iterator iterator = matchingUsers.entrySet().iterator();
