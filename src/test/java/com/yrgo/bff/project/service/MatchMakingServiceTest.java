@@ -3,68 +3,53 @@ package com.yrgo.bff.project.service;
 import com.yrgo.bff.project.domain.UserAccount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
+@SpringBootTest
 public class MatchMakingServiceTest {
 
-    private MatchMakingService matchMakingService;
-    private UserAccount user1;
-    private UserAccount user2;
-    private UserAccount user3;
-    private UserAccount user4;
-    private UserAccount user5;
-    private UserAccount user6;
-    private String location = "Stockholm";
-    private String location2 = "Göteborg";
-    private Map<UserAccount, String> usersLookingToBeMatched;
+    private static final String user1 = "alfa@mail.com";
+    private static final String user2 = "beta@mail.com";
+    private static final String user3 = "gamma@mail.com";
+    private static final String user4 = "epsilon@mail.com";
+    private static final String user5 = "zeta@mail.com";
+    private static final String user6 = "eta@mail.com";
+    private static final String user7 = "theta@mail.com";
 
+    private static final String somePassword = "asdf";
 
-    @BeforeEach
-    void init() {
-        user1 = new UserAccount("Abraham", "Lincoln");
-        user2 = new UserAccount("Noel", "Noelsson");
-        user3 = new UserAccount("Bengt", "Bengan");
-        user4 = new UserAccount("Glenn", "Glennsson");
-        user5 = new UserAccount("Åke", "Åkesson");
-        user6 = new UserAccount("Sven", "Svensson");
-        location = "Stockholm";
-        location2 = "Göteborg";
-        usersLookingToBeMatched = new HashMap<>();
+    private static final String location = "Stockholm";
+    private  static final String location2 = "Göteborg";
 
-        matchMakingService = new MatchMakingServiceImplementation();
-        matchMakingService.addUserMatchRequest(user1, location);
-        matchMakingService.addUserMatchRequest(user2, location);
-        matchMakingService.addUserMatchRequest(user3, location2);
-        matchMakingService.addUserMatchRequest(user4, location2);
-        matchMakingService.addUserMatchRequest(user5, location2);
-        matchMakingService.addUserMatchRequest(user6, location2);
+    @Autowired
+    MatchMakingService matchMakingService;
 
-    }
+    @Autowired
+    UserAccountService userAccountService;
 
+    @Autowired
+    NotificationService notificationService;
+
+    @WithMockUser(username=user1)
     @Test
     public void testCategorizeUsersByVenue() {
-        MatchMakingServiceImplementation matchingServiceImplementation = new MatchMakingServiceImplementation();
+        userAccountService.createUser(user1,somePassword);
+        userAccountService.createUser(user2,somePassword);
 
-        UserAccount userTest1 = new UserAccount("Hej", "svej");
-        UserAccount userTest2 = new UserAccount("Hejdå", "re");
-        String loc = "GBG";
+        matchMakingService.addUserMatchRequest(userAccountService.readUser(user1), location);
+        matchMakingService.addUserMatchRequest(userAccountService.readUser(user2), location);
 
-        matchingServiceImplementation.addUserMatchRequest(userTest1, loc);
-        matchingServiceImplementation.addUserMatchRequest(userTest2, loc);
-
-        Map<String, ArrayList<UserAccount>> locationAndUsers = new HashMap<>();
-        locationAndUsers = matchingServiceImplementation.categorizeUsersByVenue();
-
-        assertEquals(locationAndUsers.size(), 1);
-        assertTrue(locationAndUsers.containsKey("GBG"));
+        String notifications = notificationService.getNotifications().toString();
+        assertTrue(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
     }
-
+/*
     @Test
     void testAddUserMatchRequest() {
         usersLookingToBeMatched.put(user1, location);
@@ -82,7 +67,7 @@ public class MatchMakingServiceTest {
 
         usersLookingToBeMatched.remove(user2);
         assertEquals(usersLookingToBeMatched.size(), 0);
-    }
+    }*/
 
 
 }
