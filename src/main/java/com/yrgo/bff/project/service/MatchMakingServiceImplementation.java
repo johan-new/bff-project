@@ -83,8 +83,17 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
                 }
             }
         }
+
+        //sorting out singles
+        locationAndUsers=locationAndUsers.entrySet().stream().filter(s->s.getValue().size()>1).collect(Collectors.toMap(
+                Map.Entry::getKey,
+                Map.Entry::getValue,
+                (oldValue,newValue)->oldValue,HashMap::new));
+
+
         return locationAndUsers;
     }
+
 
     public Map<UserAccount, String> getUsersLookingToBeMatched() {
         return usersLookingToBeMatched;
