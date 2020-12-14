@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class UserAccount {
@@ -28,14 +29,15 @@ public class UserAccount {
     @Transient
     NotificationService notificationService;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Friends friends = new Friends();
+    @ElementCollection
+    private Set<String> friends;
+
 
     //this should never be serialized by the web layer
 //    @JsonIgnore
     private String password;
 
-    public UserAccount(String username, String password) {
+    public UserAccount(String username, String password) throws Exception {
         setUsername(username);
         this.password = password;
     }
@@ -56,9 +58,11 @@ public class UserAccount {
         return username;
     }
 
-    private void setUsername(String username) {
+    private void setUsername(String username) throws Exception {
         if (UserAccountServiceImplementation.validEmailAddress(username)) {
             this.username = username;
+        } else {
+            throw new Exception("Inte giltigt epostadress!");
         }
     }
 
@@ -116,16 +120,23 @@ public class UserAccount {
         }
     }
 
-    public void addFriend(UserAccount user) {
-        this.friends.addFriend(user);
+    public void addFriend(UserAccount newFriend) {
+        if (friends==null) {
+            friends=new HashSet<>();
+        }
+        this.friends.add(newFriend.getUsername());
         System.out.println("UserAccount" + getClass().getSimpleName());
     }
 
-    public void removeFriend(UserAccount user) {
-        this.friends.removeFriend(user);
+    public void removeFriend(UserAccount friend) {
+        try {
+            friends.remove(friend.getUsername());
+        } catch (NullPointerException e) {
+            System.err.println("Kunde ej ta bort vän\n" + e.getMessage());
+        }
     }
 
-    public Friends getFriends() {
-        return this.friends;
+    public Set<String> getFriends() {
+        return Collections.unmodifiableSet(friends);
     }
 }

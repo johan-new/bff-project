@@ -35,7 +35,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      * @return An instance of User
      */
     @Override
-    public UserAccount createUser(String username, String password) {
+    public UserAccount createUser(String username, String password) throws Exception {
         UserAccount user = new UserAccount(username.toLowerCase(),bCryptPasswordEncoder.encode(password));
         userAccountDataAccess.save(user);
         return user;

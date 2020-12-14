@@ -44,7 +44,7 @@ public class UserApplicationControllerTest {
     private JacksonTester<Game> jsonGame;
     private UserAccount ereko;
     @BeforeEach
-    void init() {
+    void init() throws Exception {
 
         // We would need this line if we would not use the MockitoExtension
         // MockitoAnnotations.initMocks(this);

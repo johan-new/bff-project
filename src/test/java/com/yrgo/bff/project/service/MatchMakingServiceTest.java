@@ -26,7 +26,7 @@ public class MatchMakingServiceTest {
 
 
     @BeforeEach
-    void init() {
+    void init() throws Exception {
         user1 = new UserAccount("Abraham", "Lincoln");
         user2 = new UserAccount("Noel", "Noelsson");
         user3 = new UserAccount("Bengt", "Bengan");
@@ -48,7 +48,7 @@ public class MatchMakingServiceTest {
     }
 
     @Test
-    public void testCategorizeUsersByVenue() {
+    public void testCategorizeUsersByVenue() throws Exception {
         MatchMakingServiceImplementation matchingServiceImplementation = new MatchMakingServiceImplementation();
 
         UserAccount userTest1 = new UserAccount("Hej", "svej");

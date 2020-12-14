@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface UserAccountService {
-    UserAccount createUser(String username, String password);
+    UserAccount createUser(String username, String password) throws Exception;
     UserAccount removeUser(String username);
     UserAccount updateUser(String oldPassword, String newPassword);
     UserAccount readUser(String username);
