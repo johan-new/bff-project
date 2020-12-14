@@ -6,17 +6,18 @@ import java.util.List;
 import java.util.Set;
 
 public interface UserAccountService {
-    ApplicationUser createUser(String username, String password);
-    ApplicationUser removeUser(String username);
-    ApplicationUser updateUser(String oldPassword, String newPassword);
-    ApplicationUser readUser(String username);
-    ApplicationUser readLoggedInUser();
+    UserAccount createUser(String username, String password);
+    UserAccount removeUser(String username);
+    UserAccount updateUser(String oldPassword, String newPassword);
+    UserAccount readUser(String username);
+    UserAccount readLoggedInUser();
 
-    Set<ApplicationUser> findAll();
+    Set<UserAccount> findAll();
+    Set<UserAccount> findAll();
 
     void addFriend(String username);
     void removeFriend(String username);
 
-    List<ApplicationUser> loadFriends();
+    List<UserAccount> loadFriends();
 
 }

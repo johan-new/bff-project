@@ -1,7 +1,7 @@
 package com.yrgo.bff.project.controllers;
 
 import com.yrgo.bff.project.domain.Game;
-import com.yrgo.bff.project.domain.ApplicationUser;
+import com.yrgo.bff.project.domain.UserAccount;
 import com.yrgo.bff.project.service.GameService;
 import com.yrgo.bff.project.service.UserAccountService;
 import org.json.simple.JSONObject;
@@ -48,14 +48,14 @@ public class GameController {
     }
 
 
-    private Set<ApplicationUser> stringArrayToSet(String[] players) throws Exception {
+    private Set<UserAccount> stringArrayToSet(String[] players) throws Exception {
 
         //allowing only 1-3 players in addition to the logged in user
         if (players.length <= 0 || players.length > 3) {
             throw new Exception("Too many players");
         }
 
-        Set<ApplicationUser> playersSet = new HashSet<>();
+        Set<UserAccount> playersSet = new HashSet<>();
 
         //adds logged in user to the set
         playersSet.add(userAccountService.readLoggedInUser());
@@ -63,7 +63,7 @@ public class GameController {
         //adding the rest of the participants
         for (String username:players) {
             System.err.println(username);
-            ApplicationUser u = userAccountService.readUser(username);
+            UserAccount u = userAccountService.readUser(username);
             if (u == null) {
                 System.out.println("********** " + u);
                 throw new Exception("User doesn't exists!");

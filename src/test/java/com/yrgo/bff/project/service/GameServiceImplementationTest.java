@@ -3,9 +3,7 @@ package com.yrgo.bff.project.service;
 import com.yrgo.bff.project.dao.GameDataAccess;
 import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.Game;
-import com.yrgo.bff.project.domain.ApplicationUser;
-import com.yrgo.bff.project.service.GameServiceImplementation;
-import com.yrgo.bff.project.service.UserAccountServiceImplementation;
+import com.yrgo.bff.project.domain.UserAccount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,17 +34,17 @@ public class GameServiceImplementationTest {
     @Autowired
     private UserAccountServiceImplementation userAccountServiceImplementation;
 
-    private ApplicationUser simpassword;
-    private Set<ApplicationUser> userSet;
+    private UserAccount simpassword;
+    private Set<UserAccount> userSet;
     private Game game;
 
     @BeforeEach
     private void init() {
-        simpassword = new ApplicationUser("Simon", "password");
+        simpassword = new UserAccount("Simon", "password");
         Mockito.when(userAccountDataAccess.findByUsername(simpassword.getUsername())).thenReturn(simpassword);
         Mockito.when(userAccountDataAccess.save(simpassword)).thenReturn(simpassword);
 
-        Set<ApplicationUser> users = new HashSet<>();
+        Set<UserAccount> users = new HashSet<>();
         users.add(simpassword);
         game = new Game(new Date(), "Norrbo Padel", users);
         Mockito.when(gameDataAccess.save(game)).thenReturn(game);

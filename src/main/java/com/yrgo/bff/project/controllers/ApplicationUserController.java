@@ -1,6 +1,6 @@
 package com.yrgo.bff.project.controllers;
 
-import com.yrgo.bff.project.domain.ApplicationUser;
+import com.yrgo.bff.project.domain.UserAccount;
 import com.yrgo.bff.project.service.UserAccountService;
 import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.json.simple.JSONObject;
@@ -26,7 +26,7 @@ public class ApplicationUserController {
     public JSONObject createUser(@RequestBody JSONObject user) throws Exception {
         //parsing
         final String username = (String)user.get("username");
-        final String password = bCryptPasswordEncoder.encode((String)user.get("password"));
+        final String password = (String)user.get("password");
 
         if (!UserAccountServiceImplementation.validEmailAddress(username)) {
             throw new Exception("Invalid email address!");
@@ -60,7 +60,7 @@ public class ApplicationUserController {
     @PutMapping("/user")
     void updateUser(@RequestBody JSONObject user) throws Exception {
         final String oldPassword = (String)user.get("oldPassword");
-        ApplicationUser u = userAccountService.readUser((String)user.get("username"));
+        UserAccount u = userAccountService.readUser((String)user.get("username"));
         final String newPassword = (String)user.get("newPassword");
 
         if (bCryptPasswordEncoder.matches(oldPassword, u.getPassword()) && !oldPassword.equals(newPassword)) {

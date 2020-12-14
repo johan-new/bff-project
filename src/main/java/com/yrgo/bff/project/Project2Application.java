@@ -1,8 +1,8 @@
 package com.yrgo.bff.project;
 
-import com.yrgo.bff.project.domain.ApplicationUser;
+import com.yrgo.bff.project.domain.UserAccount;
 import com.yrgo.bff.project.service.GameService;
-import com.yrgo.bff.project.service.MatchingService;
+import com.yrgo.bff.project.service.MatchMakingService;
 import com.yrgo.bff.project.service.NotificationService;
 import com.yrgo.bff.project.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class Project2Application {
 	GameService gameService;
 
 	@Autowired
-	MatchingService matchingService;
+	MatchMakingService matchMakingService;
 
 	@Autowired
 	NotificationService notificationService;
@@ -58,13 +58,23 @@ public class Project2Application {
 
 			final String venue = "Mölndal";
 
+			final String user5 = "e@e.e";
+			final String user6 = "s@s.s";
+			final String user7 = "j@j.j";
+			final String user8 = "f@f.f";
 
 			userAccountService.createUser(user,password);
 			userAccountService.createUser(user2,password);
 			userAccountService.createUser(user3,password);
 			userAccountService.createUser(user4,password);
 
-			Set<ApplicationUser> users = new HashSet<>();
+
+			Set<UserAccount> users = new HashSet<>();
+
+			userAccountService.createUser(user5,password);
+			userAccountService.createUser(user6,password);
+			userAccountService.createUser(user7,password);
+			userAccountService.createUser(user8,password);
 
 			users.add(userAccountService.readUser(user));
 			users.add(userAccountService.readUser(user2));
@@ -72,13 +82,22 @@ public class Project2Application {
 
 			gameService.createGame(new Date(),"Göteborg",users);
 
-			matchingService.addUserMatchRequest(userAccountService.readUser(user),venue);
-			matchingService.addUserMatchRequest(userAccountService.readUser(user2),venue);
-			matchingService.addUserMatchRequest(userAccountService.readUser(user3),venue);
-			matchingService.addUserMatchRequest(userAccountService.readUser(user4),venue);
+			matchMakingService.addUserMatchRequest(userAccountService.readUser(user),venue);
+			matchMakingService.addUserMatchRequest(userAccountService.readUser(user2),venue);
+			matchMakingService.addUserMatchRequest(userAccountService.readUser(user3),venue);
+			matchMakingService.addUserMatchRequest(userAccountService.readUser(user4),venue);
 
 			notificationService.addNotification(user3,"Detta är en notis!", NotificationService.Type.GENERAL);
 
+			UserAccount u1 = new UserAccount(user5, password);
+			UserAccount u2 = new UserAccount(user6, password);
+			UserAccount u3 = new UserAccount(user7, password);
+			UserAccount u4 = new UserAccount(user8, password);
+
+			matchMakingService.addUserMatchRequest(u1, "Stockholm");
+			matchMakingService.addUserMatchRequest(u2, "Norrut");
+			matchMakingService.addUserMatchRequest(u3, "Skåne");
+			matchMakingService.addUserMatchRequest(u4, "Pajala");
 
 		}
 

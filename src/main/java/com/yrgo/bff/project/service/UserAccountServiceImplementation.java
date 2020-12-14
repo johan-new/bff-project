@@ -1,7 +1,7 @@
 package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.dao.UserAccountDataAccess;
-import com.yrgo.bff.project.domain.ApplicationUser;
+import com.yrgo.bff.project.domain.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,10 +35,8 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      * @return An instance of User
      */
     @Override
-    public ApplicationUser createUser(final String username, String password) {
-        ApplicationUser user = new ApplicationUser(username,bCryptPasswordEncoder.encode(password));
-        System.out.println("Created user " + user.getUsername()+ " with password " + password);
-
+    public UserAccount createUser(String username, String password) {
+        UserAccount user = new UserAccount(username.toLowerCase(),bCryptPasswordEncoder.encode(password));
         userAccountDataAccess.save(user);
         return user;
     }
@@ -50,8 +48,8 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      * @return An instance of User that was deleted
      */
     @Override
-    public ApplicationUser removeUser(String username) {
-        ApplicationUser user = userAccountDataAccess.findByUsername(username);
+    public UserAccount removeUser(String username) {
+        UserAccount user = userAccountDataAccess.findByUsername(username.toLowerCase());
         userAccountDataAccess.delete(user);
         return user;
     }
@@ -63,7 +61,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      * @return An instance of User that was updated
      */
     @Override
-    public ApplicationUser updateUser(String oldPassword, String newPassword) {
+    public UserAccount updateUser(String oldPassword, String newPassword) {
         bCryptPasswordEncoder.encode(newPassword);
         readLoggedInUser().setPassword(newPassword);
         userAccountDataAccess.save(readLoggedInUser());
@@ -77,8 +75,8 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      * @return An instance of User that was found
      */
     @Override
-    public ApplicationUser readUser(String username) {
-        return userAccountDataAccess.findByUsername(username);
+    public UserAccount readUser(String username) {
+        return userAccountDataAccess.findByUsername(username.toLowerCase());
     }
 
     /**
@@ -87,9 +85,9 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      * @return a Set of User
      */
     @Override
-    public Set<ApplicationUser> findAll() {
-        Set<ApplicationUser> users = new HashSet<ApplicationUser>();
-        Iterator<ApplicationUser> ite = userAccountDataAccess.findAll().iterator();
+    public Set<UserAccount> findAll() {
+        Set<UserAccount> users = new HashSet<UserAccount>();
+        Iterator<UserAccount> ite = userAccountDataAccess.findAll().iterator();
         while (ite.hasNext()) {
             users.add(ite.next());
         }
@@ -98,15 +96,18 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ApplicationUser user = userAccountDataAccess.findByUsername(username);
+        UserAccount user = userAccountDataAccess.findByUsername(username.toLowerCase());
+        System.out.println("***********\n" + user);
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
-        return new User(user.getUsername(), user.getPassword(), emptyList());
+        User user2 = new User(user.getUsername(), user.getPassword(), emptyList());
+        System.out.println(user2);
+        return user2;
     }
 
     @Override
-    public ApplicationUser readLoggedInUser() {
+    public UserAccount readLoggedInUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return readUser(authentication.getName());
     }

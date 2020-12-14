@@ -1,11 +1,8 @@
 package com.yrgo.bff.project.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.yrgo.bff.project.controllers.ApplicationUserController;
-import com.yrgo.bff.project.service.NotificationService;
 import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -13,14 +10,13 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.Transient;
 import java.util.*;
 
 @Entity
-public class ApplicationUser {
+public class UserAccount {
 
     //jsonignore due to infinite recursion otherwise when creating json object
-    @ManyToMany (mappedBy = "participants") @JsonIgnore
+    @ManyToMany (mappedBy = "participants")
     Set<Game> previousGames;
 
     @Id
@@ -36,12 +32,12 @@ public class ApplicationUser {
 //    @JsonIgnore
     private String password;
 
-    public ApplicationUser(String username, String password) {
+    public UserAccount(String username, String password) {
         setUsername(username);
         this.password = password;
     }
 
-    ApplicationUser(){
+    UserAccount(){
     }
 
     public Set<Game> getPreviousGames() {
@@ -80,7 +76,7 @@ public class ApplicationUser {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ApplicationUser user = (ApplicationUser) o;
+        UserAccount user = (UserAccount) o;
         return Objects.equals(username, user.username);
     }
 
