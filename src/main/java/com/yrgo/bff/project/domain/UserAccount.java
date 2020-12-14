@@ -125,7 +125,6 @@ public class UserAccount {
             friends=new HashSet<>();
         }
         this.friends.add(newFriend.getUsername());
-        System.out.println("UserAccount" + getClass().getSimpleName());
     }
 
     public void removeFriend(UserAccount friend) {

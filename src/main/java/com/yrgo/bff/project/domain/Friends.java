@@ -42,8 +42,6 @@ public class Friends {
             friendsGroup = new ArrayList<>();
         }
         this.friendsGroup.add(user);
-        System.out.println("UserAccount" + getClass().getSimpleName());
-        System.out.println(friendsGroup);
     }
 
     void removeFriend(UserAccount user) {

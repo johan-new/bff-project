@@ -1,12 +1,16 @@
 package com.yrgo.bff.project.domain;
 
+import org.h2.engine.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -26,26 +30,24 @@ public class FriendsTest {
         assertTrue(userWithFriendsList.getFriends().contains(username));
     }
 
-    //@Test
-    /*public void removeFriendsTest() {
-        UserAccount userWithFriendsListAgain = new UserAccount("Gösta", "lolz");
-        for (UserAccount u: ar) {
-            userWithFriendsListAgain.addFriend(u);
-        }
-        userWithFriendsListAgain.removeFriend(ar.get(1));
+    @Test
+    public void removeFriendsTest() throws Exception {
+        final String username = "mange@mange.se";
+        final UserAccount username2 = new UserAccount("kondrad@konken.se", "hej");
+        final UserAccount username3 = new UserAccount("abraham@abris.se", "hej");
 
-        assertNotEquals(userWithFriendsListAgain.getFriends().getFriendsGroup().size(), 3);
-        System.out.println(userWithFriendsListAgain.getFriends().getFriendsGroup());
+        UserAccount userWithFriendsList = new UserAccount(username, "lol");
+
+        userWithFriendsList.addFriend(username2);
+        userWithFriendsList.addFriend(username3);
+
+        //Kollar så att bägge vännerna ligger i listan
+        assertEquals(userWithFriendsList.getFriends().size(), 2);
+        //Tar bort en vän ur listan
+        userWithFriendsList.removeFriend(username2);
+        //Kollar igen så att vännen togs bort
+        assertEquals(userWithFriendsList.getFriends().size(), 1);
+
     }
-
-    //@Test
-    public void getAllFriendsTest() {
-        UserAccount userWithFriendsListYetAgain = new UserAccount("Pål", "lolz");
-        for (UserAccount u: ar) {
-            userWithFriendsListYetAgain.addFriend(u);
-        }
-        assertNotNull(userWithFriendsListYetAgain.getFriends().getFriendsGroup());
-        System.out.println(userWithFriendsListYetAgain.getUsername() + " vänner är: " + userWithFriendsListYetAgain.getFriends().getFriendsGroup());
-    }*/
 
 }
