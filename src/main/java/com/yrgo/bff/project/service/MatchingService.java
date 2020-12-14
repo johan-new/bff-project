@@ -8,7 +8,6 @@ import java.util.Map;
 public interface MatchingService {
     void addUserMatchRequest(ApplicationUser user, String location);
     void removeUserMatchRequest(ApplicationUser user);
-    void matchUsers();
     Map<ApplicationUser, String> getUsersLookingToBeMatched();
     Map<String, ArrayList<ApplicationUser>> getLocationAndUsers();
 }

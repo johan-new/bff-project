@@ -20,6 +20,7 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
     public void addUserMatchRequest(ApplicationUser user, String location) {
         if (!usersLookingToBeMatched.containsKey(user)) {
             usersLookingToBeMatched.put(user, location);
+            matchUsers();
             System.out.println("MatchingServiceImplementation.addUserMatchRequest "+ user + " " + location);
         }
     }
@@ -29,14 +30,13 @@ public class MatchingServiceImplementation implements MatchingService, Runnable 
         usersLookingToBeMatched.remove(user);
     }
 
+
     // TODO: Facade pattern??? -> Tanke här, låt matchUsers returnera matchingUsers mapen, så kallar man den på @GetMapping("/match/queue/venue").
     // TODO: forts... Just nu anropar den metoden matchUsers, sedan hämtar via getter samma lista.
-    @Override
-    public void matchUsers() {
+    private void matchUsers() {
         Map<String, ArrayList<ApplicationUser>>  matchingUsers = categorizeUsersByVenue();
-        //sortOutSingles();
         // TODO: notifyUsers funkar ej, Null ptrexception
-//        notifyUsersThatMatch(matchingUsers);
+        notifyUsersThatMatch(matchingUsers);
     }
 
 
