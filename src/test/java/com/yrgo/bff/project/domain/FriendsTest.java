@@ -1,5 +1,6 @@
 package com.yrgo.bff.project.domain;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,28 +10,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@SpringBootTest
 public class FriendsTest {
 
-    List<UserAccount> ar;
-    UserAccount user;
-    UserAccount user2;
-    UserAccount user3;
+//    List<UserAccount> ar;
+    UserAccount user = new UserAccount("Simon", "hej");
+    UserAccount user2 = new UserAccount("Johan", "yo");
+    UserAccount user3 = new UserAccount("Erik", "yalla");
 
-    @BeforeEach
-     void init() {
-        user = new UserAccount("Simon", "hej");
-        user2 = new UserAccount("Johan", "yo");
-        user3 = new UserAccount("Erik", "yalla");
+    List<UserAccount> ar = new ArrayList<>();
 
-
-        ar = new ArrayList<>();
-        ar.add(user);
-        ar.add(user2);
-        ar.add(user3);
-
-        System.out.println(ar);
-    }
 
     @Test
     public void addFriendsTest() {
@@ -39,6 +27,8 @@ public class FriendsTest {
 //        for (ApplicationUser u: ar) {
 //            userWithFriendsList.addFriend(u);
 //        }
+        System.out.println(user);
+        System.out.println(userWithFriendsList);
         userWithFriendsList.addFriend(user01);
 
 

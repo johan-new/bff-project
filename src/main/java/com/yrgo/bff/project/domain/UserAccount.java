@@ -118,6 +118,7 @@ public class UserAccount {
 
     public void addFriend(UserAccount user) {
         this.friends.addFriend(user);
+        System.out.println("UserAccount" + getClass().getSimpleName());
     }
 
     public void removeFriend(UserAccount user) {

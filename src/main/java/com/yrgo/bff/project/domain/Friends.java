@@ -12,7 +12,7 @@ public class Friends {
     private Long id;
 
     @ManyToMany
-    private List<UserAccount> friendsGroup = new ArrayList<>();
+    private List<UserAccount> friendsGroup;
 
     public Friends() {}
 
@@ -38,10 +38,22 @@ public class Friends {
     }
 
     void addFriend(UserAccount user) {
+        if(friendsGroup == null) {
+            friendsGroup = new ArrayList<>();
+        }
         this.friendsGroup.add(user);
+        System.out.println("UserAccount" + getClass().getSimpleName());
+        System.out.println(friendsGroup);
     }
 
     void removeFriend(UserAccount user) {
         this.friendsGroup.remove(user);
+    }
+
+    @Override
+    public String toString() {
+        return "Friends{" +
+                "friendsGroup=" + friendsGroup +
+                '}';
     }
 }
