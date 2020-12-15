@@ -100,18 +100,7 @@ public class Project2Application {
 			matchMakingService.addUserMatchRequest(u3, "Skåne");
 			matchMakingService.addUserMatchRequest(u4, "Pajala");
 
-			Set<UserAccount> friends = new HashSet<>();
-			friends.add(u1);
-			friends.add(u2);
-			friends.add(u3);
-			friends.add(u4);
 
-			u1.addFriend(u2);
-			u1.addFriend(u3);
-			u1.addFriend(u4);
-
-			System.out.println("Listad nedan är vännerna för e@e.e:");
-			System.out.println(u1.getFriends().toString());
 		}
 
 	}
