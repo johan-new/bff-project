@@ -51,15 +51,19 @@ public class MatchMakingController {
         }
     }
 
-    //EJ param
-    @DeleteMapping(value = "/match/{user}")
-    public void cancelMatchingRequest(@PathVariable("user") String user,@PathVariable("location") String location) throws Exception {
-            UserAccount userObject = userAccountService.readUser(user);
-        if (userObject!=null) {
-            matchMakingService.removeUserMatchRequest(userObject,location);
-        } else {
+
+    @DeleteMapping(value = "/match")
+    public ResponseEntity cancelMatchingRequest(@RequestBody JSONObject location) throws Exception {
+        UserAccount userObject = userAccountService.readLoggedInUser();
+        if (userObject !=null) {
+            matchMakingService.removeUserMatchRequest(userObject,(String)location.get("location"));
+            return ResponseEntity.status(HttpStatus.OK).body("Match request cancelled!");
+        }
+        else {
             throw new Exception("No such user");
         }
 
+        }
+
     }
-}
+
