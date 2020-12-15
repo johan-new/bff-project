@@ -121,12 +121,9 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     }
 
     @Override
-    public List<UserAccount> loadFriends() {
-       List<UserAccount> friendsList = new ArrayList<>();
-        for (UserAccount u : friendsList) {
-            friendsList.add(u);
-        }
-        return friendsList;
+    public Set<String> loadFriends(String username) {
+        UserAccount friendsListToReadFriendsFrom = readLoggedInUser();
+        return friendsListToReadFriendsFrom.getFriends();
     }
 
     @Override

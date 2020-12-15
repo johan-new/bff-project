@@ -6,7 +6,9 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.SecondaryTable;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class FriendsController {
@@ -22,8 +24,9 @@ public class FriendsController {
     }
 
     @GetMapping(value = "/friend")
-    public List<UserAccount> loadFriends() {
-        return userAccountService.loadFriends();
+    public Set<String> loadFriends(@RequestBody JSONObject user) {
+        final String username = (String)user.get("username");
+        return userAccountService.loadFriends(username);
     }
 
     @DeleteMapping("/friend")

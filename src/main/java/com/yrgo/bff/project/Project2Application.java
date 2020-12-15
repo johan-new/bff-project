@@ -5,6 +5,7 @@ import com.yrgo.bff.project.service.GameService;
 import com.yrgo.bff.project.service.MatchMakingService;
 import com.yrgo.bff.project.service.NotificationService;
 import com.yrgo.bff.project.service.UserAccountService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -99,6 +100,18 @@ public class Project2Application {
 			matchMakingService.addUserMatchRequest(u3, "Skåne");
 			matchMakingService.addUserMatchRequest(u4, "Pajala");
 
+			Set<UserAccount> friends = new HashSet<>();
+			friends.add(u1);
+			friends.add(u2);
+			friends.add(u3);
+			friends.add(u4);
+
+			u1.addFriend(u2);
+			u1.addFriend(u3);
+			u1.addFriend(u4);
+
+			System.out.println("Listad nedan är vännerna för e@e.e:");
+			System.out.println(u1.getFriends().toString());
 		}
 
 	}

@@ -1,8 +1,8 @@
 package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.domain.UserAccount;
+import org.apache.catalina.User;
 
-import java.util.List;
 import java.util.Set;
 
 public interface UserAccountService {
@@ -17,6 +17,6 @@ public interface UserAccountService {
     void addFriend(String username);
     void removeFriend(String username);
 
-    List<UserAccount> loadFriends();
+    Set<String> loadFriends(String username);
 
 }
