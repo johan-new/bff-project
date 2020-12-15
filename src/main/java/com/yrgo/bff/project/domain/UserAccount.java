@@ -1,13 +1,21 @@
 package com.yrgo.bff.project.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeId;
+import com.yrgo.bff.project.service.NotificationService;
 import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.persistence.*;
+import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class UserAccount {
@@ -19,11 +27,19 @@ public class UserAccount {
     @Id
     private String username;
 
+    @Autowired
+    @Transient
+    NotificationService notificationService;
+
+    @ElementCollection
+    private Set<String> friends;
+
 
     //this should never be serialized by the web layer
+//    @JsonIgnore
     private String password;
 
-    public UserAccount(String username, String password) {
+    public UserAccount(String username, String password) throws Exception {
         setUsername(username);
         this.password = password;
     }
@@ -32,6 +48,7 @@ public class UserAccount {
     }
 
     public Set<Game> getPreviousGames() {
+
         return previousGames;
     }
 
@@ -43,9 +60,11 @@ public class UserAccount {
         return username;
     }
 
-    private void setUsername(String username) {
+    private void setUsername(String username) throws Exception {
         if (UserAccountServiceImplementation.validEmailAddress(username)) {
             this.username = username;
+        } else {
+            throw new Exception("Inte giltigt epostadress!");
         }
     }
 
@@ -101,5 +120,24 @@ public class UserAccount {
         } catch (NullPointerException e) {
             return new JSONObject();
         }
+    }
+
+    public void addFriend(UserAccount newFriend) {
+        if (friends==null) {
+            friends=new HashSet<>();
+        }
+        this.friends.add(newFriend.getUsername());
+    }
+
+    public void removeFriend(UserAccount friend) {
+        try {
+            friends.remove(friend.getUsername());
+        } catch (NullPointerException e) {
+            System.err.println("Kunde ej ta bort vän\n" + e.getMessage());
+        }
+    }
+
+    public Set<String> getFriends() {
+        return Collections.unmodifiableSet(friends);
     }
 }

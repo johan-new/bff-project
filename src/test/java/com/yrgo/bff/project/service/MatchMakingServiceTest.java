@@ -1,13 +1,9 @@
 package com.yrgo.bff.project.service;
 
-import com.yrgo.bff.project.domain.UserAccount;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
-
-import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,7 +32,7 @@ public class MatchMakingServiceTest {
 
     @WithMockUser(username=user1)
     @Test
-    public void testCategorizeUsersByVenue() {
+    public void testCategorizeUsersByVenue() throws Exception {
         String location = Double.toString(Math.random());
         String location2 = Double.toString(Math.random());
         userAccountService.createUser(user1,somePassword);
@@ -53,19 +49,20 @@ public class MatchMakingServiceTest {
 
         assertTrue(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
 
-        //clean up
+        //clean up, no pending request due to matching success
+        assertThrows(NullPointerException.class,()->matchMakingService.removeUserMatchRequest(userAccountService.readUser(user1),location));
+        assertThrows(NullPointerException.class,()->matchMakingService.removeUserMatchRequest(userAccountService.readUser(user2),location));
+        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user3),location2);
+
         userAccountService.removeUser(user1);
         userAccountService.removeUser(user2);
         userAccountService.removeUser(user3);
 
-        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user1));
-        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user2));
-        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user3));
     }
 
     @WithMockUser(username=user3)
     @Test
-    void testFalseNotification(){
+    void testFalseNotification() throws Exception {
         String location2 = Double.toString(Math.random());
 
         userAccountService.createUser(user3,somePassword);
@@ -78,13 +75,14 @@ public class MatchMakingServiceTest {
 
         assertFalse(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
 
+        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user3),location2);
         userAccountService.removeUser(user3);
-        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user3));
+
     }
 
     @WithMockUser(username=user4)
     @Test
-    void testFalseNotificationSeveralUsers(){
+    void testFalseNotificationSeveralUsers() throws Exception {
         String location = Double.toString(Math.random());
         String location2 = Double.toString(Math.random());
         userAccountService.createUser(user4,somePassword);
@@ -104,10 +102,11 @@ public class MatchMakingServiceTest {
         assertFalse(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
 
 
+
+        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user4),location);
+        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user5),location2);
         userAccountService.removeUser(user4);
         userAccountService.removeUser(user5);
-        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user4));
-        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user5));
     }
 
 

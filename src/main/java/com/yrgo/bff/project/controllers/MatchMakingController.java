@@ -21,7 +21,7 @@ public class MatchMakingController {
     UserAccountService userAccountService;
 
     @EventListener(ApplicationReadyEvent.class)
-    public void doSomethingAfterStartup() {
+    public void doSomethingAfterStartup() throws Exception {
         UserAccount u1 = new UserAccount("erik@mail.com", "pw");
         UserAccount u2 = new UserAccount("simon@mail.com", "pw");
         UserAccount u3 = new UserAccount("Johan@mail.com", "pw");
@@ -33,14 +33,11 @@ public class MatchMakingController {
     public ResponseEntity usersLookingToBeMatched() {
         return ResponseEntity.status(HttpStatus.OK).body(matchMakingService.getUsersLookingToBeMatched());
     }
-    /*
-    Används ej nu, vi ska skapa en egen lista/map
-
-    @GetMapping("/match/queue/venue")
+    @GetMapping("/matching/pending")
     public ResponseEntity locationAndUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body(matchMakingService.getLocationAndUsers());
+        return ResponseEntity.status(HttpStatus.OK).body(matchMakingService.getUsersLookingToBeMatched());
     }
-    */
+
 
     @PostMapping("/match")
     public ResponseEntity submitMatchingRequest(@RequestBody JSONObject location) throws Exception {
@@ -54,18 +51,18 @@ public class MatchMakingController {
         }
     }
 
+
     @DeleteMapping(value = "/match")
-    public ResponseEntity cancelMatchingRequest() throws Exception {
+    public ResponseEntity cancelMatchingRequest(@RequestBody JSONObject location) throws Exception {
         UserAccount userObject = userAccountService.readLoggedInUser();
         if (userObject !=null) {
-            matchMakingService.removeUserMatchRequest(userObject);
+            matchMakingService.removeUserMatchRequest(userObject,(String)location.get("location"));
             return ResponseEntity.status(HttpStatus.OK).body("Match request cancelled!");
         }
         else {
             throw new Exception("No such user");
         }
 
-        }
-
     }
 
+}

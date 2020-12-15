@@ -12,11 +12,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import javax.transaction.Transactional;
+import java.util.*;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.sort;
 
 @Service
 public class UserAccountServiceImplementation implements UserAccountService, UserDetailsService {
@@ -37,7 +37,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      * @return An instance of User
      */
     @Override
-    public UserAccount createUser(String username, String password) {
+    public UserAccount createUser(String username, String password) throws Exception {
         UserAccount user = new UserAccount(username.toLowerCase(),bCryptPasswordEncoder.encode(password));
         userAccountDataAccess.save(user);
         return user;
@@ -113,6 +113,29 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return readUser(authentication.getName());
     }
+
+    @Override @Transactional
+    public void addFriend(String username) {
+        //Tar in den nya vännen som argument
+        UserAccount user = readLoggedInUser();
+        //Lägger till den nya vännen på användaren
+        user.addFriend(readUser(username));
+    }
+
+    @Override
+    public Set<String> loadFriends(String username) {
+        //ser till så att ingen kan ändra vännerna genom referensen som returneras
+        Set<String> returnvalues = readUser(username).getFriends();
+        System.out.println("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ " + returnvalues);
+        return Collections.unmodifiableSet(returnvalues);
+    }
+
+    @Override @Transactional
+    public void removeFriend(String username) {
+        UserAccount user = readLoggedInUser();
+        user.removeFriend(readUser(username));
+    }
+
 
     public static boolean validEmailAddress(String email){
         if (email.contains("@") && email.contains(".") &&
