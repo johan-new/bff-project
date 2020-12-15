@@ -31,7 +31,7 @@ public class UserAccountAccountServiceImplementationTest {
     private final String username = "ereko@mail.com";
 
     @BeforeEach
-    void init() {
+    void init() throws Exception {
 
         erekoPassword = new UserAccount(username, "password");
         Mockito.when(userAccountDataAccess.findByUsername(erekoPassword.getUsername())).thenReturn(erekoPassword);
@@ -63,7 +63,7 @@ public class UserAccountAccountServiceImplementationTest {
     }
 
     @Test
-    public void testMockCreateUser() {
+    public void testMockCreateUser() throws Exception {
         UserAccount createdUser = userAccountServiceImplementation.createUser(erekoPassword.getUsername(), erekoPassword.getPassword());
         assertEquals(createdUser, erekoPassword);
     }

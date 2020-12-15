@@ -1,13 +1,9 @@
 package com.yrgo.bff.project.service;
 
-import com.yrgo.bff.project.domain.UserAccount;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
-
-import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,7 +32,7 @@ public class MatchMakingServiceTest {
 
     @WithMockUser(username=user1)
     @Test
-    public void testCategorizeUsersByVenue() {
+    public void testCategorizeUsersByVenue() throws Exception {
         String location = Double.toString(Math.random());
         String location2 = Double.toString(Math.random());
         userAccountService.createUser(user1,somePassword);
@@ -66,7 +62,7 @@ public class MatchMakingServiceTest {
 
     @WithMockUser(username=user3)
     @Test
-    void testFalseNotification(){
+    void testFalseNotification() throws Exception {
         String location2 = Double.toString(Math.random());
 
         userAccountService.createUser(user3,somePassword);
@@ -86,7 +82,7 @@ public class MatchMakingServiceTest {
 
     @WithMockUser(username=user4)
     @Test
-    void testFalseNotificationSeveralUsers(){
+    void testFalseNotificationSeveralUsers() throws Exception {
         String location = Double.toString(Math.random());
         String location2 = Double.toString(Math.random());
         userAccountService.createUser(user4,somePassword);

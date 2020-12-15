@@ -21,7 +21,7 @@ public class MatchMakingController {
     UserAccountService userAccountService;
 
     @EventListener(ApplicationReadyEvent.class)
-    public void doSomethingAfterStartup() {
+    public void doSomethingAfterStartup() throws Exception {
         UserAccount u1 = new UserAccount("erik@mail.com", "pw");
         UserAccount u2 = new UserAccount("simon@mail.com", "pw");
         UserAccount u3 = new UserAccount("Johan@mail.com", "pw");

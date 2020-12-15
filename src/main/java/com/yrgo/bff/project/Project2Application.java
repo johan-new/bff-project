@@ -5,6 +5,7 @@ import com.yrgo.bff.project.service.GameService;
 import com.yrgo.bff.project.service.MatchMakingService;
 import com.yrgo.bff.project.service.NotificationService;
 import com.yrgo.bff.project.service.UserAccountService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -47,7 +49,7 @@ public class Project2Application {
 	@Component
 	public class AppStartupRunner implements ApplicationRunner {
 
-		@Override
+		@Override @Transactional
 		public void run(ApplicationArguments args) throws Exception {
 
 			final String user = "erik@a.a";
@@ -98,6 +100,10 @@ public class Project2Application {
 			matchMakingService.addUserMatchRequest(u2, "Norrut");
 			matchMakingService.addUserMatchRequest(u3, "Skåne");
 			matchMakingService.addUserMatchRequest(u4, "Pajala");
+
+			userAccountService.readUser(user).addFriend(userAccountService.readUser(user2));
+			userAccountService.readUser(user2).addFriend(userAccountService.readUser(user3));
+
 
 		}
 
