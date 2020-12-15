@@ -4,17 +4,17 @@ import store from './store/store'
 import VueRouter from 'vue-router'
 import { routes } from './routes'
 
-// import Axios from 'axios'
+import Axios from 'axios'
 
 Vue.use(VueRouter)
 
 Vue.config.productionTip = false
 
-// Vue.prototype.$http = Axios
-// const token = localStorage.getItem('token')
-// if (token) {
-//   Vue.prototype.$http.defaults.headers.common.Authorization = token
-// }
+Vue.prototype.$http = Axios
+const token = localStorage.getItem('token')
+if (token) {
+  Vue.prototype.$http.defaults.headers.common.Authorization = token
+}
 
 const router = new VueRouter({
   mode: 'history',
@@ -23,7 +23,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters.isLoggedIn) {
+    if (store.getters['authStore/isLoggedIn']) {
       next()
       return
     }

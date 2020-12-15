@@ -29,7 +29,7 @@ export default {
         name: this.userData.email,
         password: this.userData.password
       }
-      this.$store.dispatch('addUser', payload)
+      this.$store.dispatch('authStore/addUser', payload)
     }
   }
 }

@@ -30,21 +30,21 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('fetchUserprofile')
+    this.$store.dispatch('userStore/fetchUserprofile')
   },
   methods: {
     fetchUser () {
       const payload = {
         user: this.user
       }
-      this.$store.dispatch('fetchUser', payload)
+      this.$store.dispatch('userStore/fetchUser', payload)
     },
     changePassword () {
       const payload = {
         oldPassword: this.oldPassword,
         newPassword: this.newPassword
       }
-      this.$store.dispatch('changePassword', payload)
+      this.$store.dispatch('userStore/changePassword', payload)
     }
   }
 }

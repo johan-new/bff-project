@@ -20,8 +20,8 @@
 export default {
   name: 'Game',
   computed: {
-    inQueue () { return this.$store.getters.inQueue },
-    getQueue () { return this.$store.getters.getQueue }
+    getQueue () { return this.$store.getters['matchStore/getQueue'] },
+    inQueue () { return this.$store.getters['matchStore/inQueue'] }
   },
   data () {
     return {
@@ -29,19 +29,19 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('matchingQueue')
+    this.$store.dispatch('matchStore/matchingQueue')
   },
   methods: {
     submitMatchRequest () {
       const payload = {
         location: this.location
       }
-      this.$store.dispatch('submitMatchRequest', payload)
-        .then(() => this.$store.dispatch('matchingQueue'))
+      this.$store.dispatch('matchStore/submitMatchRequest', payload)
+        .then(() => this.$store.dispatch('matchStore/matchingQueue'))
     },
     cancelMatchRequest () {
-      this.$store.dispatch('cancelMatchRequest')
-        .then(() => this.$store.dispatch('matchingQueue'))
+      this.$store.dispatch('matchStore/cancelMatchRequest')
+        .then(() => this.$store.dispatch('matchStore/matchingQueue'))
     }
   }
 }

@@ -7,7 +7,10 @@ const state = {
 
 const getters = {
   inQueue: state => !!state.inQueue,
-  getQueue: state => state.queue
+  getQueue: state => state.queue,
+  getLoggedInUser (state, getters, rootState, rootGetters) {
+    return rootGetters.loggedInUser
+  }
 }
 
 const actions = {
@@ -28,15 +31,17 @@ const actions = {
         })
     })
   },
-  matchingQueue (context) {
+  matchingQueue ({ commit, rootGetters }) {
+    const l = rootGetters['authStore/loggedInUser']
+    console.log(l)
     axios.get('http://localhost:8080/match/queue')
       .then(data => {
         console.log(data.data)
-        context.commit('matching_queue', data.data)
+        commit('matching_queue', data.data)
       })
       .catch(error => {
         console.log(error.response)
-        context.commit('queue_status', false)
+        commit('queue_status', false)
       })
   },
   cancelMatchRequest (context) {
@@ -62,8 +67,8 @@ const mutations = {
     state.inQueue = data
   }
 }
-
 export default {
+  namespaced: true,
   state,
   getters,
   actions,

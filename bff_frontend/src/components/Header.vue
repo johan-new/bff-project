@@ -16,11 +16,11 @@
 export default {
   name: 'Header-component',
   computed: {
-    isLoggedIn () { return this.$store.getters.isLoggedIn }
+    isLoggedIn () { return this.$store.getters['authStore/isLoggedIn'] }
   },
   methods: {
     logout () {
-      this.$store.dispatch('logout')
+      this.$store.dispatch('authStore/logout')
         .then(() => {
           this.$router.push('/login')
         })

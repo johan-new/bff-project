@@ -57,7 +57,7 @@ const actions = {
           resolve(resp)
         })
         .catch(err => {
-          context.commit('auth_error')
+          context.commit('authStore/auth_error')
           localStorage.removeItem('token')
           reject(err)
         })
@@ -101,6 +101,7 @@ const mutations = {
   }
 }
 export default {
+  namespaced: true,
   state,
   getters,
   actions,

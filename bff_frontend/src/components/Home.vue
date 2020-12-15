@@ -30,7 +30,7 @@ export default {
       const payload = {
         location: this.userData.location
       }
-      this.$store.dispatch('matchUser', payload)
+      this.$store.dispatch('authStore/matchUser', payload)
     }
   }
 }
