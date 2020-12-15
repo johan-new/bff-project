@@ -29,6 +29,12 @@ public class FriendsController {
         return userAccountService.loadFriends(username);
     }
 
+    //returns the logged in users friendlist
+    @GetMapping(value = "/friend/all")
+    public Set<String> loadMyFriends() {
+        return userAccountService.loadFriends(userAccountService.readLoggedInUser().getUsername());
+    }
+
     @DeleteMapping("/friend")
     void removeFriend(@RequestBody JSONObject user) {
         final String username = (String)user.get("username");

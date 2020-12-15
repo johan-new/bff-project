@@ -123,7 +123,8 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     @Override
     public Set<String> loadFriends(String username) {
         UserAccount friendsListToReadFriendsFrom = readLoggedInUser();
-        return friendsListToReadFriendsFrom.getFriends();
+        //ser till så att ingen kan ändra vännerna genom referensen som returneras
+        return Collections.unmodifiableSet(friendsListToReadFriendsFrom.getFriends());
     }
 
     @Override
