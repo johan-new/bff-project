@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-public class ApplicationUserController {
+public class UserAccountController {
 
     @Autowired
     UserAccountService userAccountService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public ApplicationUserController(UserAccountService userAccountService, BCryptPasswordEncoder bCryptPasswordEncoder)
+    public UserAccountController(UserAccountService userAccountService, BCryptPasswordEncoder bCryptPasswordEncoder)
     {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userAccountService = userAccountService;

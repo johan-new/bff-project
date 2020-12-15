@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
 @WebMvcTest
-public class UserApplicationControllerTest {
+public class UserAccountControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -37,7 +37,7 @@ public class UserApplicationControllerTest {
     private UserAccountServiceImplementation userAccountServiceImplementation;
 
     @InjectMocks
-    private ApplicationUserController ctrlr;
+    private UserAccountController ctrlr;
 
     // This object will be magically initialized by the initFields method below.
     private JacksonTester<UserAccount> jsonUser;

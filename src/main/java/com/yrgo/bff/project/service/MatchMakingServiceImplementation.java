@@ -1,6 +1,7 @@
 package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.domain.UserAccount;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,87 +10,61 @@ import java.util.stream.Collectors;
 
 @Service
 public class MatchMakingServiceImplementation implements MatchMakingService {
-
-    private Map<UserAccount, String> usersLookingToBeMatched = new HashMap<>();
+    //location, username
+    private Map<String, List<String>> usersLookingToBeMatched = new HashMap<>();
 
     @Autowired
     NotificationService notificationService;
-
-    private Map<String, ArrayList<UserAccount>> locationAndUsers;
+    @Autowired
+    UserAccountService userAccountService;
 
     @Override
     public void addUserMatchRequest(UserAccount user, String location) {
-        if (!usersLookingToBeMatched.containsKey(user)) {
-            usersLookingToBeMatched.put(user, location);
-            matchUsers();
-            System.out.println("MatchingServiceImplementation.addUserMatchRequest "+ user + " " + location);
+        if (!usersLookingToBeMatched.containsKey(location)) {
+            usersLookingToBeMatched.put(location, new ArrayList<>());
+        }
+        usersLookingToBeMatched.get(location).add(user.getUsername());
+        matchUsers();
+    }
 
+    @Override
+    public void removeUserMatchRequest(UserAccount user, String location) {
+        System.out.println("TAR BORT " + user.getUsername() + " FRÅN " + location + "\nINNAN" + usersLookingToBeMatched.get(location));
+        usersLookingToBeMatched.get(location).remove(user.getUsername());
+        System.out.println("\nEFTER" + usersLookingToBeMatched.get(location));
+
+    }
+
+    private void matchUsers() {
+        if (usersLookingToBeMatched.size()>1) {
+            Map<String, List<String>> matchingUsers = usersLookingToBeMatched.entrySet().
+                    stream().
+                    filter(a->a.getValue().size()>1).
+                    collect(Collectors.toMap(e->e.getKey(),e->e.getValue()));
+
+            notifyUsersThatMatch(matchingUsers);
+
+            //removing matching users
+            usersLookingToBeMatched = usersLookingToBeMatched.entrySet().
+                    stream().
+                    filter(a->a.getValue().size()<=1).
+                    collect(Collectors.toMap(e->e.getKey(),e->e.getValue()));
+        }
+    }
+
+    private void notifyUsersThatMatch(Map<String, List<String>> matchingUsers) {
+        Iterator iterator = matchingUsers.entrySet().iterator();
+        while (iterator.hasNext()){
+            Map.Entry set = (Map.Entry) iterator.next();
+            for (String username: (ArrayList<String>)set.getValue() ) {
+                notificationService.addNotification(username,set.getValue().toString(), NotificationService.Type.MATCH_SUCCESS);
+            }
         }
     }
 
     @Override
-    public void removeUserMatchRequest(UserAccount user) {
-        usersLookingToBeMatched.remove(user);
-    }
-
-    // TODO: Facade pattern???
-    private void matchUsers() {
-        if (usersLookingToBeMatched.size()>=4) {
-            System.out.println("TRYING TO MATCH USERS");
-            Map<String, ArrayList<UserAccount>>  matchingUsers = categorizeUsersByVenue();
-//TODO: match 4 users per venue
-            notifyUsersThatMatch(matchingUsers);
-        }
-        }
-    private void notifyUsersThatMatch(Map<String, ArrayList<UserAccount>> matchingUsers) {
-        Iterator iterator = matchingUsers.entrySet().iterator();
-        while (iterator.hasNext()){
-            Map.Entry set = (Map.Entry) iterator.next();
-            for (UserAccount u: (ArrayList<UserAccount>)set.getValue() ) {
-                //u.notifyUser(set.getValue().toString());
-                notificationService.addNotification(u.getUsername(),set.getValue().toString(), NotificationService.Type.MATCH_SUCCESS);
-                removeUserMatchRequest(u);
-            }
-        }
-    }
-
-    public Map<String, ArrayList<UserAccount>>  categorizeUsersByVenue() {
-        System.out.println("Körs jag?");
-
-        //getting unique venue values
-        List<String> locationsOccurrences = new ArrayList<>();
-        Iterator iterator = usersLookingToBeMatched.entrySet().iterator();
-        //collecting locations UNIQUE values
-        while (iterator.hasNext()) {
-            Map.Entry set = (Map.Entry) iterator.next();
-            final String location = (String) set.getValue();
-            if (!locationsOccurrences.contains(location)) {
-                locationsOccurrences.add(location);
-            }
-        }
-
-        locationAndUsers = new HashMap<>();
-        for (String location : locationsOccurrences) {
-            List<Map.Entry<UserAccount, String>> usersAtThatSpecificLocation = usersLookingToBeMatched.entrySet().stream().filter(s -> s.getValue().equals(location)).collect(Collectors.toList());
-            ArrayList<UserAccount> usersAtSpecificVenue = new ArrayList<>();
-
-            //building a list of users at every unique venue
-            for (Map.Entry<UserAccount, String> userStringEntry : usersAtThatSpecificLocation) {
-                if (userStringEntry.getValue().equals(location)) {
-                    usersAtSpecificVenue.add(userStringEntry.getKey());
-                    locationAndUsers.put(location, usersAtSpecificVenue);
-                }
-            }
-        }
-        return locationAndUsers;
-    }
-
-    public Map<UserAccount, String> getUsersLookingToBeMatched() {
-        return usersLookingToBeMatched;
-    }
-
-    public Map<String, ArrayList<UserAccount>> getLocationAndUsers() {
-        return locationAndUsers;
+    public Map<String, List<String>> getUsersLookingToBeMatched() {
+        return Collections.unmodifiableMap(usersLookingToBeMatched);
     }
 
 }
