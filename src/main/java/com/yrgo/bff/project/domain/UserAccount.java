@@ -6,7 +6,6 @@ import com.yrgo.bff.project.service.NotificationService;
 import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -14,6 +13,7 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 

@@ -20,6 +20,7 @@ public class FriendsController {
     @PostMapping("/friend")
     public void addFriend(@RequestBody JSONObject user) {
         final String username = (String)user.get("username");
+        System.out.println("******* " + username);
                 userAccountService.addFriend(username);
     }
 

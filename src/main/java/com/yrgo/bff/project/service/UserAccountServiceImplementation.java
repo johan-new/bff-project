@@ -12,9 +12,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.sort;
 
 @Service
 public class UserAccountServiceImplementation implements UserAccountService, UserDetailsService {
@@ -112,7 +114,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
         return readUser(authentication.getName());
     }
 
-    @Override
+    @Override @Transactional
     public void addFriend(String username) {
         //Tar in den nya vännen som argument
         UserAccount user = readLoggedInUser();
@@ -122,12 +124,13 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
 
     @Override
     public Set<String> loadFriends(String username) {
-        UserAccount friendsListToReadFriendsFrom = readLoggedInUser();
         //ser till så att ingen kan ändra vännerna genom referensen som returneras
-        return Collections.unmodifiableSet(friendsListToReadFriendsFrom.getFriends());
+        Set<String> returnvalues = readUser(username).getFriends();
+        System.out.println("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ " + returnvalues);
+        return Collections.unmodifiableSet(returnvalues);
     }
 
-    @Override
+    @Override @Transactional
     public void removeFriend(String username) {
         UserAccount user = readLoggedInUser();
         user.removeFriend(readUser(username));
