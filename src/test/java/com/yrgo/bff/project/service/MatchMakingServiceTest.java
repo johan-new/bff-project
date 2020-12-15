@@ -53,14 +53,15 @@ public class MatchMakingServiceTest {
 
         assertTrue(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
 
-        //clean up
+        //clean up, no pending request due to matching success
+        assertThrows(NullPointerException.class,()->matchMakingService.removeUserMatchRequest(userAccountService.readUser(user1),location));
+        assertThrows(NullPointerException.class,()->matchMakingService.removeUserMatchRequest(userAccountService.readUser(user2),location));
+        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user3),location2);
+
         userAccountService.removeUser(user1);
         userAccountService.removeUser(user2);
         userAccountService.removeUser(user3);
 
-        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user1));
-        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user2));
-        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user3));
     }
 
     @WithMockUser(username=user3)
@@ -78,8 +79,9 @@ public class MatchMakingServiceTest {
 
         assertFalse(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
 
+        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user3),location2);
         userAccountService.removeUser(user3);
-        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user3));
+
     }
 
     @WithMockUser(username=user4)
@@ -104,10 +106,11 @@ public class MatchMakingServiceTest {
         assertFalse(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
 
 
+
+        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user4),location);
+        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user5),location2);
         userAccountService.removeUser(user4);
         userAccountService.removeUser(user5);
-        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user4));
-        matchMakingService.removeUserMatchRequest(userAccountService.readUser(user5));
     }
 
 

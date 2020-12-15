@@ -33,9 +33,9 @@ public class MatchMakingController {
     public ResponseEntity usersLookingToBeMatched() {
         return ResponseEntity.status(HttpStatus.OK).body(matchMakingService.getUsersLookingToBeMatched());
     }
-    @GetMapping("/match/queue/venue")
+    @GetMapping("/matching/pending")
     public ResponseEntity locationAndUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body(matchMakingService.getLocationAndUsers());
+        return ResponseEntity.status(HttpStatus.OK).body(matchMakingService.getUsersLookingToBeMatched());
     }
 
 
@@ -53,10 +53,10 @@ public class MatchMakingController {
 
     //EJ param
     @DeleteMapping(value = "/match/{user}")
-    public void cancelMatchingRequest(@PathVariable("user") String user) throws Exception {
+    public void cancelMatchingRequest(@PathVariable("user") String user,@PathVariable("location") String location) throws Exception {
             UserAccount userObject = userAccountService.readUser(user);
         if (userObject!=null) {
-            matchMakingService.removeUserMatchRequest(userObject);
+            matchMakingService.removeUserMatchRequest(userObject,location);
         } else {
             throw new Exception("No such user");
         }
