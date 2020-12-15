@@ -11,7 +11,7 @@
           <button v-if="inQueue">Cancel match request</button>
         </form>
         <div class="mmQueue" style="border:1px solid black"><h2>MM queue:</h2>
-        <div v-for="item in getQueue" :key="item.username" >Username: {{ item }}</div>
+        <div v-for="item in getQueue" :key="item.username" >Username: {{ item.username }} Location: {{ item.location }}</div>
 </div>
     </div>
 </template>

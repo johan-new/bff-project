@@ -32,25 +32,18 @@ const actions = {
     })
   },
   matchingQueue ({ commit, getters, rootGetters }) {
-    const l = rootGetters['authStore/loggedInUser']
-    console.log(getters.getQueue)
-    console.log(l)
     axios.get('http://localhost:8080/match/queue')
       .then(data => {
         commit('matching_queue', data.data)
-        console.log(data.data)
         var x
         for (x of getters.getQueue) {
           if (x.username === rootGetters['authStore/loggedInUser']) {
             commit('queue_status', true)
-            console.log('true! ' + x.username)
             break
           } else {
             commit('queue_status', false)
-            console.log('false! ' + x.username)
           }
         }
-        console.log(getters.getQueue)
       })
       .catch(error => {
         console.log(error.response)
