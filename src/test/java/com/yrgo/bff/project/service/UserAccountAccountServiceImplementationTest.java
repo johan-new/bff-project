@@ -1,16 +1,10 @@
 package com.yrgo.bff.project.service;
 
-import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.UserAccount;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,70 +12,55 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class UserAccountAccountServiceImplementationTest {
 
-    @MockBean
-    private UserAccountDataAccess userAccountDataAccess;
-
     @Autowired
-    private UserAccountServiceImplementation userAccountServiceImplementation;
+    UserAccountService userAccountService;
 
     // Variable name is the users name and password as camel notation.
-    private UserAccount erekoPassword;
-    private Set<UserAccount> userSet;
+    private UserAccount user;
+    private Set<UserAccount> userSet;;
 
-    private final String username = "ereko@mail.com";
-
-    @BeforeEach
-    void init() throws Exception {
-
-        erekoPassword = new UserAccount(username, "password");
-        Mockito.when(userAccountDataAccess.findByUsername(erekoPassword.getUsername())).thenReturn(erekoPassword);
-        Mockito.when(userAccountDataAccess.save(erekoPassword)).thenReturn(erekoPassword);
-
-        //For testMockFindAll
-        Set<UserAccount> users = new HashSet<>();
-        users.add(erekoPassword);
-        Mockito.when(userAccountDataAccess.findAll()).thenReturn(users);
-
+    @Test
+    void testReadUser() throws Exception {
+        user = new UserAccount(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"");
+        userAccountService.createUser(user.getUsername(),"");
+        assertNotNull(userAccountService.readUser(user.getUsername()));
     }
 
     @Test
-    void testMockReadUser() {
-        UserAccount found = userAccountServiceImplementation.readUser(username);
-        assertEquals(found, erekoPassword);
+    void testFindAll() throws Exception {
+        userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"");
+        assertFalse(userAccountService.findAll().isEmpty());
     }
 
     @Test
-    void testMockReadUserNoPw() {
-
+    public void testCreateUser() throws Exception {
+        assertDoesNotThrow(()->{
+            userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"");
+        });
+        assertThrows(Exception.class, ()->{
+            userAccountService.createUser("","");
+        });
+        assertThrows(Exception.class, ()->{
+            userAccountService.createUser("a","");
+        });
     }
 
     @Test
-    void testMockFindAll() {
-        userSet = new HashSet<>();
-        userSet = userAccountServiceImplementation.findAll();
-        assertEquals(userSet.size(), 1);
+    public void testRemoveUser() throws Exception {
+        String username = FriendsUserAccountServiceImplementationTest.getRandomUsername();
+        userAccountService.createUser(username,"");
+        userAccountService.removeUser(username);
+        assertNull(userAccountService.readUser(username));
     }
-
-    @Test
-    public void testMockCreateUser() throws Exception {
-        UserAccount createdUser = userAccountServiceImplementation.createUser(erekoPassword.getUsername(), erekoPassword.getPassword());
-        assertEquals(createdUser, erekoPassword);
-    }
-
-    @Test
-    public void testMockRemoveUser() {
-        userAccountServiceImplementation.removeUser(erekoPassword.getUsername());
-        Mockito.verify(userAccountDataAccess, Mockito.times(1)).delete(erekoPassword);
-    }
-
+/*
     @Test  @WithMockUser(username=username)
     public void testMockUpdateUser() {
         String newPassword = "newCoolPassword";
-        String oldPassword = erekoPassword.getPassword();
+        String oldPassword = user.getPassword();
         userAccountServiceImplementation.updateUser(oldPassword, newPassword);
-        assertEquals(erekoPassword.getPassword(), newPassword);
+        assertEquals(user.getPassword(), newPassword);
     }
-
+*/
     @Test
     public void testValidEmailAddress(){
         assertTrue(UserAccountServiceImplementation.validEmailAddress("hej@mail.com"));
