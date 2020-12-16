@@ -15,81 +15,58 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class GameServiceImplementationTest {
 
-    @MockBean
-    private GameDataAccess gameDataAccess;
-
-    @MockBean
-    private UserAccountDataAccess userAccountDataAccess;
+    @Autowired
+    UserAccountService userAccountService;
 
     @Autowired
-    private GameServiceImplementation gameServiceImplementation;
+    GameService gameService;
 
-    @Autowired
-    private UserAccountServiceImplementation userAccountServiceImplementation;
-
-    private UserAccount simpassword;
-    private Set<UserAccount> userSet;
-    private Game game;
-
-    @BeforeEach
-    private void init() throws Exception {
-        simpassword = new UserAccount("Simon", "password");
-        Mockito.when(userAccountDataAccess.findByUsername(simpassword.getUsername())).thenReturn(simpassword);
-        Mockito.when(userAccountDataAccess.save(simpassword)).thenReturn(simpassword);
-
+    private Game newGame() throws Exception {
+        UserAccount user = userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"");
+        UserAccount user2 = userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"");
         Set<UserAccount> users = new HashSet<>();
-        users.add(simpassword);
-        game = new Game(new Date(), "Norrbo Padel", users);
-        Mockito.when(gameDataAccess.save(game)).thenReturn(game);
-        Mockito.when(gameDataAccess.findById(game.getId())).thenReturn(Optional.of(game));
+        users.add(user); users.add(user2);
+        return gameService.createGame(new Date(),"Helsinki",users);
     }
 
-    //TESTAR OM MAN KAN SKAPA ETT GAME TILLFREDSTÄLLANDE
-
     @Test
-    public void createGameIsSuccessful() {
-        //Kollar att game är tom
-        assertFalse(gameDataAccess.findAll().iterator().hasNext());
-        Game game2 = gameServiceImplementation.createGame(game.getWhen(), game.getVenue(), game.getParticipants());
-        assertEquals(game.getId(), game2.getId());
+    public void createGameIsSuccessful() throws Exception {
+        Long newGameId = newGame().getId();
+        assertNotNull(gameService.readGame(newGameId));
     }
 
-    //TESTA ATT TA BORT ETT GAME TILLFREDSSTÄLLANDE
 
     @Test
-    public void removeGameIsSuccessful() {
-        gameServiceImplementation.removeGame(game.getId());
-        Mockito.verify(gameDataAccess, Mockito.times(1)).delete(game);
+    public void removeGameIsSuccessful() throws Exception {
+        Long newGameId = newGame().getId();
+        assertNotNull(gameService.readGame(newGameId));
+        gameService.removeGame(newGameId);
+        assertThrows(NoSuchElementException.class, ()->{gameService.readGame(newGameId);});
     }
 
-    //TESTAR OM DET GÅR ATT UPPDATERA ETT GAME TILLFREDSSTÄLLANDE
 
-    @Test
-    public void updateGameIsSuccessful() {
-        assertNotNull(gameDataAccess.findAll());
-        Game newGame = gameServiceImplementation.createGame(new Date(), "Göteborg", userSet);
-        gameServiceImplementation.updateGame(game.getId(), newGame);
-        assertNotEquals(game, newGame);
-        assertNull(game.getId());
-
+    @Test //uppdatera gör egetnligen bara att det gamla spelet tas bort och ett nytt skapas
+    public void updateGameIsSuccessful() throws Exception {
+        Long newGameId = newGame().getId();
+        Long anotherNewGameId = newGame().getId();
+        assertDoesNotThrow(()->gameService.readGame(anotherNewGameId));
+        assertDoesNotThrow(()->gameService.readGame(newGameId));
+        gameService.updateGame(newGameId, gameService.readGame(anotherNewGameId));
+        assertDoesNotThrow(()->gameService.readGame(anotherNewGameId));
+        assertThrows(NoSuchElementException.class, ()->gameService.readGame(newGameId));
     }
 
-    //TESTAR OM DET GÅR ATT SÖKA PÅ ETT GAME VIA ID
-
     @Test
-    public void readGameIsSuccessFul() {
-        Game game2 = gameServiceImplementation.readGame(game.getId());
-        assertEquals(game2.getId(), game.getId());
+    public void readGameIsSuccessFul() throws Exception {
+        Long newGameId = newGame().getId();
+        assertDoesNotThrow(()->gameService.readGame(newGameId));
     }
 
 }

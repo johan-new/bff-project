@@ -4,6 +4,7 @@ import com.yrgo.bff.project.domain.UserAccount;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.Set;
 
@@ -52,15 +53,7 @@ public class UserAccountAccountServiceImplementationTest {
         userAccountService.removeUser(username);
         assertNull(userAccountService.readUser(username));
     }
-/*
-    @Test  @WithMockUser(username=username)
-    public void testMockUpdateUser() {
-        String newPassword = "newCoolPassword";
-        String oldPassword = user.getPassword();
-        userAccountServiceImplementation.updateUser(oldPassword, newPassword);
-        assertEquals(user.getPassword(), newPassword);
-    }
-*/
+
     @Test
     public void testValidEmailAddress(){
         assertTrue(UserAccountServiceImplementation.validEmailAddress("hej@mail.com"));
