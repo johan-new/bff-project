@@ -5,6 +5,8 @@ import com.yrgo.bff.project.service.UserAccountService;
 import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +25,7 @@ public class UserAccountController {
     }
 
     @PostMapping("/user")
-    public JSONObject createUser(@RequestBody JSONObject user) throws Exception {
+    public ResponseEntity createUser(@RequestBody JSONObject user) throws Exception {
         //parsing
         final String username = (String)user.get("username");
         final String password = (String)user.get("password");
@@ -34,7 +36,9 @@ public class UserAccountController {
 
         if (userAccountService.readUser(username)==null) {
         userAccountService.createUser(username, password);
-        return userAccountService.readUser(username).toJSON();
+        return ResponseEntity.
+                status(HttpStatus.CREATED).
+                body(userAccountService.readUser(username).toJSON());
         } else {
             throw new Exception("User already exists!");
         }
@@ -58,7 +62,7 @@ public class UserAccountController {
     //used to change password or email adress(username)
 
     @PutMapping("/user")
-    void updateUser(@RequestBody JSONObject user) throws Exception {
+    ResponseEntity updateUser(@RequestBody JSONObject user) throws Exception {
         final String oldPassword = (String)user.get("oldPassword");
         UserAccount u = userAccountService.readUser((String)user.get("username"));
         final String newPassword = (String)user.get("newPassword");
@@ -69,13 +73,15 @@ public class UserAccountController {
         else {
             throw new Exception("ERROR: Password was not changed!");
         }
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     //TODO: admin can delete anyone, regular user just themselves
     @DeleteMapping("/user")
-    void removeUser(@RequestParam(name="name",required = true) String name,
+    ResponseEntity removeUser(@RequestParam(name="name",required = true) String name,
                     @RequestParam(name="password",required = true) String password){
         userAccountService.removeUser(name);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

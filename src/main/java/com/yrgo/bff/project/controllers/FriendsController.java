@@ -1,15 +1,14 @@
 package com.yrgo.bff.project.controllers;
 
-import com.yrgo.bff.project.domain.UserAccount;
 import com.yrgo.bff.project.service.UserAccountService;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.SecondaryTable;
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -23,16 +22,11 @@ public class FriendsController {
 
 
     @PostMapping("/friend")
-    public void addFriend(@RequestBody JSONObject user) {
+    public ResponseEntity addFriend(@RequestBody JSONObject user) {
         final String username = (String)user.get("username");
         log.debug("******* " + username);
                 userAccountService.addFriend(username);
-    }
-
-    @GetMapping(value = "/friend")
-    public Set<String> loadFriends(@RequestBody JSONObject user) {
-        final String username = (String)user.get("username");
-        return userAccountService.loadFriends(username);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     //returns the logged in users friendlist
@@ -42,8 +36,9 @@ public class FriendsController {
     }
 
     @DeleteMapping("/friend")
-    void removeFriend(@RequestBody JSONObject user) {
+    ResponseEntity removeFriend(@RequestBody JSONObject user) {
         final String username = (String)user.get("username");
         userAccountService.removeFriend(username);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }
