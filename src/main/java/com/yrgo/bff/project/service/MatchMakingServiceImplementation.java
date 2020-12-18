@@ -1,6 +1,8 @@
 package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.domain.UserAccount;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
     @Autowired
     UserAccountService userAccountService;
 
+    private Log log = LogFactory.getLog(getClass());
+
+
     @Override
     public void addUserMatchRequest(UserAccount user, String location) {
         if (!usersLookingToBeMatched.containsKey(location)) {
@@ -29,10 +34,9 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
 
     @Override
     public void removeUserMatchRequest(UserAccount user, String location) {
-        System.out.println("TAR BORT " + user.getUsername() + " FRÅN " + location + "\nINNAN" + usersLookingToBeMatched.get(location));
+        log.debug("removeUserMatchRequest\nTAR BORT " + user.getUsername() + " FRÅN " + location + "\nINNAN" + usersLookingToBeMatched.get(location));
         usersLookingToBeMatched.get(location).remove(user.getUsername());
-        System.out.println("\nEFTER" + usersLookingToBeMatched.get(location));
-
+        log.debug("\nEFTER" + usersLookingToBeMatched.get(location));
     }
 
     private void matchUsers() {

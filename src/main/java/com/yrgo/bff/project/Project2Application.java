@@ -6,6 +6,8 @@ import com.yrgo.bff.project.service.MatchMakingService;
 import com.yrgo.bff.project.service.NotificationService;
 import com.yrgo.bff.project.service.UserAccountService;
 import org.apache.catalina.User;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -49,8 +51,14 @@ public class Project2Application {
 	@Component
 	public class AppStartupRunner implements ApplicationRunner {
 
+		private Log log = LogFactory.getLog(getClass());
+
 		@Override @Transactional
 		public void run(ApplicationArguments args) throws Exception {
+
+			log.info("TEST: Detta är ett informationsmeddelande");
+			log.debug("TEST: Detta är ett debug-meddelande");
+			log.error("TEST: TEST: Detta är ett felmeddelande");
 
 			final String user = "erik@a.a";
 			final String user2 = "simon@a.a";

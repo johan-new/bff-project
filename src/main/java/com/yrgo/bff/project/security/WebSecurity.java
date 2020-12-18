@@ -58,16 +58,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 //    https://www.freecodecamp.org/news/how-to-setup-jwt-authorization-and-authentication-in-spring/
 
 
-//    @Bean //TODO: Review before prod
-//    CorsConfigurationSource corsConfigurationSource() {
-//        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        CorsConfiguration corsConfig = new CorsConfiguration();
-//        corsConfig.applyPermitDefaultValues();
-//        corsConfig.addExposedHeader(SecurityConstants.HEADER_STRING);
-//        source.registerCorsConfiguration("/**", corsConfig);
-//        return source;
-//    }
-
     @Bean   //TODO: Review before prod
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

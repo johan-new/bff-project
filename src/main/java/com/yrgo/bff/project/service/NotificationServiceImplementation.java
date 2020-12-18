@@ -1,5 +1,7 @@
 package com.yrgo.bff.project.service;
 
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,9 @@ import java.util.*;
 public class NotificationServiceImplementation implements NotificationService {
 
     Map<String,Map<Integer,Map<String,String>>> notifications;
+
+    private Log log = LogFactory.getLog(getClass());
+
 
     public NotificationServiceImplementation() {
         this.notifications =  new HashMap();
@@ -41,7 +46,7 @@ public class NotificationServiceImplementation implements NotificationService {
 
             notifications.put(username,notificationsMapForSpecificUser);
         }
-        System.out.println("Added new " + type.name() + " notification for " + username);
+        log.debug("Added new " + type.name() + " notification for " + username);
     }
 
 }

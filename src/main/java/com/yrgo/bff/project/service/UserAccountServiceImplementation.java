@@ -2,6 +2,8 @@ package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.UserAccount;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +18,6 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.sort;
 
 @Service
 public class UserAccountServiceImplementation implements UserAccountService, UserDetailsService {
@@ -25,6 +26,8 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     UserAccountDataAccess userAccountDataAccess;
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private Log log = LogFactory.getLog(getClass());
 
     public UserAccountServiceImplementation(BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -39,6 +42,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     @Override
     public UserAccount createUser(String username, String password) throws Exception {
         UserAccount user = new UserAccount(username.toLowerCase(),bCryptPasswordEncoder.encode(password));
+        log.debug("createUser(" + username + ")\n" + user);
         userAccountDataAccess.save(user);
         return user;
     }
@@ -98,8 +102,8 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.debug("loadUserByUsername("+username+")");
         UserAccount user = userAccountDataAccess.findByUsername(username.toLowerCase());
-        System.out.println("***********\n" + user);
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
@@ -126,7 +130,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     public Set<String> loadFriends(String username) {
         //ser till så att ingen kan ändra vännerna genom referensen som returneras
         Set<String> returnvalues = readUser(username).getFriends();
-        System.out.println("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ " + returnvalues);
+        log.debug("loadFriends(" + username + ")\n" + returnvalues);
         return Collections.unmodifiableSet(returnvalues);
     }
 

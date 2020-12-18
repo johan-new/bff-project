@@ -4,6 +4,8 @@ import com.yrgo.bff.project.domain.Game;
 import com.yrgo.bff.project.domain.UserAccount;
 import com.yrgo.bff.project.service.GameService;
 import com.yrgo.bff.project.service.UserAccountService;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,9 @@ public class GameController {
 
     @Autowired
     GameService gameService;
+
+    private Log log = LogFactory.getLog(getClass());
+
 
     @PostMapping(value = "/game")
         //i.e. POST "http://localhost:8080/game?players=Johan,Erik,Simon&venue=Gbg"
@@ -65,11 +70,11 @@ public class GameController {
             System.err.println(username);
             UserAccount u = userAccountService.readUser(username);
             if (u == null) {
-                System.out.println("********** " + u);
+                log.error("********** " + u);
                 throw new Exception("User doesn't exists!");
             } else {
                 playersSet.add(u);
-                System.out.println("Adding " + username + "to game");
+                log.debug("Adding " + username + "to game");
             }
         }
 

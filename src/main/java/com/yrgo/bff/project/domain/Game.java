@@ -18,11 +18,6 @@ public class Game {
 
     @ManyToMany
     Set<UserAccount> participants;
-//    @JoinTable(
-//            name = "user_game",
-//            joinColumns = @JoinColumn(name = "userName"),
-//            inverseJoinColumns = @JoinColumn(name = "id")
-//    )
 
     public Game(Date when, String venue, Set<UserAccount> participants) {
         this.when = when;

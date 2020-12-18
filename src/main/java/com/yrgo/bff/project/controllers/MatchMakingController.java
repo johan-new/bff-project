@@ -3,6 +3,8 @@ package com.yrgo.bff.project.controllers;
 import com.yrgo.bff.project.domain.UserAccount;
 import com.yrgo.bff.project.service.MatchMakingService;
 import com.yrgo.bff.project.service.UserAccountService;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -19,6 +21,9 @@ public class MatchMakingController {
 
     @Autowired
     UserAccountService userAccountService;
+
+    private Log log = LogFactory.getLog(getClass());
+
 
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() throws Exception {
@@ -47,6 +52,7 @@ public class MatchMakingController {
             matchMakingService.addUserMatchRequest(userObject,venue);
             return ResponseEntity.status(HttpStatus.CREATED).body("search added");
         } else {
+            log.error("No such user");
             throw new Exception("No such user");
         }
     }
@@ -60,6 +66,7 @@ public class MatchMakingController {
             return ResponseEntity.status(HttpStatus.OK).body("Match request cancelled!");
         }
         else {
+            log.error("No such user");
             throw new Exception("No such user");
         }
 

@@ -2,6 +2,8 @@ package com.yrgo.bff.project.controllers;
 
 import com.yrgo.bff.project.domain.UserAccount;
 import com.yrgo.bff.project.service.UserAccountService;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +18,14 @@ public class FriendsController {
     @Autowired
     UserAccountService userAccountService;
 
+    private Log log = LogFactory.getLog(getClass());
+
+
 
     @PostMapping("/friend")
     public void addFriend(@RequestBody JSONObject user) {
         final String username = (String)user.get("username");
-        System.out.println("******* " + username);
+        log.debug("******* " + username);
                 userAccountService.addFriend(username);
     }
 

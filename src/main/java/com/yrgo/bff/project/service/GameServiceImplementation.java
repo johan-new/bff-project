@@ -3,6 +3,8 @@ package com.yrgo.bff.project.service;
 import com.yrgo.bff.project.dao.GameDataAccess;
 import com.yrgo.bff.project.domain.Game;
 import com.yrgo.bff.project.domain.UserAccount;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,9 @@ public class GameServiceImplementation implements GameService {
 
     @Autowired
     GameDataAccess gameDataAccess;
+
+    private Log log = LogFactory.getLog(getClass());
+
 
     /**
      * Creates a Game and persists it in the database
