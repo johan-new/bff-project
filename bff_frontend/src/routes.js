@@ -3,6 +3,7 @@ import Login from './components/Login'
 import Register from './components/Register'
 import Game from './components/Game.vue'
 import Userprofile from './components/Userprofile.vue'
+import Notifications from './components/Notifications.vue'
 
 export const routes = [
   {
@@ -25,8 +26,16 @@ export const routes = [
       requiresAuth: true
     }
   }, {
-    path: '/userprofile',
-    name: 'userprofile',
+    path: '/notifications',
+    name: 'Notificatons',
+    component: Notifications,
+    meta: {
+      requiresAuth: true
+    }
+  }, {
+    //  path: '/userprofile',
+    path: '/:username',
+    name: 'Userprofile',
     component: Userprofile,
     meta: {
       requiresAuth: true

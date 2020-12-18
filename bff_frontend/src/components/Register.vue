@@ -4,7 +4,6 @@
     <form @submit.prevent="registerUser">
         <input type="email" placeholder="Email" v-model="userData.email" /><br>
         <input type="password" placeholder="Choose a password" v-model="userData.password" /><br>
-        <h2>{{ this.$store.state.authStore.test }}</h2>
         <button>Create account</button>
     </form>
   </div>

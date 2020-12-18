@@ -1,10 +1,13 @@
 <template>
     <div class="wrapper">
-        <h1>Userprofile component</h1>
+        <h1>Friends component</h1>
+        <form @submit.prevent="fetchUser">
+            <input type="username" placeholder="Username" v-model="user" /><br>
+          <button>Search</button>
+        </form>
         <p>Användarnamn: {{ this.$store.state.userStore.user.username }}</p>
-        <p>Användarobjekt visar tidigare spelare matcher samt framtida,
-          vilka var med, när va detta, samt användarnamn</p>
         <p>Användarobjekt: {{ this.$store.state.userStore.user }}</p>
+
         <div>
           <h2>Ändra lösenord:</h2>
             <form @submit.prevent="changePassword">
@@ -18,7 +21,7 @@
 
 <script>
 export default {
-  name: 'Userprofile',
+  name: 'Friends',
   data () {
     return {
       user: '',
@@ -30,6 +33,12 @@ export default {
     this.$store.dispatch('userStore/fetchUserprofile')
   },
   methods: {
+    fetchUser () {
+      const payload = {
+        user: this.user
+      }
+      this.$store.dispatch('userStore/fetchUser', payload)
+    },
     changePassword () {
       const payload = {
         oldPassword: this.oldPassword,

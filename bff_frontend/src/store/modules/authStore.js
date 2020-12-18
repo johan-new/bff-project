@@ -3,11 +3,9 @@ import axios from 'axios'
 const state = {
   email: '',
   password: 'password',
-  test: 'My state!',
-  location: 'location',
+  location: '',
   token: localStorage.getItem('token') || '',
-  status: '',
-  user: {}
+  status: ''
 }
 const getters = {
   isLoggedIn: state => !!state.token,
@@ -23,18 +21,6 @@ const actions = {
     })
       .then(data => {
         console.log(data.data)
-      })
-      .catch(error => {
-        console.log(error.response)
-      })
-  },
-  matchUser (context, { location }) {
-    axios.post('http://localhost:8080//match', {
-      location: location
-    })
-      .then(data => {
-        console.log(data.data)
-        context.commit('SET_LOCATION', location)
       })
       .catch(error => {
         console.log(error.response)
@@ -78,10 +64,6 @@ const mutations = {
   },
   SET_USERINFO (state, user) {
     state.email = user.name
-    state.password = user.password
-  },
-  addUser (state, payload) {
-    state.email = payload
   },
   auth_request (state) {
     state.status = 'loading'
