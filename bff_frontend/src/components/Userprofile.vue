@@ -49,8 +49,7 @@ export default {
   created () {
     axios.get('http://localhost:8080/friend/all')
       .then(data => {
-        console.log(data.data)
-        this.friends = { username: 'e@e.e' }
+        this.friends = data.data
       })
       .catch((error) => {
         console.log(error.response)

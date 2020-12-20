@@ -62,7 +62,6 @@ export default {
       axios
         .get('http://localhost:8080/loggedinuser')
         .then((data) => {
-          console.log(data.data)
           this.$router.push({
             name: 'Userprofile',
             params: { username: data.data.username, data: data.data }

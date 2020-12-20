@@ -27,7 +27,6 @@ const actions = {
       })
   },
   login (context, user) {
-    console.log(user)
     return new Promise((resolve, reject) => {
       context.commit('auth_request')
       axios.post('http://localhost:8080/login', {

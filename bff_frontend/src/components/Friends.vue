@@ -1,8 +1,8 @@
 <template>
     <div class="wrapper">
         <h1>Friends component</h1>
-         <div>
-            {{ friends }}
+         <div v-for="friend of friends" :key="friend">
+            {{ friend }}
          </div>
     </div>
 </template>
