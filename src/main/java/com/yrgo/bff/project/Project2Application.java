@@ -5,7 +5,6 @@ import com.yrgo.bff.project.service.GameService;
 import com.yrgo.bff.project.service.MatchMakingService;
 import com.yrgo.bff.project.service.NotificationService;
 import com.yrgo.bff.project.service.UserAccountService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -54,16 +53,16 @@ public class Project2Application {
 
 			final String user = "erik@a.a";
 			final String user2 = "simon@a.a";
-			final String user3 = "sohan@a.a";
-			final String user4 = "sreven@a.a";
+			final String user3 = "johan@a.a";
+			final String user4 = "greven@a.a";
 			final String password = "a";
 
 			final String venue = "Mölndal";
 
-			final String user5 = "e@e.e";
-			final String user6 = "s@s.s";
-			final String user7 = "j@j.j";
-			final String user8 = "f@f.f";
+			final String user5 = "nahid@a.a";
+			final String user6 = "anders@a.a";
+			final String user7 = "hampus@a.a";
+			final String user8 = "jon@a.a";
 
 			userAccountService.createUser(user,password);
 			userAccountService.createUser(user2,password);
@@ -72,6 +71,8 @@ public class Project2Application {
 
 
 			Set<UserAccount> users = new HashSet<>();
+			Set<UserAccount> users2 = new HashSet<>();
+			Set<UserAccount> users3 = new HashSet<>();
 
 			userAccountService.createUser(user5,password);
 			userAccountService.createUser(user6,password);
@@ -81,25 +82,34 @@ public class Project2Application {
 			users.add(userAccountService.readUser(user));
 			users.add(userAccountService.readUser(user2));
 			users.add(userAccountService.readUser(user3));
+			users2.add(userAccountService.readUser(user8));
+
+			users2.add(userAccountService.readUser(user5));
+			users2.add(userAccountService.readUser(user3));
+			users2.add(userAccountService.readUser(user2));
+			users2.add(userAccountService.readUser(user));
+
+			users3.add(userAccountService.readUser(user));
+			users3.add(userAccountService.readUser(user2));
+			users3.add(userAccountService.readUser(user3));
+			users3.add(userAccountService.readUser(user5));
 
 			gameService.createGame(new Date(),"Göteborg",users);
+			gameService.createGame(new Date(), "Borås", users2);
+			gameService.createGame(new Date(), "Halmstad", users3);
 
 			matchMakingService.addUserMatchRequest(userAccountService.readUser(user),venue);
 			matchMakingService.addUserMatchRequest(userAccountService.readUser(user2),venue);
 			matchMakingService.addUserMatchRequest(userAccountService.readUser(user3),venue);
 			matchMakingService.addUserMatchRequest(userAccountService.readUser(user4),venue);
 
+			matchMakingService.addUserMatchRequest(userAccountService.readUser(user5),"Stockholm");
+			matchMakingService.addUserMatchRequest(userAccountService.readUser(user6),"Norrut");
+			matchMakingService.addUserMatchRequest(userAccountService.readUser(user7),"Skåne");
+			matchMakingService.addUserMatchRequest(userAccountService.readUser(user8),"Pajala");
+
 			notificationService.addNotification(user3,"Detta är en notis!", NotificationService.Type.GENERAL);
 
-			UserAccount u1 = new UserAccount(user5, password);
-			UserAccount u2 = new UserAccount(user6, password);
-			UserAccount u3 = new UserAccount(user7, password);
-			UserAccount u4 = new UserAccount(user8, password);
-
-			matchMakingService.addUserMatchRequest(u1, "Stockholm");
-			matchMakingService.addUserMatchRequest(u2, "Norrut");
-			matchMakingService.addUserMatchRequest(u3, "Skåne");
-			matchMakingService.addUserMatchRequest(u4, "Pajala");
 
 			userAccountService.readUser(user).addFriend(userAccountService.readUser(user2));
 			userAccountService.readUser(user2).addFriend(userAccountService.readUser(user3));

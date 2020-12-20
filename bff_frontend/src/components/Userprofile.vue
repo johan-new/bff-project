@@ -1,10 +1,11 @@
 <template>
     <div class="wrapper">
         <h1>Userprofile component</h1>
-        <p>Användarnamn: {{ this.$store.state.userStore.user.username }}</p>
+        <div>Användarnamn: {{ username }}</div>
         <p>Användarobjekt visar tidigare spelare matcher samt framtida,
           vilka var med, när va detta, samt användarnamn</p>
-        <p>Användarobjekt: {{ this.$store.state.userStore.user }}</p>
+        <div>user-objekt: {{ data }}</div><br>
+        <div>{{ data.games }}</div>
         <div>
           <h2>Ändra lösenord:</h2>
             <form @submit.prevent="changePassword">
@@ -21,14 +22,11 @@ export default {
   name: 'Userprofile',
   data () {
     return {
-      user: '',
       oldPassword: '',
       newPassword: ''
     }
   },
-  created () {
-    this.$store.dispatch('userStore/fetchUserprofile')
-  },
+  props: ['username', 'data'],
   methods: {
     changePassword () {
       const payload = {

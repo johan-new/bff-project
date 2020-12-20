@@ -37,6 +37,7 @@ export const routes = [
     path: '/:username',
     name: 'Userprofile',
     component: Userprofile,
+    props: true,
     meta: {
       requiresAuth: true
     }
