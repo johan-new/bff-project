@@ -5,7 +5,6 @@ import com.yrgo.bff.project.service.GameService;
 import com.yrgo.bff.project.service.MatchMakingService;
 import com.yrgo.bff.project.service.NotificationService;
 import com.yrgo.bff.project.service.UserAccountService;
-import org.apache.catalina.User;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,6 +120,8 @@ public class Project2Application {
 
 
 			userAccountService.readUser(user).addFriend(userAccountService.readUser(user2));
+			userAccountService.readUser(user).addFriend(userAccountService.readUser(user3));
+			userAccountService.readUser(user).addFriend(userAccountService.readUser(user4));
 			userAccountService.readUser(user2).addFriend(userAccountService.readUser(user3));
 
 

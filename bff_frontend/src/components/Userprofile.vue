@@ -26,17 +26,35 @@
         <button>Ändra lösenord</button>
       </form>
     </div>
+     <!-- <Friends v-for="friend in friends" :key="friend" /> -->
+    <Friends :friends=friends />
   </div>
 </template>
 
 <script>
+import Friends from './Friends'
+import axios from 'axios'
 export default {
   name: 'Userprofile',
+  components: {
+    Friends
+  },
   data () {
     return {
       oldPassword: '',
-      newPassword: ''
+      newPassword: '',
+      friends: {}
     }
+  },
+  created () {
+    axios.get('http://localhost:8080/friend/all')
+      .then(data => {
+        console.log(data.data)
+        this.friends = { username: 'e@e.e' }
+      })
+      .catch((error) => {
+        console.log(error.response)
+      })
   },
   computed: {
     loggedInUser () {
