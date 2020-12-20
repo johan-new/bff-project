@@ -61,7 +61,6 @@ public class MatchMakingController {
             throw new Exception("No such user");
         }
 
-        }
-
     }
 
+}

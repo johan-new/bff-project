@@ -4,7 +4,6 @@
     <form @submit.prevent="registerUser">
         <input type="email" placeholder="Email" v-model="userData.email" /><br>
         <input type="password" placeholder="Choose a password" v-model="userData.password" /><br>
-        <h2>{{ this.$store.state.authStore.test }}</h2>
         <button>Create account</button>
     </form>
   </div>
@@ -29,7 +28,7 @@ export default {
         name: this.userData.email,
         password: this.userData.password
       }
-      this.$store.dispatch('addUser', payload)
+      this.$store.dispatch('authStore/addUser', payload)
     }
   }
 }

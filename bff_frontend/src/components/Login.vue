@@ -29,7 +29,7 @@ export default {
         name: this.userData.email,
         password: this.userData.password
       }
-      this.$store.dispatch('login', payload)
+      this.$store.dispatch('authStore/login', payload)
         .then(() => this.$router.push('/'))
         .catch(err => console.log(err))
     }
