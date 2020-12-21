@@ -54,13 +54,7 @@ export default {
     }
   },
   created () {
-    axios.get('http://localhost:8080/friend/all')
-      .then(data => {
-        this.friends = data.data
-      })
-      .catch((error) => {
-        console.log(error.response)
-      })
+    this.fetchFriends()
   },
   computed: {
     loggedInUser () {
@@ -89,10 +83,10 @@ export default {
       this.$store.dispatch('userStore/changePassword', payload)
     },
     addFriend () {
-      console.log('Nu addar jag... ' + this.username)
       axios.post('http://localhost:8080/friend', {
         username: this.username
       })
+        .then(this.fetchFriends)
         .catch(error => {
           console.log(error.response)
         })
@@ -101,7 +95,17 @@ export default {
       axios.delete('http://localhost:8080/friend', {
         data: { username: this.username }
       })
+        .then(this.fetchFriends)
         .catch(error => {
+          console.log(error.response)
+        })
+    },
+    fetchFriends () {
+      axios.get('http://localhost:8080/friend/all')
+        .then(data => {
+          this.friends = data.data
+        })
+        .catch((error) => {
           console.log(error.response)
         })
     }
