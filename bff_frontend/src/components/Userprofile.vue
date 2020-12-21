@@ -26,7 +26,14 @@
         <button>Ändra lösenord</button>
       </form>
     </div>
-     <!-- <Friends v-for="friend in friends" :key="friend" /> -->
+    <div v-if="!loggedInUser">
+      <div v-if="!friendStatus" :key="friends.length">
+        <button @click="addFriend">Add friend</button>
+        </div>
+      <div v-if="friendStatus" :key="friends.length">
+        <button @click="removeFriend">Remove friend</button>
+      </div>
+    </div>
     <Friends :friends=friends />
   </div>
 </template>
@@ -43,7 +50,7 @@ export default {
     return {
       oldPassword: '',
       newPassword: '',
-      friends: {}
+      friends: []
     }
   },
   created () {
@@ -63,6 +70,13 @@ export default {
       } else {
         return false
       }
+    },
+    friendStatus () {
+      if (this.friends.includes(this.username)) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   props: ['username', 'data'],
@@ -73,6 +87,22 @@ export default {
         newPassword: this.newPassword
       }
       this.$store.dispatch('userStore/changePassword', payload)
+    },
+    addFriend () {
+      axios.post('http://localhost:8080/friend', {
+        username: this.username
+      })
+        .catch(error => {
+          console.log(error.response)
+        })
+    },
+    removeFriend () {
+      axios.delete('http://localhost:8080/friend', {
+        data: { username: this.username }
+      })
+        .catch(error => {
+          console.log(error.response)
+        })
     }
   }
 }
