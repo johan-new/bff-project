@@ -34,7 +34,7 @@
         <button @click="removeFriend">Remove friend</button>
       </div>
     </div>
-    <Friends :friends=friends />
+    <Friends v-if="loggedInUser" :friends=friends />
   </div>
 </template>
 
@@ -89,6 +89,7 @@ export default {
       this.$store.dispatch('userStore/changePassword', payload)
     },
     addFriend () {
+      console.log('Nu addar jag... ' + this.username)
       axios.post('http://localhost:8080/friend', {
         username: this.username
       })
