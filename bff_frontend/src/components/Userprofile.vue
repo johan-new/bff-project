@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <h1>Userprofile component</h1>
-    <div>Användarnamn: {{ username }}</div>
+    <div>Användarprofil: {{ username }}</div>
     <h3>
       Spelade och kommande matcher:
     </h3>
@@ -13,16 +13,8 @@
     <div v-if="loggedInUser">
       <h2>Ändra lösenord:</h2>
       <form @submit.prevent="changePassword">
-        <input
-          type="password"
-          placeholder="Gammalt lösenord"
-          v-model="oldPassword"
-        /><br>
-        <input
-          type="password"
-          placeholder="Nytt lösenord"
-          v-model="newPassword"
-        /><br>
+        <input type="password" placeholder="Gammalt lösenord" v-model="oldPassword"/><br>
+        <input type="password" placeholder="Nytt lösenord" v-model="newPassword"/><br>
         <button>Ändra lösenord</button>
       </form>
     </div>

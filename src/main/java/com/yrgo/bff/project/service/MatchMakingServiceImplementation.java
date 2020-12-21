@@ -1,8 +1,9 @@
 package com.yrgo.bff.project.service;
 
-import com.yrgo.bff.project.domain.UserAccount;
+import com.yrgo.bff.project.domain.MatchingRequest;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 @Service
 public class MatchMakingServiceImplementation implements MatchMakingService {
     //location, username
-    private Map<String, List<String>> usersLookingToBeMatched = new HashMap<>();
+    private Map<String, List<MatchingRequest>> usersLookingToBeMatched = new HashMap<>();
 
     @Autowired
     NotificationService notificationService;
@@ -23,24 +24,28 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
 
 
     @Override
-    public void addUserMatchRequest(UserAccount user, String location) {
+    public void addUserMatchRequest(JSONObject requestParam, String location) {
+        MatchingRequest matchingRequest = new MatchingRequest(requestParam);
         if (!usersLookingToBeMatched.containsKey(location)) {
             usersLookingToBeMatched.put(location, new ArrayList<>());
         }
-        usersLookingToBeMatched.get(location).add(user.getUsername());
+        usersLookingToBeMatched.get(location).add(matchingRequest);
         matchUsers();
     }
 
     @Override
-    public void removeUserMatchRequest(UserAccount user, String location) {
-        log.debug("removeUserMatchRequest\nTAR BORT " + user.getUsername() + " FRÅN " + location + "\nINNAN" + usersLookingToBeMatched.get(location));
-        usersLookingToBeMatched.get(location).remove(user.getUsername());
-        log.debug("\nEFTER" + usersLookingToBeMatched.get(location));
+    public void removeUserMatchRequest(String username, String location) {
+        usersLookingToBeMatched.get(location);
+        for (MatchingRequest matchingRequest : usersLookingToBeMatched.get(location)) {
+            if (matchingRequest.getUsername().equals(username)) {
+                usersLookingToBeMatched.get(location).remove(matchingRequest);
+            }
+        }
     }
 
     private void matchUsers() {
         if (usersLookingToBeMatched.size()>1) {
-            Map<String, List<String>> matchingUsers = usersLookingToBeMatched.entrySet().
+            Map<String, List<MatchingRequest>> matchingUsers = usersLookingToBeMatched.entrySet().
                     stream().
                     filter(a->a.getValue().size()>1).
                     collect(Collectors.toMap(e->e.getKey(),e->e.getValue()));
@@ -55,19 +60,22 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         }
     }
 
-    private void notifyUsersThatMatch(Map<String, List<String>> matchingUsers) {
+    private void notifyUsersThatMatch(Map<String, List<MatchingRequest>> matchingUsers) {
         Iterator iterator = matchingUsers.entrySet().iterator();
         while (iterator.hasNext()){
             Map.Entry set = (Map.Entry) iterator.next();
-            for (String username: (ArrayList<String>)set.getValue() ) {
-                notificationService.addNotification(username,set.getValue().toString(), NotificationService.Type.MATCH_SUCCESS);
+            for (Object matchingRequest : (List)set.getValue()) {
+                MatchingRequest castedRequest = (MatchingRequest)matchingRequest;
+                notificationService.addNotification(castedRequest.getUsername(),
+                        set.getValue().toString(),
+                        NotificationService.Type.MATCH_SUCCESS);
             }
         }
     }
 
     @Override
-    public Map<String, List<String>> getUsersLookingToBeMatched() {
-        return Collections.unmodifiableMap(usersLookingToBeMatched);
+    public JSONObject getUsersLookingToBeMatched() {
+        return new JSONObject(usersLookingToBeMatched);
     }
 
 }

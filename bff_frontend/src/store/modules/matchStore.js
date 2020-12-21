@@ -1,78 +1,7 @@
 import axios from 'axios'
 
 const state = {
-  queue: {
-    Göteborg: [
-      {
-        username: 'e@e.e',
-        date: '2020-12-24',
-        time: '18:30',
-        reservation: false,
-        venue: 'GLTK',
-        participants: 3
-      },
-      {
-        username: 's@s.s',
-        date: '2020-12-24',
-        time: '16:30',
-        reservation: false,
-        venue: 'MBB',
-        participants: 2
-      },
-      {
-        username: 'b@b.b',
-        date: '2020-12-31',
-        time: '23:30',
-        reservation: true,
-        venue: 'Hallen',
-        participants: 1
-      }
-    ],
-    Stockholm: [
-      {
-        username: 'asda@as.s',
-        date: '2020-12-22',
-        time: '13:00',
-        reservation: false,
-        venue: 'Tråkhallen',
-        participants: 3
-      },
-      {
-        username: 'dtf@b.b',
-        date: '2020-12-25',
-        time: '15:30',
-        reservation: true,
-        venue: 'DTF-hallen',
-        participants: 2
-      },
-      {
-        username: 'gote@b.b',
-        date: '2020-12-21',
-        time: '22:30',
-        reservation: false,
-        venue: 'Logan',
-        participants: 1
-      }
-    ],
-    Uppsala: [
-      {
-        username: 'hejhej@b.b',
-        date: '2020-12-30',
-        time: '21:30',
-        reservation: false,
-        venue: 'Logan logansson-hallen',
-        participants: 3
-      },
-      {
-        username: 'logan@logansson.b',
-        date: '2020-12-19',
-        time: '25:30',
-        reservation: false,
-        venue: 'Hallen',
-        participants: 1
-      }
-    ]
-  },
+  queue: {},
   inQueue: false
 }
 

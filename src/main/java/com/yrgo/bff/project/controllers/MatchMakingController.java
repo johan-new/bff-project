@@ -1,14 +1,11 @@
 package com.yrgo.bff.project.controllers;
 
-import com.yrgo.bff.project.domain.UserAccount;
 import com.yrgo.bff.project.service.MatchMakingService;
 import com.yrgo.bff.project.service.UserAccountService;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,31 +33,25 @@ public class MatchMakingController {
 
 
     @PostMapping("/match")
-    public ResponseEntity submitMatchingRequest(@RequestBody JSONObject location) throws Exception {
-        UserAccount userObject = userAccountService.readLoggedInUser();
-        String venue = (String)location.get("location");
-        if (userObject!=null) {
-            matchMakingService.addUserMatchRequest(userObject,venue);
+    public ResponseEntity submitMatchingRequest(@RequestBody JSONObject request) throws Exception {
+        request.put("username", userAccountService.readLoggedInUser().getUsername());
+        String location = (String)request.get("location");
+        if (location!=null) {
+            request.remove(location);
+            matchMakingService.addUserMatchRequest(request, location);
             return ResponseEntity.status(HttpStatus.CREATED).body("search added");
         } else {
-            log.error("No such user");
-            throw new Exception("No such user");
+            log.error("No such location");
+            throw new Exception("No such location");
         }
+
     }
 
 
     @DeleteMapping(value = "/match")
     public ResponseEntity cancelMatchingRequest(@RequestBody JSONObject location) throws Exception {
-        UserAccount userObject = userAccountService.readLoggedInUser();
-        if (userObject !=null) {
-            matchMakingService.removeUserMatchRequest(userObject,(String)location.get("location"));
+            String username = userAccountService.readLoggedInUser().getUsername();
+            matchMakingService.removeUserMatchRequest(username, (String)location.get("location"));
             return ResponseEntity.status(HttpStatus.OK).body("Match request cancelled!");
-        }
-        else {
-            log.error("No such user");
-            throw new Exception("No such user");
-        }
-
     }
-
 }

@@ -45,6 +45,9 @@ export default {
       this.$store.dispatch('matchStore/cancelMatchRequest')
         .then(() => this.$store.dispatch('matchStore/matchingQueue'))
     }
+  },
+  created () {
+    this.$store.dispatch('matchStore/matchingQueue')
   }
 }
 </script>
