@@ -15,6 +15,15 @@ Strukturen på JSON-objektet är detsamma oavsett om du ska uppdatera användare
 * I dagsläget görs ingen kontroll om gamla lösenordet stämmer innan det ändras till det nya.
 * användarnamn, alltså `username` kan inte ändras
 
+`PUT /user`
+```
+{
+	"presentation": "hej världen här är jag",
+	"gender": "FEMALE",
+	"city": "Lerum",
+	"age": 100
+}
+```
 
 
 `GET /loggedinuser`
