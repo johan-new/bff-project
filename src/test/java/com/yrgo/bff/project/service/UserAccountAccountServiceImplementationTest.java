@@ -72,7 +72,7 @@ public class UserAccountAccountServiceImplementationTest {
         final String newPresentation = "This is me, then";
         final String newCity = "Lund";
         final String newGender = "FEMALE";
-        final String newAge = "30";
+        final int newAge = 30;
 
         JSONObject json = new JSONObject();
         json.put("presentation",newPresentation);
@@ -85,7 +85,7 @@ public class UserAccountAccountServiceImplementationTest {
         assertEquals(userAccountService.readLoggedInUser().getPresentation(), newPresentation);
         assertEquals(userAccountService.readLoggedInUser().getCity(), newCity);
         assertEquals(userAccountService.readLoggedInUser().getGender(), newGender);
-        assertEquals(userAccountService.readLoggedInUser().getAge(), Integer.parseInt(newAge));
+        assertEquals(userAccountService.readLoggedInUser().getAge(), newAge);
 
     }
 }
