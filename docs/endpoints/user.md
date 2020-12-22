@@ -1,4 +1,22 @@
- `GET /loggedinuser`
+### Struktur på JSON
+Strukturen på JSON-objektet är detsamma oavsett om du ska uppdatera användarens information eller hämta den.
+```
+{
+  "username": "erik@a.a",
+  "presentation": "hej världen här är jag",
+  "gender": "FEMALE",
+  "city": "Lerum",
+  "age": 100
+}
+```
+
+```"games"``` kan bara hämtas via GET, inte ändras via PUT.
+lösenord kan inte hämtas, endast ändras genom ```"newPassword"```/```"oldPassword"```
+I dagsläget görs ingen kontroll om gamla lösenordet stämmer innan det ändras till det nya.
+
+
+
+`GET /loggedinuser`
 Hämtar information om inloggad användare. Ex
 
 ``` 
