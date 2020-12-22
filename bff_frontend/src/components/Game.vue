@@ -3,12 +3,13 @@
         <h1>Padel/Game component</h1>
         <h2>Spela padel: Ange location</h2>
                 <form @submit.prevent="submitMatchRequest">
-            <input type="location" placeholder="Stad" v-model="location" /><br>
-            <input type="date" placeholder="Datum" v-model="date" /><br>
-            <input type="time" placeholder="Tid" v-model="time" /><br>
-            <input type="reservation" placeholder="Reserverat" v-model="reservation" /><br>
-            <input type="venue" placeholder="Padelhall" v-model="venue" /><br>
-            <input type="participants" placeholder="Spelare" v-model="participants" /><br>
+            <input type="location" placeholder="Stad" v-model="form.location" /><br>
+            <input type="date" placeholder="Datum" v-model="form.date" /><br>
+            <input type="time" placeholder="Tid" v-model="form.time" /><br>
+            <!-- <input type="reservation" placeholder="Reserverat" v-model="form.reservation" /><br> -->
+            <input type="checkbox" v-model="form.reservation" /><span>Bokat?</span><br>
+            <input type="venue" placeholder="Padelhall" v-model="form.venue" /><br>
+            <input type="participants" placeholder="Spelare" v-model="form.participants" /><br>
           <button>Play padel</button>
         </form>
 
@@ -23,6 +24,7 @@
         </div>
         </div>
 </div>
+
     </div>
 </template>
 
@@ -35,35 +37,29 @@ export default {
   },
   data () {
     return {
-      location: '',
-      date: '',
-      time: '',
-      reservation: false,
-      venue: '',
-      participants: 0
+      form: {
+        location: '',
+        date: '',
+        time: '',
+        reservation: false,
+        venue: '',
+        participants: ''
+      }
     }
   },
   methods: {
     submitMatchRequest () {
-      const payload = {
-        location: this.location,
-        date: this.date,
-        time: this.time,
-        reservation: this.reservation,
-        venue: this.venue,
-        participants: this.participants
-      }
-      console.log(payload)
-      this.$store.dispatch('matchStore/submitMatchRequest', payload)
-      // .then(() => this.$store.dispatch('matchStore/matchingQueue'))
+      console.log(this.form)
+      this.$store.dispatch('matchStore/submitMatchRequest', this.form)
+        .then(() => this.$store.dispatch('matchStore/matchingQueue'))
     },
     cancelMatchRequest () {
       this.$store.dispatch('matchStore/cancelMatchRequest')
-      //  .then(() => this.$store.dispatch('matchStore/matchingQueue'))
+        .then(() => this.$store.dispatch('matchStore/matchingQueue'))
     }
+  },
+  created () {
+    this.$store.dispatch('matchStore/matchingQueue')
   }
-  // created () {
-  //   this.$store.dispatch('matchStore/matchingQueue')
-  // }
 }
 </script>
