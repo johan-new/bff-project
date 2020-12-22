@@ -35,10 +35,13 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
 
     @Override
     public void removeUserMatchRequest(String username, String location) {
-        usersLookingToBeMatched.get(location);
         for (MatchingRequest matchingRequest : usersLookingToBeMatched.get(location)) {
-            if (matchingRequest.getUsername().equals(username)) {
+            if (matchingRequest.getUsername().equals(username) && usersLookingToBeMatched.get(location).size() <= 1) {
+                usersLookingToBeMatched.remove(location);
+                break;
+            } else if (matchingRequest.getUsername().equals(username)) {
                 usersLookingToBeMatched.get(location).remove(matchingRequest);
+                break;
             }
         }
     }

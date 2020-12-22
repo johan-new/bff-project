@@ -16,7 +16,6 @@ const getters = {
 const actions = {
   submitMatchRequest (context, payload) {
     return new Promise((resolve, reject) => {
-      console.log(payload)
       axios.post('http://localhost:8080/match', {
         location: payload.location,
         date: payload.date,
@@ -26,7 +25,6 @@ const actions = {
         participants: payload.participants
       })
         .then(data => {
-          console.log(data)
           context.commit('queue_status', true)
           resolve(data)
         })
@@ -40,26 +38,26 @@ const actions = {
     axios.get('http://localhost:8080/match/queue')
       .then(data => {
         commit('matching_queue', data.data)
-        var x
-        for (x of getters.getQueue) {
-          if (x.username === rootGetters['authStore/loggedInUser']) {
-            commit('queue_status', true)
-            break
-          } else {
-            commit('queue_status', false)
+        commit('queue_status', false)
+        var item
+        for (item in state.queue) {
+          for (var i = 0; i < state.queue[item].length; i++) {
+            if (state.queue[item][i].username === rootGetters['authStore/loggedInUser']) {
+              commit('queue_status', true)
+            }
           }
         }
       })
       .catch(error => {
-        console.log(error.response)
-        commit('queue_status', false)
+        console.log(error)
       })
   },
-  cancelMatchRequest (context) {
+  cancelMatchRequest (context, payload) {
     return new Promise((resolve, reject) => {
-      axios.delete('http://localhost:8080/match')
+      axios.delete('http://localhost:8080/match', {
+        data: { location: payload }
+      })
         .then(data => {
-          console.log(data.data)
           context.commit('queue_status', false)
           resolve(data)
         })
