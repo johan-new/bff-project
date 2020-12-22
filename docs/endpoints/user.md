@@ -10,9 +10,10 @@ Strukturen på JSON-objektet är detsamma oavsett om du ska uppdatera användare
 }
 ```
 
-```"games"``` kan bara hämtas via GET, inte ändras via PUT.
-lösenord kan inte hämtas, endast ändras genom ```"newPassword"```/```"oldPassword"```
-I dagsläget görs ingen kontroll om gamla lösenordet stämmer innan det ändras till det nya.
+* ```"games"``` kan bara hämtas via GET, inte ändras via PUT.
+* lösenord kan inte hämtas, endast ändras genom ```"newPassword"```/```"oldPassword"```
+* I dagsläget görs ingen kontroll om gamla lösenordet stämmer innan det ändras till det nya.
+* användarnamn, alltså `username` kan inte ändras
 
 
 
