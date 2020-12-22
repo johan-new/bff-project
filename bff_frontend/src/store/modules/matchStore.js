@@ -14,11 +14,16 @@ const getters = {
 }
 
 const actions = {
-  submitMatchRequest (context, location) {
+  submitMatchRequest (context, payload) {
     return new Promise((resolve, reject) => {
-      location = location.location
+      console.log(payload)
       axios.post('http://localhost:8080/match', {
-        location: location
+        location: payload.location,
+        date: payload.date,
+        time: payload.time,
+        reservation: payload.reservation,
+        venue: payload.venue,
+        participants: payload.participants
       })
         .then(data => {
           console.log(data)

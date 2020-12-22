@@ -17,12 +17,14 @@ public class MatchingRequest {
     public MatchingRequest(JSONObject jsonObject) {
         String dateString = jsonObject.get("date").toString();
         String timeString = jsonObject.get("time").toString();
+
+        int participantsAsInt = Integer.parseInt(jsonObject.get("participants").toString());
         this.username = (String)jsonObject.get("username");
         this.date = LocalDate.parse(dateString);
         this.time = LocalTime.parse(timeString);
         this.reservation = (boolean)jsonObject.get("reservation");
         this.venue = (String)jsonObject.get("venue");
-        this.participants = (Integer)jsonObject.get("participants");
+        this.participants = participantsAsInt;
     }
 
     public String getUsername() {
