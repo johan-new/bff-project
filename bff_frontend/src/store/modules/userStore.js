@@ -5,7 +5,7 @@ const state = {
   friendlist: {},
   gamelist: {},
   statuscode: '',
-  notifications: {}
+  notifications: []
 }
 
 const getters = {
@@ -56,8 +56,10 @@ const actions = {
   notifications (context) {
     axios.get('http://localhost:8080/notifications')
       .then(data => {
-        context.commit('set_notifications', data.data)
         console.log(data.data)
+        if (data.data !== '') {
+          context.commit('set_notifications', data.data)
+        }
       })
       .catch(error => {
         console.log(error)
@@ -73,7 +75,7 @@ const mutations = {
     state.statuscode = status
   },
   set_notifications (state, data) {
-    state.notifications = data
+    state.notifications.push(data)
   }
 }
 
