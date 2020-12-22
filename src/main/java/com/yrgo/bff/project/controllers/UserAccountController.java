@@ -59,25 +59,14 @@ public class UserAccountController {
         return userAccountService.readLoggedInUser().toJSON();
     }
 
-    //used to change password or email adress(username)
-
     @PutMapping("/user")
-    ResponseEntity updateUser(@RequestBody JSONObject user) throws Exception {
-        final String oldPassword = (String)user.get("oldPassword");
-        UserAccount u = userAccountService.readUser((String)user.get("username"));
-        final String newPassword = (String)user.get("newPassword");
-
-        if (bCryptPasswordEncoder.matches(oldPassword, u.getPassword()) && !oldPassword.equals(newPassword)) {
-            userAccountService.updateUser(oldPassword, newPassword);
-        }
-        else {
-            throw new Exception("ERROR: Password was not changed!");
-        }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    ResponseEntity updateUser(@RequestBody JSONObject newUserInformation) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).
+                body(userAccountService.updateUser(newUserInformation).toJSON());
     }
 
     //TODO: admin can delete anyone, regular user just themselves
-    @DeleteMapping("/user")
+    @DeleteMapping("/user/admin")
     ResponseEntity removeUser(@RequestParam(name="name",required = true) String name,
                     @RequestParam(name="password",required = true) String password){
         userAccountService.removeUser(name);

@@ -1,6 +1,9 @@
 package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.domain.UserAccount;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,9 +19,9 @@ public class UserAccountAccountServiceImplementationTest {
     @Autowired
     UserAccountService userAccountService;
 
-    // Variable name is the users name and password as camel notation.
+    private Log log = LogFactory.getLog(getClass());
+
     private UserAccount user;
-    private Set<UserAccount> userSet;;
 
     @Test
     void testReadUser() throws Exception {
@@ -34,7 +37,7 @@ public class UserAccountAccountServiceImplementationTest {
     }
 
     @Test
-    public void testCreateUser() throws Exception {
+    public void testCreateUser() {
         assertDoesNotThrow(()->{
             userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"");
         });
@@ -60,6 +63,29 @@ public class UserAccountAccountServiceImplementationTest {
         assertFalse(UserAccountServiceImplementation.validEmailAddress("asdf"));
         assertFalse(UserAccountServiceImplementation.validEmailAddress("@"));
         assertFalse(UserAccountServiceImplementation.validEmailAddress("."));
+    }
+
+    @Test @WithMockUser(username = "testChangeUserInformation@mail.com")
+    void testChangeUserInformation() throws Exception {
+        userAccountService.createUser("testChangeUserInformation@mail.com","asdf");
+
+        final String newPresentation = "This is me, then";
+        final String newCity = "Lund";
+        final String newGender = "FEMALE";
+        final String newAge = "30";
+
+        JSONObject json = new JSONObject();
+        json.put("presentation",newPresentation);
+        json.put("city",newCity);
+        json.put("gender",newGender);
+        json.put("age",newAge);
+
+        userAccountService.updateUser(json);
+
+        assertEquals(userAccountService.readLoggedInUser().getPresentation(), newPresentation);
+        assertEquals(userAccountService.readLoggedInUser().getCity(), newCity);
+        assertEquals(userAccountService.readLoggedInUser().getGender(), newGender);
+        assertEquals(userAccountService.readLoggedInUser().getAge(), Integer.parseInt(newAge));
 
     }
 }

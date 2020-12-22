@@ -100,11 +100,14 @@ public class UserAccount {
     //used to not expose passwords
     public JSONObject toJSON(){
         JSONObject json = new JSONObject();
+
         json.put("username",getUsername());
+        if (!nullOrEmpty(getPresentation())) json.put("presentation",getPresentation());
+        if (!nullOrEmpty(getCity())) json.put("city",getCity());
+        if (!nullOrEmpty(getGender())) json.put("gender",getGender());
+        if (!nullOrEmpty(Integer.toString(getAge()))) json.put("age",getAge());
 
-        JSONObject games = getPreviousGamesAsJSON();
-
-        if (!games.isEmpty()) {
+        if (!getPreviousGamesAsJSON().isEmpty()) {
         json.put("games",getPreviousGamesAsJSON());
         }
 
@@ -176,8 +179,12 @@ public class UserAccount {
         this.age = age;
     }
 
-    enum Gender{
+    public enum Gender{
         FEMALE,MALE,NONBINARY
+    }
+
+    private boolean nullOrEmpty(String s) {
+        return s == null || s.isBlank();
     }
 
 

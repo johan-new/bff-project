@@ -4,6 +4,8 @@ import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.UserAccount;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import org.json.simple.JSONObject;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -63,14 +65,42 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     /**
      * Updates a user with a new password and persists it in the database
      *
-     * @param newPassword - String of the new password
+     * @param newUserInformation - JSON body containing new info
      * @return An instance of User that was updated
      */
-    @Override
-    public UserAccount updateUser(String oldPassword, String newPassword) {
-        bCryptPasswordEncoder.encode(newPassword);
-        readLoggedInUser().setPassword(newPassword);
-        userAccountDataAccess.save(readLoggedInUser());
+    @Override @Transactional
+    public UserAccount updateUser(JSONObject newUserInformation) {
+        UserAccount userAccount = readLoggedInUser();
+
+        //mapping all data
+        final String oldPassword = (String)newUserInformation.get("oldPassword");
+        final String newPassword = (String)newUserInformation.get("newPassword");
+        final String presentation = (String)newUserInformation.get("presentation");
+        final String gender = ((String)newUserInformation.get("gender")).toUpperCase();
+        final String city = (String)newUserInformation.get("city");
+        final int age = (Integer)newUserInformation.get("age");
+
+        //TODO: Remove or implement password check when changing it?
+        if (newPassword != null && !newPassword.isBlank()) {
+            //if (userAccount.getPassword().equals(bCryptPasswordEncoder.encode(oldPassword)))
+            //{
+                userAccount.setPassword(bCryptPasswordEncoder.encode(newPassword));
+            //} else {
+            //    throw new Exception("Password not changed!");
+            //}
+        }
+        if (!presentation.isBlank()) {
+            userAccount.setPresentation(presentation);
+        }
+        if (gender != null && !gender.isBlank()) {
+            userAccount.setGender(UserAccount.Gender.valueOf(gender));
+        }
+        if (city != null && !city.isBlank()) {
+            userAccount.setCity(city);
+        }
+
+        userAccount.setAge(age);
+
         return readLoggedInUser();
     }
 
