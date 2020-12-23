@@ -53,13 +53,6 @@ public class MatchingRequest {
 
     @Override
     public String toString() {
-        return "MatchingRequest{" +
-                "username='" + username + '\'' +
-                ", date=" + date +
-                ", time=" + time +
-                ", reservation=" + reservation +
-                ", venue='" + venue + '\'' +
-                ", participants=" + participants +
-                '}';
+        return username;
     }
 }

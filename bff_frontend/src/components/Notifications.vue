@@ -3,9 +3,9 @@
         <h1>Notification component</h1>
         <div v-for="(item, name) of getNotifications" :key="name">
           Name/ID: {{ name }} <br>
-          {{ item.type }}
-          {{ item.content}}
-          {{ item.timestamp }}<br><br>
+          Item.type: {{ item.type }} <br>
+          Item.content: {{ item.content}} <br>
+          Item.timestamp: {{ item.timestamp }}<br><br>
           <!-- <div v-for="(value) in item" :key="value.type"></div>
           item : {{ value }}<br><br> -->
 
