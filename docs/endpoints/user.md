@@ -1,14 +1,15 @@
 ### Struktur på JSON
 Strukturen på JSON-objektet är detsamma oavsett om du ska uppdatera användarens information eller hämta den.
 
-Godkända parametrar
+Parametrar
 ```
-oldPassword
-newPassword
+oldPassword (endast PUT)
+newPassword (endast PUT)
 presentation
 city
 age
 gender
+games (endast GET)
 ```
 
 
