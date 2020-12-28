@@ -3,8 +3,7 @@ package com.yrgo.bff.project.domain;
 import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.Range;
+
 import org.json.simple.JSONObject;
 
 import javax.persistence.*;
@@ -13,7 +12,7 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.validation.constraints.*;
+
 import java.util.*;
 
 @Entity
@@ -55,10 +54,6 @@ public class UserAccount {
         return Collections.unmodifiableSet(previousGames);
     }
 
-    public void setPreviousGames(Set<Game> previousGames) {
-        this.previousGames = previousGames;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -75,8 +70,13 @@ public class UserAccount {
         return password;
     }
 
-    public void setPassword(@NotBlank String password) {
-            this.password = password;
+    public void setPassword(String password) throws Exception {
+            if (password != null && !password.isBlank()) {
+                this.password = password;
+            } else
+            {
+                throw new Exception("Lösenordet är tomt!");
+            }
     }
 
     @Override
@@ -105,7 +105,7 @@ public class UserAccount {
         if (!nullOrEmpty(getPresentation())) json.put("presentation",getPresentation());
         if (!nullOrEmpty(getCity())) json.put("city",getCity());
         if (!nullOrEmpty(getGender())) json.put("gender",getGender());
-        if (!nullOrEmpty(Integer.toString(getAge()))) json.put("age",getAge());
+        if (getAge()!=0) json.put("age",getAge());
 
         if (!getPreviousGamesAsJSON().isEmpty()) {
         json.put("games",getPreviousGamesAsJSON());
@@ -151,15 +151,18 @@ public class UserAccount {
         return presentation;
     }
 
-    public void setPresentation(@Length (max = 500, message = "Maximum 500 chars") String presentation) {
-        this.presentation = presentation;
+    public void setPresentation(String presentation) {
+        this.presentation = presentation.length()>500 ? presentation.substring(0,499) : presentation;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(@Length (max = 50) String city) {
+    public void setCity(String city) {
+        if (city.length()>50) {
+            city = city.substring(0,49);
+        }
         this.city = city;
     }
 
@@ -175,8 +178,13 @@ public class UserAccount {
         return age;
     }
 
-    public void setAge(@Range (min=0, max = 120, message = "Not an valid age") int age) {
-        this.age = age;
+    public void setAge(int age) throws Exception {
+        if (age > 15 && age < 120)
+        {
+            this.age = age;
+        } else {
+            throw new Exception("Ogiltig ålder!");
+        }
     }
 
     public enum Gender{

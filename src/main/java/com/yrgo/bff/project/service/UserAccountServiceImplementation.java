@@ -20,6 +20,7 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.sort;
 
 @Service
 public class UserAccountServiceImplementation implements UserAccountService, UserDetailsService {
@@ -43,6 +44,8 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      */
     @Override
     public UserAccount createUser(String username, String password) throws Exception {
+        passwordCheck(password);
+
         UserAccount user = new UserAccount(username.toLowerCase(),bCryptPasswordEncoder.encode(password));
         log.debug("createUser(" + username + ")\n" + user);
         userAccountDataAccess.save(user);
@@ -69,37 +72,29 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      * @return An instance of User that was updated
      */
     @Override @Transactional
-    public UserAccount updateUser(JSONObject newUserInformation) {
+    public UserAccount updateUser(JSONObject newUserInformation) throws Exception {
         UserAccount userAccount = readLoggedInUser();
 
         //mapping all data
         final String oldPassword = (String)newUserInformation.get("oldPassword");
-        final String newPassword = (String)newUserInformation.get("newPassword");
         final String presentation = (String)newUserInformation.get("presentation");
         final String gender = ((String)newUserInformation.get("gender")).toUpperCase();
         final String city = (String)newUserInformation.get("city");
         final int age = (Integer)newUserInformation.get("age");
 
-        //TODO: Remove or implement password check when changing it?
-        if (newPassword != null && !newPassword.isBlank()) {
-            //if (userAccount.getPassword().equals(bCryptPasswordEncoder.encode(oldPassword)))
-            //{
-                userAccount.setPassword(bCryptPasswordEncoder.encode(newPassword));
-            //} else {
-            //    throw new Exception("Password not changed!");
-            //}
-        }
-        if (!presentation.isBlank()) {
-            userAccount.setPresentation(presentation);
-        }
-        if (gender != null && !gender.isBlank()) {
-            userAccount.setGender(UserAccount.Gender.valueOf(gender));
-        }
-        if (city != null && !city.isBlank()) {
-            userAccount.setCity(city);
-        }
-
+        String newPassword = (String)newUserInformation.get("newPassword");
+        System.out.println(newPassword);
+        bCryptPasswordEncoder.encode(newPassword);
+        newPassword = bCryptPasswordEncoder.encode(newPassword);
+        //valid data checks occur in UserAccount set-ers
+        System.out.println(newPassword);
+        userAccount.setPresentation(presentation);
+        userAccount.setGender(UserAccount.Gender.valueOf(gender));
+        userAccount.setCity(city);
         userAccount.setAge(age);
+
+            passwordCheck(newPassword);
+        userAccount.setPassword();
 
         return readLoggedInUser();
     }
@@ -178,6 +173,12 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
             return true;
         } else {
             return false;
+        }
+    }
+
+    private void passwordCheck(final String password) throws Exception {
+        if (password == null || password.isBlank()) {
+            throw new Exception("Password cannot be blank or null!");
         }
     }
 }

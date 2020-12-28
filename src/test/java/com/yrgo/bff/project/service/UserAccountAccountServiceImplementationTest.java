@@ -25,20 +25,20 @@ public class UserAccountAccountServiceImplementationTest {
 
     @Test
     void testReadUser() throws Exception {
-        user = new UserAccount(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"");
-        userAccountService.createUser(user.getUsername(),"");
+        user = new UserAccount(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"test");
+        userAccountService.createUser(user.getUsername(),"test");
         assertNotNull(userAccountService.readUser(user.getUsername()));
     }
 
     @Test
     void testFindAll() throws Exception {
-        userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"");
+        userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"test");
         assertFalse(userAccountService.findAll().isEmpty());
     }
 
     @Test
     public void testCreateUser() {
-        assertDoesNotThrow(()->{
+        assertThrows(Exception.class, ()->{
             userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"");
         });
         assertThrows(Exception.class, ()->{
@@ -52,7 +52,8 @@ public class UserAccountAccountServiceImplementationTest {
     @Test
     public void testRemoveUser() throws Exception {
         String username = FriendsUserAccountServiceImplementationTest.getRandomUsername();
-        userAccountService.createUser(username,"");
+        userAccountService.createUser(username,"test");
+        assertNotNull(userAccountService.readUser(username));
         userAccountService.removeUser(username);
         assertNull(userAccountService.readUser(username));
     }
@@ -80,8 +81,9 @@ public class UserAccountAccountServiceImplementationTest {
         json.put("gender",newGender);
         json.put("age",newAge);
 
+        System.out.println("hejsan");
         userAccountService.updateUser(json);
-
+        System.out.println("svejsan");
         assertEquals(userAccountService.readLoggedInUser().getPresentation(), newPresentation);
         assertEquals(userAccountService.readLoggedInUser().getCity(), newCity);
         assertEquals(userAccountService.readLoggedInUser().getGender(), newGender);

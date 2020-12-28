@@ -8,7 +8,7 @@ import java.util.Set;
 public interface UserAccountService {
     UserAccount createUser(String username, String password) throws Exception;
     UserAccount removeUser(String username);
-    UserAccount updateUser(JSONObject newUserInformation);
+    UserAccount updateUser(JSONObject newUserInformation) throws Exception;
     UserAccount readUser(String username);
     UserAccount readLoggedInUser();
 
