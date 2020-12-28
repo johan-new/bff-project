@@ -1,5 +1,16 @@
 ### Struktur på JSON
 Strukturen på JSON-objektet är detsamma oavsett om du ska uppdatera användarens information eller hämta den.
+
+Godkända parametrar
+```
+oldPassword
+newPassword
+presentation
+city
+age
+gender
+```
+ex
 ```
 {
   "username": "erik@a.a",
