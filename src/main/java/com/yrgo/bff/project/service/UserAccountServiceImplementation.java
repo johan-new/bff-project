@@ -4,6 +4,7 @@ import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.UserAccount;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.sort;
 
 @Service
 public class UserAccountServiceImplementation implements UserAccountService, UserDetailsService {
@@ -41,6 +43,10 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      */
     @Override
     public UserAccount createUser(String username, String password) throws Exception {
+        if (!qualifiesAsAPassword(password)) {
+            throw new Exception("Password cannot be blank or null!");
+        }
+
         UserAccount user = new UserAccount(username.toLowerCase(),bCryptPasswordEncoder.encode(password));
         log.debug("createUser(" + username + ")\n" + user);
         userAccountDataAccess.save(user);
@@ -63,14 +69,48 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     /**
      * Updates a user with a new password and persists it in the database
      *
-     * @param newPassword - String of the new password
+     * @param newUserInformation - JSON body containing info to be updated
+     *                           > password
+     *                           > presentation
+     *                           > city
+     *                           > age
+     *                           > gender
      * @return An instance of User that was updated
+     *
      */
-    @Override
-    public UserAccount updateUser(String oldPassword, String newPassword) {
-        bCryptPasswordEncoder.encode(newPassword);
-        readLoggedInUser().setPassword(newPassword);
-        userAccountDataAccess.save(readLoggedInUser());
+    @Override @Transactional
+    public UserAccount updateUser(JSONObject newUserInformation) throws Exception {
+        UserAccount userAccount = readLoggedInUser();
+
+        final String oldPassword = (String)newUserInformation.get("oldPassword");
+        final String newPassword = (String)newUserInformation.get("newPassword");
+        changePassword(userAccount,oldPassword,newPassword);
+
+        try {
+            if (newUserInformation.containsKey("city")) {
+                userAccount.setCity((String)newUserInformation.get("city"));
+            }
+        } catch (Exception ignored) {}
+
+        try {
+            if (newUserInformation.containsKey("presentation")) {
+                userAccount.setPresentation((String)newUserInformation.get("presentation"));
+            }
+        } catch (Exception ignored) {}
+
+
+        try {
+            if (newUserInformation.containsKey("age")) {
+                userAccount.setAge((Integer)newUserInformation.get("age"));
+            }
+        } catch (Exception ignored) {}
+
+        try {
+            String gender = ((String)newUserInformation.get("gender")).toUpperCase();
+            userAccount.setGender(UserAccount.Gender.valueOf(gender));
+        } catch (Exception ignored) {}
+
+
         return readLoggedInUser();
     }
 
@@ -149,5 +189,20 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
         } else {
             return false;
         }
+    }
+
+    private void changePassword(UserAccount userAccount, String oldPassword, String newPassword) throws Exception {
+        //check if newPassword value is passed in the json body
+        if (newPassword != null) {
+            if (qualifiesAsAPassword(newPassword) && bCryptPasswordEncoder.matches(oldPassword,userAccount.getPassword())){
+                userAccount.setPassword(bCryptPasswordEncoder.encode(newPassword));
+            } else {
+                throw new Exception("Password cannot be blank or null!");
+            }
+        }
+    }
+
+    private boolean qualifiesAsAPassword(final String password) {
+        return (password != null && !password.isBlank());
     }
 }

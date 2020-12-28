@@ -1,11 +1,10 @@
 package com.yrgo.bff.project.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonTypeId;
-import com.yrgo.bff.project.service.NotificationService;
 import com.yrgo.bff.project.service.UserAccountServiceImplementation;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
+
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -13,47 +12,46 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.transaction.Transactional;
+
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 public class UserAccount {
+    @Transient
+    private Log log = LogFactory.getLog(getClass());
 
-    //jsonignore due to infinite recursion otherwise when creating json object
     @ManyToMany (mappedBy = "participants")
     Set<Game> previousGames;
 
     @Id
     private String username;
 
-    @Autowired
-    @Transient
-    NotificationService notificationService;
-
     @ElementCollection
     private Set<String> friends;
 
-
-    //this should never be serialized by the web layer
-//    @JsonIgnore
-    private String password;
+    private String password, presentation, city, gender;
+    private int age;
 
     public UserAccount(String username, String password) throws Exception {
         setUsername(username);
-        this.password = password;
+        setPassword(password);
+    }
+
+    public UserAccount(String username, String password, String presentation, String city, Gender gender, int age)
+            throws Exception {
+        setUsername(username);
+        setPassword(password);
+        setPresentation(presentation);
+        setCity(city);
+        setGender(gender);
+        setAge(age);
     }
 
     UserAccount(){
     }
 
     public Set<Game> getPreviousGames() {
-
-        return previousGames;
-    }
-
-    public void setPreviousGames(Set<Game> previousGames) {
-        this.previousGames = previousGames;
+        return Collections.unmodifiableSet(previousGames);
     }
 
     public String getUsername() {
@@ -72,8 +70,13 @@ public class UserAccount {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(String password) throws Exception {
+            if (password != null && !password.isBlank()) {
+                this.password = password;
+            } else
+            {
+                throw new Exception("Lösenordet är tomt!");
+            }
     }
 
     @Override
@@ -97,11 +100,14 @@ public class UserAccount {
     //used to not expose passwords
     public JSONObject toJSON(){
         JSONObject json = new JSONObject();
+
         json.put("username",getUsername());
+        if (!nullOrEmpty(getPresentation())) json.put("presentation",getPresentation());
+        if (!nullOrEmpty(getCity())) json.put("city",getCity());
+        if (!nullOrEmpty(getGender())) json.put("gender",getGender());
+        if (getAge()!=0) json.put("age",getAge());
 
-        JSONObject games = getPreviousGamesAsJSON();
-
-        if (!games.isEmpty()) {
+        if (!getPreviousGamesAsJSON().isEmpty()) {
         json.put("games",getPreviousGamesAsJSON());
         }
 
@@ -133,11 +139,61 @@ public class UserAccount {
         try {
             friends.remove(friend.getUsername());
         } catch (NullPointerException e) {
-            System.err.println("Kunde ej ta bort vän\n" + e.getMessage());
+            log.error("Kunde ej ta bort vän\n" + e.getMessage());
         }
     }
 
     public Set<String> getFriends() {
         return Collections.unmodifiableSet(friends);
     }
+
+    public String getPresentation() {
+        return presentation;
+    }
+
+    public void setPresentation(String presentation) {
+        this.presentation = presentation.length()>500 ? presentation.substring(0,499) : presentation;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        if (city.length()>50) {
+            city = city.substring(0,49);
+        }
+        this.city = city;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender.name();
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) throws Exception {
+        if (age > 15 && age < 120)
+        {
+            this.age = age;
+        } else {
+            throw new Exception("Ogiltig ålder!");
+        }
+    }
+
+    public enum Gender{
+        FEMALE,MALE,NONBINARY
+    }
+
+    private boolean nullOrEmpty(String s) {
+        return s == null || s.isBlank();
+    }
+
+
 }
