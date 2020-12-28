@@ -38,12 +38,19 @@ public class UserAccountAccountServiceImplementationTest {
 
     @Test
     public void testCreateUser() {
+        //valid username and password
+        assertDoesNotThrow(()->{
+            userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"test");
+        });
+        //empty password not OK
         assertThrows(Exception.class, ()->{
             userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"");
         });
+        //nor empty username
         assertThrows(Exception.class, ()->{
             userAccountService.createUser("","");
         });
+        //nor invalid email address
         assertThrows(Exception.class, ()->{
             userAccountService.createUser("a","");
         });
@@ -66,9 +73,29 @@ public class UserAccountAccountServiceImplementationTest {
         assertFalse(UserAccountServiceImplementation.validEmailAddress("."));
     }
 
+    @Test @WithMockUser(username = "yetanothermockusers@mail.com")
+    void testChangePassword() throws Exception {
+        final String newPassword = "asdf";
+        final String oldPassword = "test";
+
+        JSONObject json = new JSONObject();
+        userAccountService.createUser("yetanothermockusers@mail.com",oldPassword);
+
+        //intentionally assigning wrong value
+        json.put("oldPassword",newPassword);
+        json.put("newPassword",newPassword);
+        //shouldnt work to change to a new password without passing the old one
+        assertThrows(Exception.class,()->userAccountService.updateUser(json));
+
+        //should work, passing the old password as a verification
+        json.put("oldPassword",oldPassword);
+        assertDoesNotThrow(()->userAccountService.updateUser(json));
+    }
+
     @Test @WithMockUser(username = "testChangeUserInformation@mail.com")
     void testChangeUserInformation() throws Exception {
-        userAccountService.createUser("testChangeUserInformation@mail.com","asdf");
+
+        userAccountService.createUser("testChangeUserInformation@mail.com","test");
 
         final String newPresentation = "This is me, then";
         final String newCity = "Lund";
@@ -81,9 +108,7 @@ public class UserAccountAccountServiceImplementationTest {
         json.put("gender",newGender);
         json.put("age",newAge);
 
-        System.out.println("hejsan");
         userAccountService.updateUser(json);
-        System.out.println("svejsan");
         assertEquals(userAccountService.readLoggedInUser().getPresentation(), newPresentation);
         assertEquals(userAccountService.readLoggedInUser().getCity(), newCity);
         assertEquals(userAccountService.readLoggedInUser().getGender(), newGender);

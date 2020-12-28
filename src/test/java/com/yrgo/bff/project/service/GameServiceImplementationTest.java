@@ -29,8 +29,8 @@ public class GameServiceImplementationTest {
     GameService gameService;
 
     private Game newGame() throws Exception {
-        UserAccount user = userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"");
-        UserAccount user2 = userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"");
+        UserAccount user = userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"hej");
+        UserAccount user2 = userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"hej");
         Set<UserAccount> users = new HashSet<>();
         users.add(user); users.add(user2);
         return gameService.createGame(new Date(),"Helsinki",users);
