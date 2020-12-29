@@ -1,12 +1,35 @@
 <template>
-  <div class="wrapper">
-    <h1>Register component</h1>
-    <form @submit.prevent="registerUser">
-        <input type="email" placeholder="Email" v-model="userData.email" /><br>
-        <input type="password" placeholder="Choose a password" v-model="userData.password" /><br>
-        <button>Create account</button>
-    </form>
-  </div>
+  <div>
+    <b-card class="p-3">
+        <h3 class="mb-4">Registrera konto</h3>
+        <b-form @submit.prevent="registerUser">
+                <b-form-group id="registerInputMail"
+                    label="E-postadress:"
+                    label-for="emailInput"
+                    >
+        <b-form-input id="emailInput"
+                      type="email"
+                      v-model="userData.email"
+                      required
+                      placeholder="Ange din e-postadress">
+        </b-form-input>
+      </b-form-group>
+                <b-form-group id="registerInputPassword"
+                    label="Lösenord:"
+                    label-for="passwordInput">
+        <b-form-input id="passwordInput"
+                      type="password"
+                      v-model="userData.password"
+                      required
+                      placeholder="Ange lösenord">
+        </b-form-input>
+      </b-form-group>
+        <div class="d-flex justify-content-between">
+          <b-button type="submit">Registrera dig</b-button>
+          </div>
+          </b-form>
+    </b-card>
+    </div>
 </template>
 
 <script>

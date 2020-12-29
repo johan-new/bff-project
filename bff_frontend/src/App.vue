@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <Header />
-    <router-view></router-view>
+    <b-container class="bv-example-row">
+  <b-row align-h="center" class="mt-5">
+    <b-col md="5"><router-view></router-view></b-col>
+  </b-row>
+</b-container>
   </div>
 </template>
 
@@ -29,3 +33,11 @@ export default {
   }
 }
 </script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Lato:400,700');
+  body {
+    background: #EEF1F4 !important;
+    font-family: 'Lato', sans-serif !important;
+  }
+</style>
