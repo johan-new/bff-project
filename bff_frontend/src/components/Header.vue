@@ -1,44 +1,79 @@
 <template>
-<div>
-  <b-navbar toggleable="lg" type="dark" variant="dark">
-    <b-navbar-brand href="/">Padel pals</b-navbar-brand>
-          <b-navbar-nav class="ml-auto">
-    <b-nav-item  to="/padel" v-if="isLoggedIn">Spela padel</b-nav-item>
-          </b-navbar-nav>
-    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
-    <b-collapse id="nav-collapse" is-nav>
-
-      <!-- Right aligned nav items -->
+  <div>
+    <b-navbar class="p-1" toggleable="lg" type="dark" variant="dark">
+      <b-navbar-brand href="/">Padel Pals</b-navbar-brand>
       <b-navbar-nav class="ml-auto">
-        <b-navbar-nav>
-        <b-nav-item href="/login" v-if="!isLoggedIn">Logga in</b-nav-item>
-        <b-nav-item href="/register" v-if="!isLoggedIn">Registrera dig</b-nav-item>
+        <b-nav-item to="/padel" v-if="isLoggedIn">Spela padel</b-nav-item>
       </b-navbar-nav>
-        <b-nav-form v-if="isLoggedIn">
-          <b-form-input size="sm" class="mr-sm-2" placeholder="Användarnamn..."></b-form-input>
-          <b-button size="sm" class="my-2 my-sm-0" type="submit">Sök användare</b-button>
-        </b-nav-form>
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-        <b-nav-item-dropdown right v-if="isLoggedIn">
-          <!-- Using 'button-content' slot -->
-          <template #button-content>
-            <em>Profil</em>
-          </template>
-          <b-dropdown-item @click="fetchUserprofile">Min profil</b-dropdown-item>
-          <b-dropdown-item @click="logout">Logga ut</b-dropdown-item>
-        </b-nav-item-dropdown>
-        <b-nav-item href="/notifications">Notiser</b-nav-item>
-      </b-navbar-nav>
-    </b-collapse>
-  </b-navbar>
-</div>
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav class="ml-auto">
+          <b-navbar-nav>
+            <b-nav-item href="/login" v-if="!isLoggedIn">Logga in</b-nav-item>
+            <b-nav-item href="/register" v-if="!isLoggedIn"
+              >Registrera dig</b-nav-item
+            >
+          </b-navbar-nav>
+          <b-nav-form v-if="isLoggedIn">
+            <b-form-input
+              size="sm"
+              class="mr-sm-2"
+              placeholder="Sök användare..."
+            ></b-form-input>
+            <b-button
+              size="sm"
+              variant="dark"
+              class="my-2 my-sm-0"
+              type="submit"
+            >
+              <b-icon icon="search" aria-hidden="true"></b-icon>
+            </b-button>
+          </b-nav-form>
+
+          <b-nav-item-dropdown right v-if="isLoggedIn">
+            <template #button-content>
+              <b-icon
+                icon="person-fill"
+                aria-hidden="true"
+                variant="light"
+              ></b-icon>
+            </template>
+            <b-dropdown-item @click="fetchUserprofile"
+              >Min profil</b-dropdown-item
+            >
+            <b-dropdown-divider></b-dropdown-divider>
+            <b-dropdown-item @click="logout">Logga ut</b-dropdown-item>
+          </b-nav-item-dropdown>
+          <b-dropdown
+            right
+            text="Dropdown with text"
+            variant="dark"
+            toggle-class="text-decoration-none"
+            no-caret
+            v-if="isLoggedIn"
+          >
+            <template #button-content>
+              &nbsp;<b-icon icon="bell-fill" aria-hidden="true"></b-icon>
+            </template>
+            <b-dropdown-text style="width: 240px">
+              <p>Dina senaste notifikationer</p>
+              <b-dropdown-divider></b-dropdown-divider>
+              <Notifications />
+            </b-dropdown-text>
+          </b-dropdown>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
+  </div>
 </template>
 
 <script>
 import axios from 'axios'
+import Notifications from './Notifications.vue'
 
 export default {
+  components: { Notifications },
   name: 'Header-component',
   data () {
     return {

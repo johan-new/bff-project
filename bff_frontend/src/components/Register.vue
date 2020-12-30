@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card class="p-3">
+    <b-card class="p-5 shadow-lg p-3 mb-5">
         <h3 class="mb-4">Registrera konto</h3>
         <b-form @submit.prevent="registerUser">
                 <b-form-group id="registerInputMail"
@@ -56,3 +56,11 @@ export default {
   }
 }
 </script>
+
+<style>
+  .forgottenPassword {
+    font-size: small;
+  }
+  .card { background-color: rgba(255, 255, 255, 0.7) !important; }
+  .card-header, .card-footer { opacity: 0.1}
+</style>

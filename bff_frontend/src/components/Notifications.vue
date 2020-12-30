@@ -1,6 +1,6 @@
-<!-- <template>
-    <div class="wrapper">
-        <h1>Notification component</h1>
+<template>
+      <div>
+        <!-- <p>Dina senaste notifikationer</p> -->
         <div v-for="(item, name) of getNotifications" :key="name">
           Name/ID: {{ name }} <br>
           Item.type: {{ item.type }} <br>
@@ -8,14 +8,7 @@
           Item.timestamp: {{ item.timestamp }}<br><br>
         </div>
     </div>
-</template> -->
 
-<template>
-  <div>
-        <b-toast id="example-toast" title="BootstrapVue" static no-auto-hide>
-      Hello, world! This is a toast message.
-    </b-toast>
-  </div>
 </template>
 
 <script>

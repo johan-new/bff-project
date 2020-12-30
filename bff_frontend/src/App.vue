@@ -1,9 +1,11 @@
 <template>
   <div id="app">
     <Header />
-    <b-container class="bv-example-row">
+    <b-container fluid>
   <b-row align-h="center" class="mt-5">
-    <b-col md="5"><router-view></router-view></b-col>
+    <b-col></b-col>
+    <b-col><router-view></router-view></b-col>
+    <b-col></b-col>
   </b-row>
 </b-container>
   </div>
@@ -36,8 +38,16 @@ export default {
 
 <style>
   @import url('https://fonts.googleapis.com/css?family=Lato:400,700');
+  @import url('https://fonts.googleapis.com/css2?family=Play&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=ABeeZee&display=swap');
+  /* @import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Roboto:wght@700&display=swap'); */
+
   body {
-    background: #EEF1F4 !important;
+    /* background: #EEF1F4 !important; */
+    background-image: url('http://www.allwhitebackground.com/images/7/Padel-Wallpaper-1920x1080-07118.jpg');
     font-family: 'Lato', sans-serif !important;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
   }
 </style>
