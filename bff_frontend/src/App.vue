@@ -3,9 +3,12 @@
     <Header />
     <b-container fluid>
   <b-row align-h="center" class="mt-5">
-    <b-col></b-col>
-    <b-col md="4"><router-view></router-view></b-col>
-    <b-col></b-col>
+    <!-- <b-col></b-col> -->
+    <b-col md="auto">
+      <!-- <b-col md="auto"> -->
+      <router-view></router-view>
+    </b-col>
+    <!-- <b-col></b-col> -->
   </b-row>
 </b-container>
   </div>

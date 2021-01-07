@@ -4,6 +4,7 @@ import org.json.simple.JSONObject;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class MatchingRequest {
 
@@ -35,8 +36,8 @@ public class MatchingRequest {
         return date;
     }
 
-    public LocalTime getTime() {
-        return time;
+    public String getTime() {
+        return time.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
     public boolean isReservation() {
