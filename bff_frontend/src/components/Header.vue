@@ -1,25 +1,30 @@
 <template>
   <div>
     <b-navbar class="p-1" toggleable="lg" type="dark" variant="dark">
-      <b-navbar-brand href="/">Padel Pals</b-navbar-brand>
+      <b-navbar-brand to="/">Padel Pals</b-navbar-brand>
       <b-navbar-nav class="ml-auto">
-        <b-nav-item to="/padel" v-if="isLoggedIn">Spela padel</b-nav-item>
+        <b-nav-item to="/padel" v-if="isLoggedIn" exact exact-active-class="active">Spela padel</b-nav-item>
+      </b-navbar-nav>
+      <b-navbar-nav class="ml-auto">
+        <b-nav-item to="/games" v-if="isLoggedIn" exact exact-active-class="active">Matcher</b-nav-item>
       </b-navbar-nav>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav class="ml-auto">
+        <!-- <b-navbar-nav> -->
+        <b-navbar-nav class="ml-md-auto">
           <b-navbar-nav>
-            <b-nav-item href="/login" v-if="!isLoggedIn">Logga in</b-nav-item>
-            <b-nav-item href="/register" v-if="!isLoggedIn"
+            <b-nav-item to="/login" v-if="!isLoggedIn">Logga in</b-nav-item>
+            <b-nav-item to="/register" v-if="!isLoggedIn"
               >Registrera dig</b-nav-item
             >
           </b-navbar-nav>
-          <b-nav-form v-if="isLoggedIn">
+          <b-nav-form @submit.prevent="fetchUser" v-if="isLoggedIn">
             <b-form-input
               size="sm"
               class="mr-sm-2"
               placeholder="Sök användare..."
+              v-model="user"
             ></b-form-input>
             <b-button
               size="sm"
@@ -93,7 +98,6 @@ export default {
     },
     fetchUser () {
       const username = this.user
-      console.log(username)
       axios
         .get('http://localhost:8080/user', {
           params: { username }

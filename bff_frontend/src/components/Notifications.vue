@@ -1,6 +1,5 @@
 <template>
       <div>
-        <!-- <p>Dina senaste notifikationer</p> -->
         <div v-for="(item, name) of getNotifications" :key="name">
           Name/ID: {{ name }} <br>
           Item.type: {{ item.type }} <br>

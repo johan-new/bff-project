@@ -73,7 +73,7 @@ export default {
       }
       this.$store
         .dispatch('authStore/login', payload)
-        .then(() => this.$router.push('/'))
+        .then(() => this.$router.push('/padel'))
         .catch((err) => console.log(err))
     }
   }
@@ -85,7 +85,7 @@ export default {
   font-size: small;
 }
 .card {
-  background-color: rgba(255, 255, 255, 0.7) !important;
+  background-color: rgba(255, 255, 255, 0.9) !important;
 }
 .card-header,
 .card-footer {
