@@ -1,13 +1,13 @@
 package com.yrgo.bff.project.domain;
 
+import com.yrgo.bff.project.service.NotificationService;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MatchingRequest {
@@ -24,6 +24,9 @@ public class MatchingRequest {
 
     //contains only JoinRequest objects
     private List<JoinRequest> joinRequests;
+
+    @Autowired
+    NotificationService notificationService;
 
     public MatchingRequest(JSONObject jsonObject) {
         String dateString = jsonObject.get("date").toString();
@@ -47,12 +50,26 @@ public class MatchingRequest {
         participants = new ArrayList();
     }
 
-    public void askToJoin(UserAccount userAccount) {
-        this.joinRequests.add(new JoinRequest(userAccount));
+    public void accept(int elementNumber){
+        joinRequests.get(elementNumber).accept(this);
     }
 
-    public List<JoinRequest> getJoinRequests() {
-        return Collections.unmodifiableList(joinRequests);
+    public void decline(int elementNumber){
+        joinRequests.get(elementNumber).reject(this);
+    }
+
+    public void askToJoin(UserAccount userAccount) {
+        JoinRequest joinRequest = new JoinRequest(userAccount,this);
+        notificationService.addNotification(organizer,joinRequest.toString(), NotificationService.Type.NEW_JOIN_REQUEST);
+        this.joinRequests.add(new JoinRequest(userAccount, this));
+    }
+
+    public Map<Integer,JoinRequest> getJoinRequests() {
+        Map<Integer,JoinRequest> returnValues = new HashMap();
+        for (int i = 0; i < joinRequests.size(); i++) {
+            returnValues.put(i,joinRequests.get(i));
+        }
+        return returnValues;
     }
 
     public List<JoinRequest> getPendingJoinRequests(){
@@ -103,35 +120,36 @@ public class MatchingRequest {
 
     @Override
     public String toString() {
-        return "MatchingRequest{" +
-                "username='" + username + '\'' +
-                ", date=" + date +
-                ", time=" + time +
-                ", reservation=" + reservation +
-                ", venue='" + venue + '\'' +
-                ", requestedParticipants=" + requestedParticipants +
-                ", organizer='" + organizer + '\'' +
-                ", joinRequests=" + joinRequests +
-                '}';
+        Map request = new HashMap<>();
+        request.put("organizer",username);
+        request.put("venue",venue);
+        request.put("date",date);
+        request.put("time",time);
+        request.put("requestedParticipants", requestedParticipants);
+        return new JSONObject(request).toJSONString();
     }
 
     private class JoinRequest{
         JoinRequestStatus status;
+        MatchingRequest matchingRequestParent;
         //person who requested to join
         String sender;
 
-        JoinRequest(UserAccount sender){
+        JoinRequest(UserAccount sender, MatchingRequest matchingRequest){
             this.sender = sender.getUsername();
+            this.matchingRequestParent = matchingRequest;
             status = JoinRequestStatus.PENDING;
         }
 
-        void accept(){
+        void accept(MatchingRequest matchingRequest){
             status = JoinRequestStatus.ACCEPTED;
             participants.add(sender);
+            notificationService.addNotification(sender,matchingRequest.toString(), NotificationService.Type.ACCEPTED_JOIN_REQUEST);
         }
 
-        void reject(){
+        void reject(MatchingRequest matchingRequest){
             status = JoinRequestStatus.REJECTED;
+            notificationService.addNotification(sender,matchingRequest.toString(), NotificationService.Type.DECLINED_JOIN_REQUEST);
         }
 
         public JoinRequestStatus getStatus() {
@@ -144,7 +162,8 @@ public class MatchingRequest {
 
         @Override
         public String toString() {
-            return this.getClass().getSimpleName() + "\t" + sender + "\t" + status.name();
+            return this.getClass().getSimpleName() + " from " + sender + "\t"
+                    + status.name() + "\t" + matchingRequestParent.toString();
         }
     }
 
