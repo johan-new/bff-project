@@ -26,17 +26,17 @@ public class FriendsUserAccountServiceImplementationTest {
 
     @Test @Transactional
     public void addFriendsTest() throws Exception {
-        userAccountService.createUser(username, "");
-        userAccountService.createUser(username2, "");
+        userAccountService.createUser(username, "hej");
+        userAccountService.createUser(username2, "hej");
         userAccountService.readUser(username).addFriend(userAccountService.readUser(username2));
         assertTrue(userAccountService.readUser(username).getFriends().contains(username2));
     }
 
     @Test @Transactional
     public void removeFriendsTest() throws Exception {
-        UserAccount userWithFriends = userAccountService.createUser(username3, "");
-        UserAccount theFriend1 = userAccountService.createUser(username4, "");
-        UserAccount theFriend2 = userAccountService.createUser(username5, "");
+        UserAccount userWithFriends = userAccountService.createUser(username3, "hej");
+        UserAccount theFriend1 = userAccountService.createUser(username4, "hej");
+        UserAccount theFriend2 = userAccountService.createUser(username5, "hej");
         userWithFriends.addFriend(theFriend1);
         userWithFriends.addFriend(theFriend2);
 
