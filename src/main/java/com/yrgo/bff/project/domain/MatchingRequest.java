@@ -8,6 +8,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MatchingRequest {
 
@@ -19,8 +20,10 @@ public class MatchingRequest {
     private int requestedParticipants;
     private String organizer;
 
-    private List joinRequests;
-    private List participants;
+    private List<String> participants;
+
+    //contains only JoinRequest objects
+    private List<JoinRequest> joinRequests;
 
     public MatchingRequest(JSONObject jsonObject) {
         String dateString = jsonObject.get("date").toString();
@@ -44,12 +47,19 @@ public class MatchingRequest {
         participants = new ArrayList();
     }
 
-    public askToJoin(UserAccount userAccount) {
-
+    public void askToJoin(UserAccount userAccount) {
+        this.joinRequests.add(new JoinRequest(userAccount));
     }
 
-    public List getJoinRequests() {
+    public List<JoinRequest> getJoinRequests() {
         return Collections.unmodifiableList(joinRequests);
+    }
+
+    public List<JoinRequest> getPendingJoinRequests(){
+        return this.joinRequests
+                .stream()
+                .filter(JoinRequest::isPending)
+                .collect(Collectors.toList());
     }
 
     public String getOrganizer() {
@@ -122,6 +132,14 @@ public class MatchingRequest {
 
         void reject(){
             status = JoinRequestStatus.REJECTED;
+        }
+
+        public JoinRequestStatus getStatus() {
+            return status;
+        }
+
+        boolean isPending(){
+            return this.status==JoinRequestStatus.PENDING;
         }
 
         @Override
