@@ -85,11 +85,12 @@ public class MatchMakingServiceTest {
 
         assertTrue(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
 
-        //clean up, no pending request due to matching success
-        assertThrows(NullPointerException.class,()->matchMakingService.removeUserMatchRequest(user3, location2));
-        assertThrows(NullPointerException.class,()->matchMakingService.removeUserMatchRequest(user3, location2));
-        matchMakingService.removeUserMatchRequest(user3, location2);
+        //no pending request due to matching success
+        assertThrows(NullPointerException.class,()->matchMakingService.removeUserMatchRequest(user1, location));
+        assertThrows(NullPointerException.class,()->matchMakingService.removeUserMatchRequest(user2, location));
 
+        //clean up
+        matchMakingService.removeUserMatchRequest(user3, location2);
         userAccountService.removeUser(user1);
         userAccountService.removeUser(user2);
         userAccountService.removeUser(user3);
@@ -98,7 +99,7 @@ public class MatchMakingServiceTest {
 
     @WithMockUser(username=user3)
     @Test
-    void testFalseNotification() throws Exception {
+    void testFalseNotification() {
         String location2 = Double.toString(Math.random());
         JSONObject jsonObject3 = new JSONObject();
         jsonObject3.put("username", user3);
@@ -107,6 +108,7 @@ public class MatchMakingServiceTest {
         jsonObject3.put("reservation", true);
         jsonObject3.put("venue", venue4);
         jsonObject3.put("participants", 3);
+
         matchMakingService.addUserMatchRequest(jsonObject3, location2);
         String notifications = "";
 
@@ -115,20 +117,17 @@ public class MatchMakingServiceTest {
         } catch(NullPointerException e)  {}
 
         assertFalse(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
-
         matchMakingService.removeUserMatchRequest(user3, location2);
-        userAccountService.removeUser(user3);
-
     }
 
     @WithMockUser(username=user4)
     @Test
-    void testFalseNotificationSeveralUsers() throws Exception {
+    void testFalseNotificationSeveralUsers() {
         String location = Double.toString(Math.random());
         String location2 = Double.toString(Math.random());
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("username", user1);
+        jsonObject.put("username", user4);
         jsonObject.put("date", ld);
         jsonObject.put("time", lt);
         jsonObject.put("reservation", false);
@@ -136,7 +135,7 @@ public class MatchMakingServiceTest {
         jsonObject.put("participants", 2);
 
         JSONObject jsonObject2 = new JSONObject();
-        jsonObject2.put("username", user2);
+        jsonObject2.put("username", user4);
         jsonObject2.put("date", ld2);
         jsonObject2.put("time", lt2);
         jsonObject2.put("reservation", true);
@@ -156,12 +155,8 @@ public class MatchMakingServiceTest {
 
         assertFalse(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
 
-
-
         matchMakingService.removeUserMatchRequest(user4, location);
         matchMakingService.removeUserMatchRequest(user5, location2);
-        userAccountService.removeUser(user4);
-        userAccountService.removeUser(user5);
     }
 
 
