@@ -1,35 +1,35 @@
 package com.yrgo.bff.project.domain;
 
-import com.yrgo.bff.project.service.NotificationService;
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.stream.Collectors;
+
+/***
+ * MatchingRequest class
+ *
+ *
+ *
+ */
+
 
 public class MatchingRequest {
 
+    //organizer
     private String username;
+
     private LocalDate date;
     private LocalTime time;
-    private boolean reservation;
+    private boolean courtIsBooked;
     private String venue;
     private int requestedParticipants;
-    private String organizer;
 
     private List<String> participants;
 
     //contains only JoinRequest objects
     private List<JoinRequest> joinRequests;
 
-    @Autowired
-    NotificationService notificationService;
 
     public MatchingRequest(JSONObject jsonObject) {
         String dateString = jsonObject.get("date").toString();
@@ -39,7 +39,7 @@ public class MatchingRequest {
         this.username = (String)jsonObject.get("username");
         this.date = LocalDate.parse(dateString);
         this.time = LocalTime.parse(timeString);
-        this.reservation = (boolean)jsonObject.get("reservation");
+        this.courtIsBooked = (boolean)jsonObject.get("reservation");
         this.venue = (String)jsonObject.get("venue");
 
         try {
@@ -57,13 +57,11 @@ public class MatchingRequest {
         joinRequests.get(elementNumber).accept(this);
     }
 
-    public void decline(int elementNumber){
+    public void reject(int elementNumber){
         joinRequests.get(elementNumber).reject(this);
     }
 
     public void askToJoin(UserAccount userAccount) {
-        JoinRequest joinRequest = new JoinRequest(userAccount,this);
-        notificationService.addNotification(organizer,joinRequest.toString(), NotificationService.Type.NEW_JOIN_REQUEST);
         this.joinRequests.add(new JoinRequest(userAccount, this));
     }
 
@@ -75,20 +73,12 @@ public class MatchingRequest {
         return returnValues;
     }
 
-    public List<JoinRequest> getPendingJoinRequests(){
+    /*public List<JoinRequest> getPendingJoinRequests(){
         return this.joinRequests
                 .stream()
                 .filter(JoinRequest::isPending)
                 .collect(Collectors.toList());
-    }
-
-    public String getOrganizer() {
-        return organizer;
-    }
-
-    public void setOrganizer(UserAccount organizer) {
-        this.organizer = organizer.getUsername();
-    }
+    }*/
 
     private void setRequestedParticipants(int requestedParticipants) {
         if (requestedParticipants>0 && requestedParticipants < 4)
@@ -109,8 +99,8 @@ public class MatchingRequest {
         return time;
     }
 
-    public boolean isReservation() {
-        return reservation;
+    public boolean isCourtIsBooked() {
+        return courtIsBooked;
     }
 
     public String getVenue() {
@@ -132,7 +122,7 @@ public class MatchingRequest {
         return new JSONObject(request).toJSONString();
     }
 
-    private class JoinRequest{
+    public class JoinRequest{
         JoinRequestStatus status;
         MatchingRequest matchingRequestParent;
         //person who requested to join
@@ -147,12 +137,10 @@ public class MatchingRequest {
         void accept(MatchingRequest matchingRequest){
             status = JoinRequestStatus.ACCEPTED;
             participants.add(sender);
-            notificationService.addNotification(sender,matchingRequest.toString(), NotificationService.Type.ACCEPTED_JOIN_REQUEST);
         }
 
         void reject(MatchingRequest matchingRequest){
             status = JoinRequestStatus.REJECTED;
-            notificationService.addNotification(sender,matchingRequest.toString(), NotificationService.Type.DECLINED_JOIN_REQUEST);
         }
 
         public JoinRequestStatus getStatus() {
