@@ -1,5 +1,8 @@
 package com.yrgo.bff.project.service;
 
+import com.yrgo.bff.project.domain.MatchingRequest;
+import com.yrgo.bff.project.domain.MatchingRequestTest;
+import com.yrgo.bff.project.domain.UserAccount;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +11,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -162,6 +167,31 @@ public class MatchMakingServiceTest {
         matchMakingService.removeUserMatchRequest(user5, location2);
         userAccountService.removeUser(user4);
         userAccountService.removeUser(user5);
+    }
+
+    @WithMockUser(username=user6)
+    @Test
+    void testJoinRequests() throws Exception {
+        UserAccount organizer = userAccountService.createUser(user6,"asdf");
+
+        Map<String,Object> request = new HashMap();
+        request.put("username", organizer.getUsername());
+        request.put("date","2020-01-01");
+        request.put("time","20:00:00");
+        request.put("reservation",false);
+        request.put("venue","GLTK");
+        request.put("participants",3);
+
+        MatchingRequest matchingRequest = matchMakingService.addUserMatchRequest(new JSONObject(request),(String)request.get("venue"));
+
+        final Long id = matchingRequest.getId();
+
+        matchMakingService.askToJoinGame(id);
+
+        System.out.println(matchMakingService.getUsersLookingToBeMatched());
+        assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("PENDING"));
+
+
     }
 
 

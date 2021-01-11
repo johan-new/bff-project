@@ -16,6 +16,18 @@ import java.util.*;
 
 public class MatchingRequest {
 
+    public static Long LATEST_ID;
+
+    static {
+        LATEST_ID = 0L;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    private Long id;
+
     //organizer
     private String username;
 
@@ -32,6 +44,9 @@ public class MatchingRequest {
 
 
     public MatchingRequest(JSONObject jsonObject) {
+
+        this.id = LATEST_ID++;
+
         String dateString = jsonObject.get("date").toString();
         String timeString = jsonObject.get("time").toString();
 
@@ -113,13 +128,25 @@ public class MatchingRequest {
 
     @Override
     public String toString() {
-        Map request = new HashMap<>();
+        Map request = new HashMap<String,String>();
+        request.put("id",id);
         request.put("organizer",username);
         request.put("venue",venue);
         request.put("date",date);
         request.put("time",time);
         request.put("requestedParticipants", requestedParticipants);
+        request.put("joinRequests", joinRequestsAsJSON());
         return new JSONObject(request).toJSONString();
+    }
+
+    private String joinRequestsAsJSON() {
+        Map<Long,String> joinRequestsData = new HashMap<>();
+
+        for (JoinRequest r: joinRequests) {
+            joinRequestsData.put(r.matchingRequestParent.getId(),r.toString());
+        }
+
+        return new JSONObject(joinRequestsData).toJSONString();
     }
 
     public class JoinRequest{
@@ -143,6 +170,10 @@ public class MatchingRequest {
             status = JoinRequestStatus.REJECTED;
         }
 
+        public MatchingRequest getMatchingRequestParent() {
+            return matchingRequestParent;
+        }
+
         public JoinRequestStatus getStatus() {
             return status;
         }
@@ -153,8 +184,10 @@ public class MatchingRequest {
 
         @Override
         public String toString() {
-            return this.getClass().getSimpleName() + " from " + sender + "\t"
-                    + status.name() + "\t" + matchingRequestParent.toString();
+            Map<String,String> data = new HashMap<>();
+            data.put("sender",sender);
+            data.put("status",status.name());
+            return new JSONObject(data).toJSONString();
         }
     }
 

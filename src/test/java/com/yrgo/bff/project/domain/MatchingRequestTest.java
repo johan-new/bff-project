@@ -24,6 +24,8 @@ public class MatchingRequestTest {
     void testAskToJoin() throws Exception {
         JSONObject request = newRequest();
         MatchingRequest matchingRequest = new MatchingRequest(request);
+        System.out.println(matchingRequest);
+
         final String username = (String)request.get("username");
 
         userAccountService.createUser(username,"asdf");
@@ -36,6 +38,8 @@ public class MatchingRequestTest {
     void testAcceptRequest() throws Exception {
         JSONObject request = newRequest();
         MatchingRequest matchingRequest = new MatchingRequest(request);
+        System.out.println(matchingRequest);
+
         final String username = (String)request.get("username");
 
         userAccountService.createUser(username,"asdf");
@@ -48,6 +52,8 @@ public class MatchingRequestTest {
     void testRejectRequest() throws Exception {
         JSONObject request = newRequest();
         MatchingRequest matchingRequest = new MatchingRequest(request);
+        System.out.println(matchingRequest);
+
         final String username = (String)request.get("username");
 
         userAccountService.createUser(username,"asdf");
@@ -56,7 +62,7 @@ public class MatchingRequestTest {
         assertEquals(matchingRequest.getJoinRequests().get(0).getStatus(), MatchingRequest.JoinRequestStatus.REJECTED);
     }
 
-    private JSONObject newRequest(){
+    public JSONObject newRequest(){
         Map request = new HashMap();
         request.put("username", FriendsUserAccountServiceImplementationTest.getRandomUsername());
         request.put("date","2020-01-01");

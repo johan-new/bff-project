@@ -1,6 +1,7 @@
 package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.domain.MatchingRequest;
+import com.yrgo.bff.project.domain.UserAccount;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
@@ -22,15 +23,48 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
 
     private Log log = LogFactory.getLog(getClass());
 
+    @Override
+    public void askToJoinGame(Long id) {
+        getRequestByRequestId(id).ifPresent(this::joinRequest);
+    }
+
+    private void joinRequest(MatchingRequest joinRequest){
+        UserAccount loggedInUser = userAccountService.readLoggedInUser();
+        joinRequest.askToJoin(loggedInUser);
+
+        final String organizer = joinRequest.getUsername();
+
+        notificationService.addNotification(organizer,
+                joinRequest.toString(),
+                NotificationService.Type.NEW_JOIN_REQUEST);
+    }
+
+    private Optional<MatchingRequest> getRequestByRequestId(Long id) {
+
+        Iterator it = usersLookingToBeMatched.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            for (MatchingRequest r: (List<MatchingRequest>)pair.getValue()) {
+                if (r.getId().equals(id)){
+                    return Optional.ofNullable(r);
+                }
+            }
+        }
+
+        return Optional.empty();
+    }
+
 
     @Override
-    public void addUserMatchRequest(JSONObject requestParam, String location) {
+    public MatchingRequest addUserMatchRequest(JSONObject requestParam, String location) {
         MatchingRequest matchingRequest = new MatchingRequest(requestParam);
         if (!usersLookingToBeMatched.containsKey(location)) {
             usersLookingToBeMatched.put(location, new ArrayList<>());
         }
         usersLookingToBeMatched.get(location).add(matchingRequest);
         matchUsers();
+        //class MatchingRequest don't have any set-ers, therefore no read-only wrapping
+        return matchingRequest;
     }
 
     @Override
