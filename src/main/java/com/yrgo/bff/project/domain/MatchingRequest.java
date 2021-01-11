@@ -37,7 +37,7 @@ public class MatchingRequest {
     private String venue;
     private int requestedParticipants;
 
-    private List<String> participants;
+    private List<String> confirmedParticipants;
 
     //contains only JoinRequest objects
     private List<JoinRequest> joinRequests;
@@ -65,7 +65,7 @@ public class MatchingRequest {
         }
 
         joinRequests = new ArrayList();
-        participants = new ArrayList();
+        confirmedParticipants = new ArrayList();
     }
 
     public void accept(int elementNumber){
@@ -136,6 +136,7 @@ public class MatchingRequest {
         request.put("time",time);
         request.put("requestedParticipants", requestedParticipants);
         request.put("joinRequests", joinRequestsAsJSON());
+        request.put("confirmedParticipants", confirmedParticipants.toString());
         return new JSONObject(request).toJSONString();
     }
 
@@ -163,7 +164,7 @@ public class MatchingRequest {
 
         void accept(MatchingRequest matchingRequest){
             status = JoinRequestStatus.ACCEPTED;
-            participants.add(sender);
+            confirmedParticipants.add(sender);
         }
 
         void reject(MatchingRequest matchingRequest){

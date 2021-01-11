@@ -28,6 +28,16 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         getRequestByRequestId(id).ifPresent(this::joinRequest);
     }
 
+    @Override
+    public void acceptJoinRequest(Long id) {
+        getRequestByRequestId(id).ifPresent(this::accept);
+    }
+
+    @Override
+    public void rejectJoinRequest(Long id) {
+        getRequestByRequestId(id).ifPresent(this::reject);
+    }
+
     private void joinRequest(MatchingRequest joinRequest){
         UserAccount loggedInUser = userAccountService.readLoggedInUser();
         joinRequest.askToJoin(loggedInUser);
@@ -39,8 +49,36 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
                 NotificationService.Type.NEW_JOIN_REQUEST);
     }
 
-    private Optional<MatchingRequest> getRequestByRequestId(Long id) {
+    private void accept(MatchingRequest requestToAccept) {
+        UserAccount loggedInUser = userAccountService.readLoggedInUser();
+        if (loggedInUser.getUsername().equals(requestToAccept.getUsername())) {
+            requestToAccept.accept(Math.toIntExact(requestToAccept.getId()));
 
+            notificationService.addNotification(loggedInUser.getUsername(),
+                    requestToAccept.toString(),
+                    NotificationService.Type.ACCEPTED_JOIN_REQUEST);
+        } else {
+            //TODO: Exception? Or return a boolean indicating success?
+            log.error("ACCEPTING REQUEST ONLY POSSIBLE BY THE ORGANIZER");
+        }
+
+    }
+
+    private void reject(MatchingRequest requestToReject) {
+        UserAccount loggedInUser = userAccountService.readLoggedInUser();
+        if (loggedInUser.getUsername().equals(requestToReject.getUsername())) {
+            requestToReject.accept(Math.toIntExact(requestToReject.getId()));
+
+            notificationService.addNotification(loggedInUser.getUsername(),
+                    requestToReject.toString(),
+                    NotificationService.Type.ACCEPTED_JOIN_REQUEST);
+        } else {
+            //TODO: Exception? Or return a boolean indicating success?
+            log.error("ACCEPTING REQUEST ONLY POSSIBLE BY THE ORGANIZER");
+        }
+    }
+
+    private Optional<MatchingRequest> getRequestByRequestId(Long id) {
         Iterator it = usersLookingToBeMatched.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
@@ -50,7 +88,6 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
                 }
             }
         }
-
         return Optional.empty();
     }
 

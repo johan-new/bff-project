@@ -191,6 +191,12 @@ public class MatchMakingServiceTest {
         System.out.println(matchMakingService.getUsersLookingToBeMatched());
         assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("PENDING"));
 
+        matchMakingService.acceptJoinRequest(id);
+        assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("ACCEPTED"));
+
+        System.out.println(matchMakingService.getUsersLookingToBeMatched());
+
+        //System.out.println(new JSONObject(notificationService.getNotifications()));
 
     }
 
