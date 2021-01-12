@@ -96,7 +96,6 @@ public class MatchMakingServiceTest {
         matchMakingService.removeUserMatchRequest(user3, location2);
 
         //clean up
-        matchMakingService.removeUserMatchRequest(user3, location2);
         userAccountService.removeUser(user1);
         userAccountService.removeUser(user2);
         userAccountService.removeUser(user3);
