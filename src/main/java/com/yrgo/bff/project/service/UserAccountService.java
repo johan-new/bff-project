@@ -1,12 +1,13 @@
 package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.domain.UserAccount;
+import com.yrgo.bff.project.exception.HandleBadRequestException;
 import org.json.simple.JSONObject;
 
 import java.util.Set;
 
 public interface UserAccountService {
-    UserAccount createUser(String username, String password) throws Exception;
+    UserAccount createUser(String username, String password) throws HandleBadRequestException;
     UserAccount removeUser(String username);
     UserAccount updateUser(JSONObject newUserInformation) throws Exception;
     UserAccount readUser(String username);

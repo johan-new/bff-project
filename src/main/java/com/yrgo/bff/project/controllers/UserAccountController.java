@@ -1,6 +1,6 @@
 package com.yrgo.bff.project.controllers;
 
-import com.yrgo.bff.project.domain.UserAccount;
+import com.yrgo.bff.project.exception.HandleBadRequestException;
 import com.yrgo.bff.project.service.UserAccountService;
 import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.json.simple.JSONObject;
@@ -25,13 +25,13 @@ public class UserAccountController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity createUser(@RequestBody JSONObject user) throws Exception {
+    public ResponseEntity createUser(@RequestBody JSONObject user) throws HandleBadRequestException {
         //parsing
         final String username = (String)user.get("username");
         final String password = (String)user.get("password");
 
         if (!UserAccountServiceImplementation.validEmailAddress(username)) {
-            throw new Exception("Invalid email address!");
+            throw new HandleBadRequestException("Invalid email address!");
         }
 
         if (userAccountService.readUser(username)==null) {
@@ -40,7 +40,7 @@ public class UserAccountController {
                 status(HttpStatus.CREATED).
                 body(userAccountService.readUser(username).toJSON());
         } else {
-            throw new Exception("User already exists!");
+            throw new HandleBadRequestException("User already exists!");
         }
     }
 
