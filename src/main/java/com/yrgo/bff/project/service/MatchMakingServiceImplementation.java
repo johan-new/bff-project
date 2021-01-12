@@ -1,6 +1,7 @@
 package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.domain.MatchingRequest;
+import com.yrgo.bff.project.domain.UserAccount;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
@@ -22,15 +23,79 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
 
     private Log log = LogFactory.getLog(getClass());
 
+    @Override
+    public void askToJoinGame(Long id) {
+        getRequestByRequestId(id).ifPresent(this::joinRequest);
+    }
 
     @Override
-    public void addUserMatchRequest(JSONObject requestParam, String location) {
+    public void acceptJoinRequest(Long matchingRequestId, int joinRequestId) {
+        MatchingRequest matchingRequest = getRequestByRequestId(matchingRequestId).get();
+        UserAccount loggedInUser = userAccountService.readLoggedInUser();
+
+        if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
+            matchingRequest.accept(joinRequestId);
+            notificationService.addNotification(loggedInUser.getUsername(),
+                    matchingRequest.toString(),
+                    NotificationService.Type.ACCEPTED_JOIN_REQUEST);
+        } else {
+            //TODO: Exception? Or return a boolean indicating success?
+            log.error("ACCEPTING REQUEST ONLY POSSIBLE BY THE ORGANIZER");
+        }
+    }
+
+    @Override
+    public void rejectJoinRequest(Long matchingRequestId, int joinRequestId) {
+        MatchingRequest matchingRequest = getRequestByRequestId(matchingRequestId).get();
+        UserAccount loggedInUser = userAccountService.readLoggedInUser();
+
+        if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
+            matchingRequest.reject(joinRequestId);
+            notificationService.addNotification(loggedInUser.getUsername(),
+                    matchingRequest.toString(),
+                    NotificationService.Type.REJECTED_JOIN_REQUEST);
+        } else {
+            //TODO: Exception? Or return a boolean indicating success?
+            log.error("ACCEPTING REQUEST ONLY POSSIBLE BY THE ORGANIZER");
+        }
+    }
+
+    private void joinRequest(MatchingRequest joinRequest){
+        UserAccount loggedInUser = userAccountService.readLoggedInUser();
+        joinRequest.askToJoin(loggedInUser);
+
+        final String organizer = joinRequest.getUsername();
+
+        notificationService.addNotification(organizer,
+                joinRequest.toString(),
+                NotificationService.Type.NEW_JOIN_REQUEST);
+    }
+
+
+    private Optional<MatchingRequest> getRequestByRequestId(Long id) {
+        Iterator it = usersLookingToBeMatched.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            for (MatchingRequest r: (List<MatchingRequest>)pair.getValue()) {
+                if (r.getId().equals(id)){
+                    return Optional.ofNullable(r);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+
+    @Override
+    public MatchingRequest addUserMatchRequest(JSONObject requestParam, String location) {
         MatchingRequest matchingRequest = new MatchingRequest(requestParam);
         if (!usersLookingToBeMatched.containsKey(location)) {
             usersLookingToBeMatched.put(location, new ArrayList<>());
         }
         usersLookingToBeMatched.get(location).add(matchingRequest);
         matchUsers();
+        //class MatchingRequest don't have any set-ers, therefore no read-only wrapping
+        return matchingRequest;
     }
 
     @Override
