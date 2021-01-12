@@ -31,3 +31,12 @@ Lägger till en matchrequest i kön
 	]
 }
 ``` 
+`POST /match/900`
+Organisatören för matchningsförfrågan 900 vill acceptera förfrågan att gå med från en annan
+spelare. Denna förfrågan har idnummer 3. _Endast organisatören kan acceptera eller avvisa._
+```
+{
+  "joinRequest": 3
+  "action": "accept"
+}
+```
