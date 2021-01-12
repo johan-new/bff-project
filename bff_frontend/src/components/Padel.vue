@@ -91,7 +91,7 @@
 <script>
 // import axios from 'axios'
 export default {
-  name: 'Game',
+  name: 'Padel',
   computed: {
     getQueue () { return this.$store.getters['matchStore/getQueue'] },
     inQueue () { return this.$store.getters['matchStore/inQueue'] },

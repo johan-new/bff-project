@@ -2,7 +2,8 @@ import axios from 'axios'
 
 const state = {
   queue: [],
-  inQueue: false
+  inQueue: false,
+  previous_games: []
 }
 
 const getters = {
@@ -10,7 +11,8 @@ const getters = {
   getQueue: state => state.queue,
   getLoggedInUser (state, getters, rootState, rootGetters) {
     return rootGetters.loggedInUser
-  }
+  },
+  previousGames: state => state.previous_games
 }
 
 const actions = {
@@ -66,6 +68,15 @@ const actions = {
           reject(error)
         })
     })
+  },
+  previousGames (context) {
+    axios.get('http://localhost:8080/user/previousgames')
+      .then(data => {
+        context.commit('previous_games', data.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 }
 const mutations = {
@@ -74,6 +85,9 @@ const mutations = {
   },
   queue_status (state, data) {
     state.inQueue = data
+  },
+  previous_games (state, data) {
+    state.previous_games = data
   }
 }
 export default {

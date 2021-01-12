@@ -1,9 +1,10 @@
 import Home from './components/Home'
 import Login from './components/Login'
 import Register from './components/Register'
-import Game from './components/Game.vue'
+import Padel from './components/Padel.vue'
 import Userprofile from './components/Userprofile.vue'
 import Notifications from './components/Notifications.vue'
+import Games from './components/Games.vue'
 
 export const routes = [
   {
@@ -20,8 +21,15 @@ export const routes = [
     component: Register
   }, {
     path: '/padel',
-    name: 'Game',
-    component: Game,
+    name: 'Padel',
+    component: Padel,
+    meta: {
+      requiresAuth: true
+    }
+  }, {
+    path: '/games',
+    name: 'Games',
+    component: Games,
     meta: {
       requiresAuth: true
     }
