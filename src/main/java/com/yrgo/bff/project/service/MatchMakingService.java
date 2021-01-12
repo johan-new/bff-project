@@ -11,8 +11,8 @@ public interface MatchMakingService {
     void removeUserMatchRequest(String username, String location);
     JSONObject getUsersLookingToBeMatched();
     void askToJoinGame(Long id);
-    void acceptJoinRequest(Long id);
-    void rejectJoinRequest(Long id);
+    void acceptJoinRequest(Long matchingRequestId, int joinRequestId);
+    void rejectJoinRequest(Long matchingRequestId, int joinRequestId);
 
 
 }

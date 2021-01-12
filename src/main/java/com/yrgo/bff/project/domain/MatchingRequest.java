@@ -19,7 +19,7 @@ public class MatchingRequest {
     public static Long LATEST_ID;
 
     static {
-        LATEST_ID = 0L;
+        LATEST_ID = 900L;
     }
 
     public Long getId() {
@@ -141,10 +141,10 @@ public class MatchingRequest {
     }
 
     private String joinRequestsAsJSON() {
-        Map<Long,String> joinRequestsData = new HashMap<>();
+        Map<Integer,String> joinRequestsData = new HashMap<>();
 
-        for (JoinRequest r: joinRequests) {
-            joinRequestsData.put(r.matchingRequestParent.getId(),r.toString());
+        for (int i = 0; i < joinRequests.size(); i++) {
+            joinRequestsData.put(i,joinRequests.get(i).toString());
         }
 
         return new JSONObject(joinRequestsData).toJSONString();

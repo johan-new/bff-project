@@ -29,13 +29,35 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
     }
 
     @Override
-    public void acceptJoinRequest(Long id) {
-        getRequestByRequestId(id).ifPresent(this::accept);
+    public void acceptJoinRequest(Long matchingRequestId, int joinRequestId) {
+        MatchingRequest matchingRequest = getRequestByRequestId(matchingRequestId).get();
+        UserAccount loggedInUser = userAccountService.readLoggedInUser();
+
+        if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
+            matchingRequest.accept(joinRequestId);
+            notificationService.addNotification(loggedInUser.getUsername(),
+                    matchingRequest.toString(),
+                    NotificationService.Type.ACCEPTED_JOIN_REQUEST);
+        } else {
+            //TODO: Exception? Or return a boolean indicating success?
+            log.error("ACCEPTING REQUEST ONLY POSSIBLE BY THE ORGANIZER");
+        }
     }
 
     @Override
-    public void rejectJoinRequest(Long id) {
-        getRequestByRequestId(id).ifPresent(this::reject);
+    public void rejectJoinRequest(Long matchingRequestId, int joinRequestId) {
+        MatchingRequest matchingRequest = getRequestByRequestId(matchingRequestId).get();
+        UserAccount loggedInUser = userAccountService.readLoggedInUser();
+
+        if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
+            matchingRequest.reject(joinRequestId);
+            notificationService.addNotification(loggedInUser.getUsername(),
+                    matchingRequest.toString(),
+                    NotificationService.Type.REJECTED_JOIN_REQUEST);
+        } else {
+            //TODO: Exception? Or return a boolean indicating success?
+            log.error("ACCEPTING REQUEST ONLY POSSIBLE BY THE ORGANIZER");
+        }
     }
 
     private void joinRequest(MatchingRequest joinRequest){
@@ -49,34 +71,6 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
                 NotificationService.Type.NEW_JOIN_REQUEST);
     }
 
-    private void accept(MatchingRequest requestToAccept) {
-        UserAccount loggedInUser = userAccountService.readLoggedInUser();
-        if (loggedInUser.getUsername().equals(requestToAccept.getUsername())) {
-            requestToAccept.accept(Math.toIntExact(requestToAccept.getId()));
-
-            notificationService.addNotification(loggedInUser.getUsername(),
-                    requestToAccept.toString(),
-                    NotificationService.Type.ACCEPTED_JOIN_REQUEST);
-        } else {
-            //TODO: Exception? Or return a boolean indicating success?
-            log.error("ACCEPTING REQUEST ONLY POSSIBLE BY THE ORGANIZER");
-        }
-
-    }
-
-    private void reject(MatchingRequest requestToReject) {
-        UserAccount loggedInUser = userAccountService.readLoggedInUser();
-        if (loggedInUser.getUsername().equals(requestToReject.getUsername())) {
-            requestToReject.accept(Math.toIntExact(requestToReject.getId()));
-
-            notificationService.addNotification(loggedInUser.getUsername(),
-                    requestToReject.toString(),
-                    NotificationService.Type.ACCEPTED_JOIN_REQUEST);
-        } else {
-            //TODO: Exception? Or return a boolean indicating success?
-            log.error("ACCEPTING REQUEST ONLY POSSIBLE BY THE ORGANIZER");
-        }
-    }
 
     private Optional<MatchingRequest> getRequestByRequestId(Long id) {
         Iterator it = usersLookingToBeMatched.entrySet().iterator();

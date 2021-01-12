@@ -91,8 +91,7 @@ public class MatchMakingServiceTest {
         assertTrue(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
 
         //clean up, no pending request due to matching success
-        assertThrows(NullPointerException.class,()->matchMakingService.removeUserMatchRequest(user3, location2));
-        assertThrows(NullPointerException.class,()->matchMakingService.removeUserMatchRequest(user3, location2));
+        assertThrows(NullPointerException.class,()->matchMakingService.removeUserMatchRequest(user1, location));
         matchMakingService.removeUserMatchRequest(user3, location2);
 
         userAccountService.removeUser(user1);
@@ -122,8 +121,6 @@ public class MatchMakingServiceTest {
         assertFalse(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
 
         matchMakingService.removeUserMatchRequest(user3, location2);
-        userAccountService.removeUser(user3);
-
     }
 
     @WithMockUser(username=user4)
@@ -163,16 +160,43 @@ public class MatchMakingServiceTest {
 
 
 
-        matchMakingService.removeUserMatchRequest(user4, location);
-        matchMakingService.removeUserMatchRequest(user5, location2);
-        userAccountService.removeUser(user4);
-        userAccountService.removeUser(user5);
+        matchMakingService.removeUserMatchRequest(user1, location);
+        matchMakingService.removeUserMatchRequest(user2, location2);
     }
 
     @WithMockUser(username=user6)
     @Test
     void testJoinRequests() throws Exception {
         UserAccount organizer = userAccountService.createUser(user6,"asdf");
+
+        Map<String,Object> request = new HashMap();
+        request.put("username", organizer.getUsername());
+        request.put("date","2020-01-01");
+        request.put("time","20:00:00");
+        request.put("reservation",false);
+        request.put("venue","GLTK");
+        request.put("participants",3);
+
+
+        MatchingRequest matchingRequest = matchMakingService.addUserMatchRequest(new JSONObject(request),(String)request.get("venue"));
+
+        final Long id = matchingRequest.getId();
+
+        matchMakingService.askToJoinGame(id);
+
+        System.out.println(matchMakingService.getUsersLookingToBeMatched());
+        assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("PENDING"));
+
+        matchMakingService.acceptJoinRequest(id,0);
+        //assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("ACCEPTED"));
+
+        System.out.println(matchMakingService.getUsersLookingToBeMatched());
+    }
+
+    @WithMockUser(username=user7)
+    @Test
+    void testDenyRequest() throws Exception {
+        UserAccount organizer = userAccountService.createUser(user7,"asdf");
 
         Map<String,Object> request = new HashMap();
         request.put("username", organizer.getUsername());
@@ -191,13 +215,10 @@ public class MatchMakingServiceTest {
         System.out.println(matchMakingService.getUsersLookingToBeMatched());
         assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("PENDING"));
 
-        matchMakingService.acceptJoinRequest(id);
-        assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("ACCEPTED"));
-
+        matchMakingService.rejectJoinRequest(id,0);
+        assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("REJECTED"));
+        assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("\"confirmedParticipants\":\"[]\""));
         System.out.println(matchMakingService.getUsersLookingToBeMatched());
-
-        //System.out.println(new JSONObject(notificationService.getNotifications()));
-
     }
 
 
