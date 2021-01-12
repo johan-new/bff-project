@@ -36,7 +36,7 @@ Organisatören för matchningsförfrågan 900 vill acceptera förfrågan att gå
 spelare. Denna förfrågan har idnummer 3. _Endast organisatören kan acceptera eller avvisa._
 ```
 {
-  "joinRequest": 3
+  "joinRequestId": 3
   "action": "accept"
 }
 ```
