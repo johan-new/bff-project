@@ -53,6 +53,8 @@
       <div v-for="(item, name) of getQueue" :key="name" > <h4>{{ name }} </h4>
       <div class="table-responsive">
       <b-table stacked="sm" hover :items="item" :fields="fields">
+          <!-- <b-table stacked="sm" hover :items="item"> -->
+
         <template #cell(info)="row">
         <!-- <b-button>Button</b-button> -->
         <div v-for="(value) in item" :key="value.location">
@@ -65,15 +67,14 @@
         <b-card>
                     <b-row class="mb-2">
                       <b-cols>Gå med {{ row.item.username }}</b-cols>
-                        <b-col>
-          <label for="participants1">Antal Spelare:</label>
-          <select class="custom-select" id="participants1" required v-model="form.participants">
-        <option selected disabled value="">Antal...</option>
-            <option :value="1" selected>1</option>
-    <option :value="2">2</option>
-    <option :value="3">3</option>
-      </select>
-      </b-col>
+      <b-cols>
+        <div v-for="request in row.item.joinRequests" :key="request">
+        <!-- {{ row.item.joinRequests }} -->
+        <!-- {{ request }} -->
+        {{ request.status }}
+        {{ request.sender }}
+        </div>
+      </b-cols>
       <b-col><b-button>Gå med</b-button></b-col>
           </b-row>
 
@@ -108,7 +109,7 @@ export default {
         venue: '',
         participants: ''
       },
-      fields: ['username', 'date', 'time', 'reservation', 'venue', 'participants', 'info']
+      fields: ['username', 'date', 'time', 'courtIsBooked', 'venue', 'requestedParticipants', 'joinRequests', 'confirmedParticipants', 'info']
     }
   },
   methods: {

@@ -32,7 +32,7 @@ public class MatchMakingController {
     }
 
 
-    @PostMapping("/match")
+    @PostMapping("/match/submit")
     public ResponseEntity submitMatchingRequest(@RequestBody JSONObject request) throws Exception {
         request.put("username", userAccountService.readLoggedInUser().getUsername());
         String location = (String)request.get("location");
@@ -48,25 +48,24 @@ public class MatchMakingController {
     }
 
 
-    @DeleteMapping(value = "/match")
+    @DeleteMapping(value = "/match/cancel")
     public ResponseEntity cancelMatchingRequest(@RequestBody JSONObject location) throws Exception {
             String username = userAccountService.readLoggedInUser().getUsername();
             matchMakingService.removeUserMatchRequest(username, (String)location.get("location"));
             return ResponseEntity.status(HttpStatus.OK).body("Match request cancelled!");
     }
 
-    @PostMapping("/match/{matchingRequestId}")
-    public ResponseEntity<String> organizersResponseToJoinRequest(
-            @PathVariable(value="matchingRequestId") String matchingRequestId,
-            @RequestBody JSONObject parameters){
+    @PostMapping("/match/request")
+    public ResponseEntity<String> organizersResponseToJoinRequest(@RequestBody JSONObject parameters){
         try {
-            final int joinRequestId = (int)parameters.get("joinRequestId");
+            final long matchingRequestId = Long.parseLong((String)parameters.get("matchingRequestId"));
+            final int joinRequestId = Integer.parseInt((String)parameters.get("joinRequestId"));
             final String action = (String)parameters.get("action");
 
             if (action.equals("accept")) {
-                matchMakingService.acceptJoinRequest(Long.parseLong(matchingRequestId),joinRequestId);
+                matchMakingService.acceptJoinRequest(matchingRequestId,joinRequestId);
             } else if (action.equals("reject")) {
-                matchMakingService.rejectJoinRequest(Long.parseLong(matchingRequestId),joinRequestId);
+                matchMakingService.rejectJoinRequest(matchingRequestId,joinRequestId);
             } else
             {
                 throw new Exception("Action must be either accept or reject");
@@ -80,11 +79,10 @@ public class MatchMakingController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PostMapping("/match/asktojoin/{matchingRequestId}")
-    public ResponseEntity<String> userRequestsParticipation(
-            @PathVariable(value="matchingRequestId") String matchingRequestId){
+    @PostMapping("/match/join")
+    public ResponseEntity<String> userRequestsParticipation(@RequestBody JSONObject request) {
         try {
-            matchMakingService.askToJoinGame(Long.parseLong(matchingRequestId));
+            matchMakingService.askToJoinGame(Long.parseLong((String)request.get("requestId")));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
