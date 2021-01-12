@@ -54,4 +54,42 @@ public class MatchMakingController {
             matchMakingService.removeUserMatchRequest(username, (String)location.get("location"));
             return ResponseEntity.status(HttpStatus.OK).body("Match request cancelled!");
     }
+
+    @PostMapping("/match/{matchingRequestId}")
+    public ResponseEntity<String> organizersResponseToJoinRequest(
+            @PathVariable(value="matchingRequestId") String matchingRequestId,
+            @RequestBody JSONObject parameters){
+        try {
+            final int joinRequestId = (int)parameters.get("joinRequestId");
+            final String action = (String)parameters.get("action");
+
+            if (action.equals("accept")) {
+                matchMakingService.acceptJoinRequest(Long.parseLong(matchingRequestId),joinRequestId);
+            } else if (action.equals("reject")) {
+                matchMakingService.rejectJoinRequest(Long.parseLong(matchingRequestId),joinRequestId);
+            } else
+            {
+                throw new Exception("Action must be either accept or reject");
+            }
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/match/asktojoin/{matchingRequestId}")
+    public ResponseEntity<String> userRequestsParticipation(
+            @PathVariable(value="matchingRequestId") String matchingRequestId){
+        try {
+            matchMakingService.askToJoinGame(Long.parseLong(matchingRequestId));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }

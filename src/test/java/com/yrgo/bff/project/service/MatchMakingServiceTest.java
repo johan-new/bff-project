@@ -177,20 +177,15 @@ public class MatchMakingServiceTest {
         request.put("venue","GLTK");
         request.put("participants",3);
 
-
-        MatchingRequest matchingRequest = matchMakingService.addUserMatchRequest(new JSONObject(request),(String)request.get("venue"));
-
+        MatchingRequest matchingRequest = matchMakingService.addUserMatchRequest(new JSONObject(request),"Norumsgärde");
         final Long id = matchingRequest.getId();
 
         matchMakingService.askToJoinGame(id);
-
-        System.out.println(matchMakingService.getUsersLookingToBeMatched());
         assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("PENDING"));
-
         matchMakingService.acceptJoinRequest(id,0);
-        //assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("ACCEPTED"));
+        assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("ACCEPTED"));
+        assertTrue(notificationService.getNotifications().toString().contains(NotificationService.Type.ACCEPTED_JOIN_REQUEST.name()));
 
-        System.out.println(matchMakingService.getUsersLookingToBeMatched());
     }
 
     @WithMockUser(username=user7)
@@ -206,18 +201,25 @@ public class MatchMakingServiceTest {
         request.put("venue","GLTK");
         request.put("participants",3);
 
-        MatchingRequest matchingRequest = matchMakingService.addUserMatchRequest(new JSONObject(request),(String)request.get("venue"));
+        MatchingRequest matchingRequest = matchMakingService.addUserMatchRequest(new JSONObject(request),"Partille");
 
         final Long id = matchingRequest.getId();
 
         matchMakingService.askToJoinGame(id);
 
         System.out.println(matchMakingService.getUsersLookingToBeMatched());
+        //assure its pending
         assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("PENDING"));
+        //assure organizer is notified
+        assertTrue(notificationService.getNotifications().toString().contains(NotificationService.Type.NEW_JOIN_REQUEST.name()));
+
 
         matchMakingService.rejectJoinRequest(id,0);
+        //assure its rejected
         assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("REJECTED"));
         assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("\"confirmedParticipants\":\"[]\""));
+        //assure the the requestee is notified
+        assertTrue(notificationService.getNotifications().toString().contains(NotificationService.Type.REJECTED_JOIN_REQUEST.name()));
         System.out.println(matchMakingService.getUsersLookingToBeMatched());
     }
 

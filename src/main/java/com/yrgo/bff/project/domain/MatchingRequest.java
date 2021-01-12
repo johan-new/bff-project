@@ -1,10 +1,12 @@
 package com.yrgo.bff.project.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.json.simple.JSONObject;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /***
  * MatchingRequest class
@@ -80,6 +82,10 @@ public class MatchingRequest {
         this.joinRequests.add(new JoinRequest(userAccount, this));
     }
 
+    public List<String> getConfirmedParticipants() {
+        return Collections.unmodifiableList(confirmedParticipants);
+    }
+
     public Map<Integer,JoinRequest> getJoinRequests() {
         Map<Integer,JoinRequest> returnValues = new HashMap();
         for (int i = 0; i < joinRequests.size(); i++) {
@@ -128,6 +134,10 @@ public class MatchingRequest {
 
     @Override
     public String toString() {
+        return new JSONObject(mapped()).toString();
+    }
+
+    public Map<Object,Object> mapped(){
         Map request = new HashMap<String,String>();
         request.put("id",id);
         request.put("organizer",username);
@@ -135,23 +145,27 @@ public class MatchingRequest {
         request.put("date",date);
         request.put("time",time);
         request.put("requestedParticipants", requestedParticipants);
-        request.put("joinRequests", joinRequestsAsJSON());
+        request.put("joinRequests", joinRequestsMapped());
         request.put("confirmedParticipants", confirmedParticipants.toString());
-        return new JSONObject(request).toJSONString();
+        return request;
     }
 
-    private String joinRequestsAsJSON() {
-        Map<Integer,String> joinRequestsData = new HashMap<>();
+    public JSONObject toJSON(){
+        return null;
+    }
 
+    private Map<Integer,String> joinRequestsMapped() {
+        Map<Integer,String> joinRequestsData = new HashMap<>();
         for (int i = 0; i < joinRequests.size(); i++) {
             joinRequestsData.put(i,joinRequests.get(i).toString());
         }
-
-        return new JSONObject(joinRequestsData).toJSONString();
+        return joinRequestsData;
     }
 
     public class JoinRequest{
         JoinRequestStatus status;
+
+        @JsonIgnore
         MatchingRequest matchingRequestParent;
         //person who requested to join
         String sender;
@@ -179,6 +193,10 @@ public class MatchingRequest {
             return status;
         }
 
+        public String getSender() {
+            return sender;
+        }
+
         boolean isPending(){
             return this.status==JoinRequestStatus.PENDING;
         }
@@ -188,7 +206,7 @@ public class MatchingRequest {
             Map<String,String> data = new HashMap<>();
             data.put("sender",sender);
             data.put("status",status.name());
-            return new JSONObject(data).toJSONString();
+            return new JSONObject(data).toString();
         }
     }
 

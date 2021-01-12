@@ -58,7 +58,9 @@ public class MatchingRequestTest {
 
         userAccountService.createUser(username,"asdf");
         matchingRequest.askToJoin(userAccountService.readUser(username));
+        System.out.println(matchingRequest);
         matchingRequest.reject(0);
+        System.out.println(matchingRequest);
         assertEquals(matchingRequest.getJoinRequests().get(0).getStatus(), MatchingRequest.JoinRequestStatus.REJECTED);
     }
 
