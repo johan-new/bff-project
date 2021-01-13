@@ -21,7 +21,8 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
     @Autowired
     UserAccountService userAccountService;
 
-    ConversionMatchingToGame converter = new ConversionMatchingToGame();
+    @Autowired
+    ConversionMatchingToGame converter;
 
     private Log log = LogFactory.getLog(getClass());
 
@@ -34,6 +35,9 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
     public void acceptJoinRequest(Long matchingRequestId, int joinRequestId) {
         MatchingRequest matchingRequest = getRequestByRequestId(matchingRequestId).get();
         UserAccount loggedInUser = userAccountService.readLoggedInUser();
+
+        //TODO: REMOVE BELOW
+        System.out.println("*** LOGGED IN USER: " + loggedInUser.getUsername() + "\n" + "Organizer: " + matchingRequest.getUsername());
 
         if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
             matchingRequest.accept(joinRequestId);
@@ -53,6 +57,8 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
     public void rejectJoinRequest(Long matchingRequestId, int joinRequestId) {
         MatchingRequest matchingRequest = getRequestByRequestId(matchingRequestId).get();
         UserAccount loggedInUser = userAccountService.readLoggedInUser();
+        //TODO: REMOVE BELOW
+        System.out.println("*** LOGGED IN USER: " + loggedInUser.getUsername() + "\n" + "Organizer: " + matchingRequest.getUsername());
 
         if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
             matchingRequest.reject(joinRequestId);

@@ -40,7 +40,7 @@ public class MatchingRequest {
     private String venue;
     private int requestedParticipants;
 
-    private List<String> confirmedParticipants;
+    private Set<String> confirmedParticipants;
 
     //contains only JoinRequest objects
     private List<JoinRequest> joinRequests;
@@ -68,7 +68,7 @@ public class MatchingRequest {
         }
 
         joinRequests = new ArrayList();
-        confirmedParticipants = new ArrayList();
+        confirmedParticipants = new HashSet<>();
     }
 
     public void accept(int elementNumber){
@@ -83,8 +83,8 @@ public class MatchingRequest {
         this.joinRequests.add(new JoinRequest(userAccount, this));
     }
 
-    public List<String> getConfirmedParticipants() {
-        return Collections.unmodifiableList(confirmedParticipants);
+    public Set<String> getConfirmedParticipants() {
+        return Collections.unmodifiableSet(confirmedParticipants);
     }
 
     public Map<Integer,JoinRequest> getJoinRequests() {
