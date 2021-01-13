@@ -3,7 +3,7 @@
       <b-card md="6" class="shadow">
       <b-card class="shadow-sm mb-4">
         <h3>Spela padel</h3>
-        <b-form @submit.prevent="submitMatchRequest" class="needs-validation" validated novalidate>
+        <b-form @submit.prevent="submitMatch" class="needs-validation" validated novalidate>
           <div class="form-row">
             <div class="form-group col-md-4">
               <label for="inputDate">Datum:</label>
@@ -58,24 +58,39 @@
         <template #cell(info)="row">
         <!-- <b-button>Button</b-button> -->
         <div v-for="(value) in item" :key="value.location">
-            <b-button variant="outline-secondary" v-if="value.username === loggedInUser" @click="cancelMatchRequest(name)" >Avbryt</b-button>
-            <b-button variant="outline-secondary" v-else-if="value.username !== loggedInUser" @click="row.toggleDetails">{{ row.detailsShowing ? 'Hide' : 'Show'}} Details</b-button>
+            <b-button variant="outline-secondary" @click="row.toggleDetails">{{ row.detailsShowing ? 'Dölj' : 'Visa mer'}}</b-button>
         </div>
         </template>
-
               <template #row-details="row">
         <b-card>
                     <b-row class="mb-2">
-                      <b-cols>Gå med {{ row.item.username }}</b-cols>
-      <b-cols>
-        <div v-for="request in row.item.joinRequests" :key="request">
-        <!-- {{ row.item.joinRequests }} -->
-        <!-- {{ request }} -->
-        {{ request.status }}
-        {{ request.sender }}
+                      <b-col>Gå med {{ row.item.username }}</b-col>
+      <b-col>
+        <div v-for="(value) in item" :key="value.location">
+        <div v-if="value.username === loggedInUser">
+          <p>loggedInUser</p>
+            <b-button variant="outline-secondary" @click="cancelMatch(name)" >Avbryt</b-button>
+          {{ row.item.confirmedParticipants }}
+          <div v-for="confirmedParticipants in row.item.confirmedParticipants" :key="confirmedParticipants">
+            <p>confirmedParticipants {{ confirmedParticipants }}</p>
+          </div>
+        <div v-for="(joinRequest, name) in row.item.joinRequests" :key="joinRequest.id">
+        <div v-if="joinRequest.status === 'PENDING'">
+        <p>joinRequest.status {{ joinRequest.status }}</p>
+        <p>joinRequest.id {{ name }}</p>
+        <p>joinRequest.sender {{ joinRequest.sender }}<b-button @click="acceptMatchRequest(name, item[0].id)">Acceptera</b-button><b-button>Neka</b-button></p>
         </div>
-      </b-cols>
-      <b-col><b-button>Gå med</b-button></b-col>
+        </div>
+        </div>
+        <div v-if="value.username !== loggedInUser">
+          <p>!loggedInUser</p>
+        <b-button @click="joinMatch(item[0].id)">Gå med</b-button>
+        <!-- <p>Request {{ request }}</p> -->
+        </div>
+        <!-- {{ row.item.joinRequests }} -->
+        </div>
+      </b-col>
+      <b-col></b-col>
           </b-row>
 
         </b-card>
@@ -113,12 +128,35 @@ export default {
     }
   },
   methods: {
-    submitMatchRequest () {
-      this.$store.dispatch('matchStore/submitMatchRequest', this.form)
+    submitMatch () {
+      this.$store.dispatch('matchStore/submitMatch', this.form)
         .then(() => this.$store.dispatch('matchStore/matchingQueue'))
     },
-    cancelMatchRequest (location) {
-      this.$store.dispatch('matchStore/cancelMatchRequest', location)
+    cancelMatch (location) {
+      this.$store.dispatch('matchStore/cancelMatch', location)
+        .then(() => this.$store.dispatch('matchStore/matchingQueue'))
+    },
+    acceptMatchRequest (name, id) {
+      const payload = {
+        matchingRequestId: id,
+        joinRequestId: name,
+        action: 'accept'
+      }
+      console.log(payload)
+      this.$store.dispatch('matchStore/matchRequest', payload)
+        .then(() => this.$store.dispatch('matchStore/matchingQueue'))
+    },
+    rejectMatchRequest (name, id) {
+      const payload = {
+        matchingRequestId: id,
+        joinRequestId: name,
+        action: 'reject'
+      }
+      this.$store.dispatch('matchStore/matchRequest', payload)
+        .then(() => this.$store.dispatch('matchStore/matchingQueue'))
+    },
+    joinMatch (id) {
+      this.$store.dispatch('matchStore/joinMatch', id)
         .then(() => this.$store.dispatch('matchStore/matchingQueue'))
     }
     // fetchMatchingQueue () {

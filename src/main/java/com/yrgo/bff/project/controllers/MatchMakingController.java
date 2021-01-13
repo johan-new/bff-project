@@ -58,7 +58,8 @@ public class MatchMakingController {
     @PostMapping("/match/request")
     public ResponseEntity<String> organizersResponseToJoinRequest(@RequestBody JSONObject parameters){
         try {
-            final long matchingRequestId = Long.parseLong((String)parameters.get("matchingRequestId"));
+//            final long matchingRequestId = Long.parseLong((String)parameters.get("matchingRequestId"));
+            final long matchingRequestId = (long) (int) parameters.get("matchingRequestId");
             final int joinRequestId = Integer.parseInt((String)parameters.get("joinRequestId"));
             final String action = (String)parameters.get("action");
 
@@ -82,7 +83,8 @@ public class MatchMakingController {
     @PostMapping("/match/join")
     public ResponseEntity<String> userRequestsParticipation(@RequestBody JSONObject request) {
         try {
-            matchMakingService.askToJoinGame(Long.parseLong((String)request.get("requestId")));
+            final long matchingRequestId = (long) (int) request.get("requestId");
+            matchMakingService.askToJoinGame(matchingRequestId);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

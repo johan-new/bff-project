@@ -3,7 +3,8 @@ import axios from 'axios'
 const state = {
   queue: [],
   inQueue: false,
-  previous_games: []
+  previous_games: [],
+  test: {}
 }
 
 const getters = {
@@ -16,9 +17,9 @@ const getters = {
 }
 
 const actions = {
-  submitMatchRequest (context, payload) {
+  submitMatch (context, payload) {
     return new Promise((resolve, reject) => {
-      axios.post('http://localhost:8080/match', {
+      axios.post('http://localhost:8080/match/submit', {
         location: payload.location,
         date: payload.date,
         time: payload.time,
@@ -54,9 +55,9 @@ const actions = {
         console.log(error)
       })
   },
-  cancelMatchRequest (context, payload) {
+  cancelMatch (context, payload) {
     return new Promise((resolve, reject) => {
-      axios.delete('http://localhost:8080/match', {
+      axios.delete('http://localhost:8080/match/cancel', {
         data: { location: payload }
       })
         .then(data => {
@@ -77,6 +78,33 @@ const actions = {
       .catch(error => {
         console.log(error)
       })
+  },
+  matchRequest (context, payload) {
+    console.log(payload)
+    axios.post('http://localhost:8080/match/request', {
+      matchingRequestId: payload.matchingRequestId,
+      joinRequestId: payload.joinRequestId,
+      action: payload.action
+    })
+      .then(data => {
+        context.commit('test', data.data)
+        console.log(data.data)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+  },
+  joinMatch (context, payload) {
+    axios.post('http://localhost:8080/match/join', {
+      requestId: payload
+    })
+      .then(data => {
+        context.commit('test', data.data)
+        console.log(data.data)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
   }
 }
 const mutations = {
@@ -88,6 +116,9 @@ const mutations = {
   },
   previous_games (state, data) {
     state.previous_games = data
+  },
+  test (state, data) {
+    state.test = data
   }
 }
 export default {
