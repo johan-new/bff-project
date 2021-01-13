@@ -21,6 +21,8 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
     @Autowired
     UserAccountService userAccountService;
 
+    ConversionMatchingToGame converter = new ConversionMatchingToGame();
+
     private Log log = LogFactory.getLog(getClass());
 
     @Override
@@ -38,11 +40,14 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
             notificationService.addNotification(loggedInUser.getUsername(),
                     matchingRequest.toString(),
                     NotificationService.Type.ACCEPTED_JOIN_REQUEST);
+            converter.convertRequestToGame(matchingRequest);
         } else {
             //TODO: Exception? Or return a boolean indicating success?
             log.error("ACCEPTING REQUEST ONLY POSSIBLE BY THE ORGANIZER");
         }
     }
+
+
 
     @Override
     public void rejectJoinRequest(Long matchingRequestId, int joinRequestId) {
@@ -146,4 +151,26 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         return new JSONObject(usersLookingToBeMatched);
     }
 
+    @Override
+    public void removeUserMatchRequest(Long id) {
+        String location = "";
+        String username = "";
+
+        Iterator iterator = usersLookingToBeMatched.entrySet().iterator();
+        while (iterator.hasNext()){
+            Map.Entry set = (Map.Entry) iterator.next();
+            for (Object matchingRequest : (List)set.getValue()) {
+                if (((MatchingRequest)matchingRequest).getId() == id ){
+                    location = (String)set.getKey();
+                    username = ((MatchingRequest) matchingRequest).getUsername();
+                }
+            }
+        }
+
+        if (!location.isBlank() && !username.isBlank()) {
+            System.out.println("MATCHING REQUEST FOUND BY ID. REMOVING...");
+            removeUserMatchRequest(username,location);
+        }
+
+    }
 }
