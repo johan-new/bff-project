@@ -1,6 +1,6 @@
 package com.yrgo.bff.project.domain;
 
-import com.yrgo.bff.project.exception.HandleBadRequestException;
+import com.yrgo.bff.project.exception.BadRequestException;
 import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
@@ -33,7 +33,7 @@ public class UserAccount {
     private String password, presentation, city, gender;
     private int age;
 
-    public UserAccount(String username, String password) throws HandleBadRequestException {
+    public UserAccount(String username, String password) throws BadRequestException {
         setUsername(username);
         setPassword(password);
     }
@@ -59,11 +59,11 @@ public class UserAccount {
         return username;
     }
 
-    private void setUsername(String username) throws HandleBadRequestException {
+    private void setUsername(String username) throws BadRequestException {
         if (UserAccountServiceImplementation.validEmailAddress(username)) {
             this.username = username;
         } else {
-            throw new HandleBadRequestException("Inte giltigt epostadress!");
+            throw new BadRequestException("Inte giltigt epostadress!");
         }
     }
 
@@ -71,12 +71,12 @@ public class UserAccount {
         return password;
     }
 
-    public void setPassword(String password) throws HandleBadRequestException {
+    public void setPassword(String password) throws BadRequestException {
             if (password != null && !password.isBlank()) {
                 this.password = password;
             } else
             {
-                throw new HandleBadRequestException("Lösenordet är tomt!");
+                throw new BadRequestException("Lösenordet är tomt!");
             }
     }
 

@@ -2,7 +2,7 @@ package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.UserAccount;
-import com.yrgo.bff.project.exception.HandleBadRequestException;
+import com.yrgo.bff.project.exception.BadRequestException;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
@@ -43,9 +43,9 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      * @return An instance of User
      */
     @Override
-    public UserAccount createUser(String username, String password) throws HandleBadRequestException {
+    public UserAccount createUser(String username, String password) throws BadRequestException {
         if (!qualifiesAsAPassword(password)) {
-            throw new HandleBadRequestException("Password cannot be blank or null!");
+            throw new BadRequestException("Password cannot be blank or null!");
         }
 
         UserAccount user = new UserAccount(username.toLowerCase(),bCryptPasswordEncoder.encode(password));
