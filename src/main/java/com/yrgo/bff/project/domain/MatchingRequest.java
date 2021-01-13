@@ -121,6 +121,8 @@ public class MatchingRequest {
         return time.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
+    public LocalTime getLocalTime() { return this.time; }
+
     public boolean isCourtIsBooked() {
         return courtIsBooked;
     }

@@ -1,8 +1,10 @@
 package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.domain.MatchingRequest;
-import com.yrgo.bff.project.domain.MatchingRequestTest;
 import com.yrgo.bff.project.domain.UserAccount;
+import com.yrgo.bff.project.service.matching.MatchMakingService;
+import com.yrgo.bff.project.service.notification.NotificationService;
+import com.yrgo.bff.project.service.useraccount.UserAccountService;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

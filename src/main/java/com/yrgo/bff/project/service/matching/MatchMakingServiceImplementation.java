@@ -1,7 +1,9 @@
-package com.yrgo.bff.project.service;
+package com.yrgo.bff.project.service.matching;
 
 import com.yrgo.bff.project.domain.MatchingRequest;
 import com.yrgo.bff.project.domain.UserAccount;
+import com.yrgo.bff.project.service.notification.NotificationService;
+import com.yrgo.bff.project.service.useraccount.UserAccountService;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;

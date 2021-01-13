@@ -1,4 +1,4 @@
-package com.yrgo.bff.project.service;
+package com.yrgo.bff.project.service.useraccount;
 
 import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.UserAccount;

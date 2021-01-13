@@ -2,8 +2,8 @@ package com.yrgo.bff.project.controllers;
 
 import com.yrgo.bff.project.domain.Game;
 import com.yrgo.bff.project.domain.UserAccount;
-import com.yrgo.bff.project.service.GameService;
-import com.yrgo.bff.project.service.UserAccountService;
+import com.yrgo.bff.project.service.game.GameService;
+import com.yrgo.bff.project.service.useraccount.UserAccountService;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.parser.Entity;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,13 +27,6 @@ public class GameController {
     private Log log = LogFactory.getLog(getClass());
 
 
-    @PostMapping(value = "/game")
-        //i.e. POST "http://localhost:8080/game?players=Johan,Erik,Simon&venue=Gbg"
-    ResponseEntity createGame(@RequestParam("players") String[] players, @RequestParam("venue") String venue/*, User organizedBy, String password*/) throws Exception {
-        //TODO: Authenticate and use custom exception, check max players 4
-        gameService.createGame(new Date(), venue, stringArrayToSet(players));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
 
     // TODO: for a future admin portal, or remove? A user get the games from ApplicationUserController
     @GetMapping(value = "/game/{gameId}")
@@ -48,7 +39,7 @@ public class GameController {
         //TODO: Ability to change date?
         Game game = gameService.readGame(Long.parseLong(gameId));
         gameService.removeGame(Long.parseLong(gameId));
-        gameService.createGame(game.getWhen(),game.getVenue(),stringArrayToSet(newPlayers));
+        gameService.createGame(game.getDate(),game.getTime(),game.getVenue(),stringArrayToSet(newPlayers));
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 

@@ -1,10 +1,10 @@
 package com.yrgo.bff.project;
 
 import com.yrgo.bff.project.domain.UserAccount;
-import com.yrgo.bff.project.service.GameService;
-import com.yrgo.bff.project.service.MatchMakingService;
-import com.yrgo.bff.project.service.NotificationService;
-import com.yrgo.bff.project.service.UserAccountService;
+import com.yrgo.bff.project.service.game.GameService;
+import com.yrgo.bff.project.service.matching.MatchMakingService;
+import com.yrgo.bff.project.service.notification.NotificationService;
+import com.yrgo.bff.project.service.useraccount.UserAccountService;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -105,9 +104,9 @@ public class Project2Application {
 			users3.add(userAccountService.readUser(user3));
 			users3.add(userAccountService.readUser(user5));
 
-			gameService.createGame(new Date(),"Göteborg",users);
-			gameService.createGame(new Date(), "Borås", users2);
-			gameService.createGame(new Date(), "Halmstad", users3);
+			gameService.createGame(LocalDate.now(), LocalTime.now(),"Göteborg",users);
+			gameService.createGame(LocalDate.now(), LocalTime.now(), "Borås", users2);
+			gameService.createGame(LocalDate.now(), LocalTime.now(), "Halmstad", users3);
 			LocalDate ld = LocalDate.parse("2020-12-24");
 			LocalTime lt = LocalTime.parse("17:00");
 			LocalDate ld2 = LocalDate.parse("2020-12-25");

@@ -1,20 +1,16 @@
 package com.yrgo.bff.project.service;
 
-import com.yrgo.bff.project.dao.GameDataAccess;
-import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.Game;
 import com.yrgo.bff.project.domain.UserAccount;
-import org.junit.jupiter.api.BeforeEach;
+import com.yrgo.bff.project.service.game.GameService;
+import com.yrgo.bff.project.service.useraccount.UserAccountService;
 import org.junit.jupiter.api.Test;
 
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,7 +29,7 @@ public class GameServiceImplementationTest {
         UserAccount user2 = userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"hej");
         Set<UserAccount> users = new HashSet<>();
         users.add(user); users.add(user2);
-        return gameService.createGame(new Date(),"Helsinki",users);
+        return gameService.createGame(LocalDate.now(),LocalTime.now(),"Helsinki",users);
     }
 
     @Test

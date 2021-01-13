@@ -1,7 +1,7 @@
 package com.yrgo.bff.project.controllers;
 
-import com.yrgo.bff.project.service.MatchMakingService;
-import com.yrgo.bff.project.service.UserAccountService;
+import com.yrgo.bff.project.service.matching.MatchMakingService;
+import com.yrgo.bff.project.service.useraccount.UserAccountService;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;

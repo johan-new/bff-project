@@ -1,13 +1,14 @@
-package com.yrgo.bff.project.service;
+package com.yrgo.bff.project.service.matching;
 
 import com.yrgo.bff.project.domain.MatchingRequest;
 import com.yrgo.bff.project.domain.UserAccount;
+import com.yrgo.bff.project.service.game.GameService;
+import com.yrgo.bff.project.service.notification.NotificationService;
+import com.yrgo.bff.project.service.useraccount.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,14 +35,13 @@ public class ConversionMatchingToGameImpl implements ConversionMatchingToGame {
             //TODO: Date is deprecated, refactor Game class
             //create new game with the accepted participants
             System.out.println("Game is full, creating game...");
-            gameService.createGame(new Date(),
+            gameService.createGame(matchingRequest.getDate(),
+                    matchingRequest.getLocalTime(),
                     matchingRequest.getVenue(),
                     participants);
             //notify them
-            System.out.println("Notifing users...");
             notifyUsers(participants,matchingRequest);
             //remove the request
-            System.out.println("Removing request...");
             matchMakingService.removeUserMatchRequest(matchingRequest.getId());
         }
     }
@@ -59,22 +59,11 @@ public class ConversionMatchingToGameImpl implements ConversionMatchingToGame {
     private Set<UserAccount> getParticipantsAsASet(MatchingRequest matchingRequest) {
         Set<UserAccount> users = new HashSet<>();
         //adding the organizer
-        System.out.println("SERVICE REFERS TO " + userAccountService.toString());
-        System.out.println("Putting all users in one HashSet...\nAdding organizer " + matchingRequest.getUsername());
-        System.out.println(matchingRequest.getUsername().length());
-        System.out.println(matchingRequest.getUsername().equals("johan@a.a"));
-        System.out.println(matchingRequest.getUsername().trim().equals("johan@a.a"));
-        UserAccount loggedin = userAccountService.readLoggedInUser();
-        System.out.println("logged in read " + loggedin);
-        UserAccount someUser = userAccountService.readUser("erik@a.a");
-        UserAccount organizer = userAccountService.readUser("johan@a.a");
-        System.out.println("REFERENS: " + organizer);
+        final UserAccount organizer = userAccountService.readUser(matchingRequest.getUsername());
         users.add(organizer);
-        System.out.println("Organizer added...");
-        //and the ones that person accepted
+        //adding the other players
         for (String username: matchingRequest.getConfirmedParticipants()) {
             users.add(userAccountService.readUser(username));
-            System.out.println("added participant...");
         }
         return users;
     }

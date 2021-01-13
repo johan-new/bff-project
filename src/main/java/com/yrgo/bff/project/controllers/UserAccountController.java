@@ -1,8 +1,7 @@
 package com.yrgo.bff.project.controllers;
 
-import com.yrgo.bff.project.domain.UserAccount;
-import com.yrgo.bff.project.service.UserAccountService;
-import com.yrgo.bff.project.service.UserAccountServiceImplementation;
+import com.yrgo.bff.project.service.useraccount.UserAccountService;
+import com.yrgo.bff.project.service.useraccount.UserAccountServiceImplementation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,6 @@
 package com.yrgo.bff.project.domain;
 
-import com.yrgo.bff.project.service.UserAccountServiceImplementation;
+import com.yrgo.bff.project.service.useraccount.UserAccountServiceImplementation;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 

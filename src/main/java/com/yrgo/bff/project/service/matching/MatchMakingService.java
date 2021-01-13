@@ -1,4 +1,4 @@
-package com.yrgo.bff.project.service;
+package com.yrgo.bff.project.service.matching;
 
 import com.yrgo.bff.project.domain.MatchingRequest;
 import com.yrgo.bff.project.domain.UserAccount;

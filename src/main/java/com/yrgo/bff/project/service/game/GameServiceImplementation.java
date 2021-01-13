@@ -1,4 +1,4 @@
-package com.yrgo.bff.project.service;
+package com.yrgo.bff.project.service.game;
 
 import com.yrgo.bff.project.dao.GameDataAccess;
 import com.yrgo.bff.project.domain.Game;
@@ -8,7 +8,8 @@ import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Set;
 
 @Service
@@ -23,15 +24,15 @@ public class GameServiceImplementation implements GameService {
     /**
      * Creates a Game and persists it in the database
      *
-     * @param when - Date when of the Game you want to create
+     * @param date - Date when of the Game you want to create
      * @param venue - String of the Game you want to create
      * @param users - Set of <Users> for the Game you want to create
      * @return An instance of Game
      *
      * */
     @Override
-    public Game createGame(Date when, String venue, Set<UserAccount> users) {
-        Game game = new Game(when, venue, users);
+    public Game createGame(LocalDate date, LocalTime time, String venue, Set<UserAccount> users) {
+        Game game = new Game(date, time, venue, users);
         gameDataAccess.save(game);
         return game;
     }
