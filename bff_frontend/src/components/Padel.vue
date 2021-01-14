@@ -2,18 +2,16 @@
     <div>
       <b-card md="6" class="shadow">
       <b-card class="shadow-sm mb-4">
-        <h3>Spela padel</h3>
+        <h4 class="font-weight-bold">Spela padel</h4>
         <b-form @submit.prevent="submitMatch" class="needs-validation" validated novalidate>
           <div class="form-row">
             <div class="form-group col-md-4">
               <label for="inputDate">Datum:</label>
               <b-form-datepicker placeholder="Välj datum" class="form-control" id="inputDate" required v-model="form.date"></b-form-datepicker>
-              <!-- <input type="date" class="form-control" id="inputDate" required v-model="form.date"> -->
             </div>
             <div class="form-group col-md-3">
               <label for="inputTime">Tidpunkt:</label>
 <b-form-timepicker label-no-time-selected="Välj tid" class="form-control" id="inputTime" required v-model="form.time"></b-form-timepicker>
-              <!-- <input type="time" class="form-control" id="inputTime" required v-model="form.time" /> -->
             </div>
           </div>
 
@@ -33,69 +31,87 @@
             <option :value="1" selected>1</option>
     <option :value="2">2</option>
     <option :value="3">3</option>
-
       </select>
     </div>
     <div class="col-md-4 mb-3">
       <label for="location">Stad:</label>
       <input type="text" class="form-control" id="location" v-model="form.location" required>
-            <!-- <div class="invalid-tooltip">
-        Please provide a valid city.
-      </div> -->
     </div>
     </div>
-
           <b-button variant="outline-secondary" type="submit">Spela!</b-button>
         </b-form>
         </b-card>
 
-        <b-card class="p-2 shadow-sm mb-1"><h3 class="mb-4">Hitta din match</h3>
-      <div v-for="(item, name) of getQueue" :key="name" > <h4>{{ name }} </h4>
+        <b-card class="p-2 shadow-sm mb-1">
+          <h4 class="mb-4 font-weight-bold">Hitta din match</h4>
+      <div v-for="(item, name) of getQueue" :key="name" > <h5>{{ name }} </h5>
       <div class="table-responsive">
       <b-table stacked="sm" hover :items="item" :fields="fields">
-          <!-- <b-table stacked="sm" hover :items="item"> -->
-
         <template #cell(info)="row">
-        <!-- <b-button>Button</b-button> -->
         <div v-for="(value) in item" :key="value.location">
             <b-button variant="outline-secondary" @click="row.toggleDetails">{{ row.detailsShowing ? 'Dölj' : 'Visa mer'}}</b-button>
         </div>
         </template>
               <template #row-details="row">
-        <b-card>
-                    <b-row class="mb-2">
-                      <b-col>Gå med {{ row.item.username }}</b-col>
-      <b-col>
+        <b-card bg-variant="light">
         <div v-for="(value) in item" :key="value.location">
-        <div v-if="value.username === loggedInUser">
-          <p>loggedInUser</p>
-            <b-button variant="outline-secondary" @click="cancelMatch(name)" >Avbryt</b-button>
-          {{ row.item.confirmedParticipants }}
+          <div v-if="row.item.confirmedParticipants.length !== 0">
+          <h5 class="mb-3">Accepterade spelare:</h5>
           <div v-for="confirmedParticipants in row.item.confirmedParticipants" :key="confirmedParticipants">
-            <p>confirmedParticipants {{ confirmedParticipants }}</p>
+            <b-card no-body class="my-2 shadow-sm" align-v="center">
+            <div class="m-2">{{ confirmedParticipants }}</div>
+            </b-card>
+            </div>
+          <hr>
           </div>
+          <div v-if="value.username === loggedInUser">
+          <div v-if="Object.keys(row.item.joinRequests).length !== 0">
+          <h5 class="my-3">Spelare som vill gå med:</h5>
         <div v-for="(joinRequest, name) in row.item.joinRequests" :key="joinRequest.id">
-        <div v-if="joinRequest.status === 'PENDING'">
-        <p>joinRequest.status {{ joinRequest.status }}</p>
-        <p>joinRequest.id {{ name }}</p>
-        <p>joinRequest.sender {{ joinRequest.sender }}<b-button @click="acceptMatchRequest(name, item[0].id)">Acceptera</b-button><b-button>Neka</b-button></p>
+          <b-card v-if="joinRequest.status === 'PENDING'" no-body class="my-2 shadow-sm">
+        <div class="m-2 d-flex">
+        <div class="mr-auto">{{ joinRequest.sender }}</div>
+        <div>
+          <b-button @click="acceptMatchRequest(name, item[0].id)" variant="outline-secondary" size="sm" class="mx-1">Acceptera</b-button>
+          <b-button variant="outline-secondary" size="sm" class="mx-1">Neka</b-button></div>
         </div>
+        </b-card>
+          </div>
+        <hr>
         </div>
+          <div>
+            <b-button variant="outline-secondary" @click="cancelMatch(name)" >Avbryt</b-button>
+          </div>
         </div>
         <div v-if="value.username !== loggedInUser">
+          <!-- <div v-for="(joinRequest) in row.item.joinRequests" :key="joinRequest.id"> -->
+              <!-- <div v-if="Object.keys(row.item.joinRequests).length === 0"> -->
+            <div v-for="joinRequest in row.item.joinRequests" :key="joinRequest.id">
+              <div v-if="joinRequest.status === 'PENDING' && joinRequest.sender === loggedInUser">
+                <div>Du är i kö, chilla, {{ joinRequest.sender }}</div>
+              </div>
+              <div v-else-if="joinRequest.status === 'ACCEPTED' && joinRequest.sender === loggedInUser">
+                <div>Du är med i spelet</div>
+              </div>
+              <div v-else-if="joinRequest.sender === loggedInUser && joinRequest.status === 'REJECTED'">
+              <b-button @click="joinMatch(item[0].id)">Gå med</b-button>
+              {{ joinRequest.sender }}
+              </div>
+              <div v-else-if="joinRequest.sender !== loggedInUser">
+                <b-button @click="joinMatch(item[0].id)">Gå med</b-button>
+              </div>
+            </div>
+            <div v-if="Object.keys(row.item.joinRequests).length === 0">
           <p>!loggedInUser</p>
-        <b-button @click="joinMatch(item[0].id)">Gå med</b-button>
-        <!-- <p>Request {{ request }}</p> -->
+          <b-button @click="joinMatch(item[0].id)">Gå med2</b-button>
+            </div>
+          <!-- </div>
+            </div> -->
+        <!-- </div> -->
         </div>
-        <!-- {{ row.item.joinRequests }} -->
         </div>
-      </b-col>
-      <b-col></b-col>
-          </b-row>
-
         </b-card>
       </template>
-
       </b-table>
       </div>
         </div>
@@ -124,7 +140,7 @@ export default {
         venue: '',
         participants: ''
       },
-      fields: ['username', 'date', 'time', 'courtIsBooked', 'venue', 'requestedParticipants', 'joinRequests', 'confirmedParticipants', 'info']
+      fields: ['username', 'date', 'time', 'courtIsBooked', 'venue', 'requestedParticipants', 'info']
     }
   },
   methods: {
@@ -159,20 +175,6 @@ export default {
       this.$store.dispatch('matchStore/joinMatch', id)
         .then(() => this.$store.dispatch('matchStore/matchingQueue'))
     }
-    // fetchMatchingQueue () {
-    //   axios.get('http://localhost:8080/match/queue')
-    //     .then(data => {
-    //       var item
-    //       for (item in data.data) {
-    //         console.log(item)
-    //         this.items.push(item)
-    //       }
-    //       console.log(this.items)
-    //     })
-    //     .catch((error) => {
-    //       console.log(error.response)
-    //     })
-    // }
   },
   created () {
     this.$store.dispatch('matchStore/matchingQueue')
