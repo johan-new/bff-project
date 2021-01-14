@@ -116,10 +116,31 @@
 export default {
   name: 'Padel',
   computed: {
-    getQueue () { return this.$store.getters['matchStore/getQueue'] },
+    // getQueue () { return this.$store.getters['matchStore/getQueue'] },
     inQueue () { return this.$store.getters['matchStore/inQueue'] },
     loggedInUser () { return this.$store.getters['authStore/loggedInUser'] },
-    trueOrFalse () { return this.form.reservation }
+    trueOrFalse () { return this.form.reservation },
+    getQueue () {
+      const queue = this.$store.getters['matchStore/getQueue']
+      let q = {}
+      // let s = 0
+      for (q in queue) {
+        if (queue[q][0].courtIsBooked === true) {
+          queue[q][0].courtIsBooked = 'Ja'
+        } else {
+          queue[q][0].courtIsBooked = 'Nej'
+        }
+        // for (s in queue[q][0].confirmedParticipants) {
+        //   console.log(s)
+        //   console.log(queue[q])
+        //   console.log(queue[q][0].confirmedParticipants[s])
+        //   queue[q][0].requestedParticipants--
+        //   // s++
+        //   // queue[q][0].requestedParticipants -= s
+        // }
+      }
+      return queue
+    }
   },
   data () {
     return {
@@ -131,7 +152,30 @@ export default {
         venue: '',
         participants: ''
       },
-      fields: ['username', 'date', 'time', 'courtIsBooked', 'venue', 'requestedParticipants', 'info'],
+      fields: [
+        {
+          key: 'username',
+          label: 'Användare'
+        }, {
+          key: 'date',
+          label: 'Datum'
+        }, {
+          key: 'time',
+          label: 'Tid'
+        }, {
+          key: 'courtIsBooked',
+          label: 'Bokat'
+        }, {
+          key: 'venue',
+          label: 'Padelhall'
+        }, {
+          key: 'requestedParticipants',
+          label: 'Önskat spelarantal'
+        }, {
+          key: 'info',
+          label: 'Info'
+        }
+      ],
       componentKey: 0
     }
   },
@@ -150,7 +194,6 @@ export default {
         joinRequestId: name,
         action: 'accept'
       }
-      console.log(payload)
       this.$store.dispatch('matchStore/matchRequest', payload)
         .then(() => this.$store.dispatch('matchStore/matchingQueue'))
     },

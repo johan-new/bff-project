@@ -1,6 +1,5 @@
 package com.yrgo.bff.project.controllers;
 
-import com.yrgo.bff.project.domain.UserAccount;
 import com.yrgo.bff.project.service.UserAccountService;
 import com.yrgo.bff.project.service.UserAccountServiceImplementation;
 import org.json.simple.JSONObject;
@@ -61,6 +60,7 @@ public class UserAccountController {
 
     @PutMapping("/user")
     ResponseEntity updateUser(@RequestBody JSONObject newUserInformation) throws Exception {
+        userAccountService.updateUser(newUserInformation);
         return ResponseEntity.status(HttpStatus.ACCEPTED).
                 body(userAccountService.updateUser(newUserInformation).toJSON());
     }
