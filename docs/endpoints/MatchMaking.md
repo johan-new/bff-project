@@ -33,18 +33,25 @@ Lägger till en matchrequest i kön
 
 ``` 
 
-`POST /match/900`
+`POST match/request`
 
-Organisatören för matchningsförfrågan 900 vill acceptera förfrågan att gå med från en annan
-spelare. Denna förfrågan har idnummer 3. Endast organisatören kan acceptera("accept") eller avvisa ("reject").
+Organisatören för matchningsförfrågan 904 vill acceptera förfrågan att gå med från en annan
+spelare. Denna förfrågan har idnummer 1. Endast organisatören kan acceptera("accept") eller avvisa ("reject").
 
 ```
 {
-  "joinRequestId": 3
-  "action": "accept"
+	"matchingRequestId": 904,
+	"joinRequestId": "1",
+	"action": "accept"
 }
 ```
 
 
-`POST /match/asktojoin/900`
+`POST match/join`
 Den inloggade användaren ber om att få delta i en MatchRequest med id 900.
+
+```
+{
+	"requestId": 904
+}
+```
