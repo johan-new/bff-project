@@ -64,28 +64,30 @@
             </div>
           <hr>
           </div>
-          <div v-if="value.username === loggedInUser">
+            <div :key="componentKey">
+          <!-- <div v-if="value.username === loggedInUser"> -->
           <div v-if="Object.keys(row.item.joinRequests).length !== 0">
           <h5 class="my-3">Spelare som vill gå med:</h5>
-        <div v-for="(joinRequest, name) in row.item.joinRequests" :key="joinRequest.id">
+        <div v-for="(joinRequest, name) in row.item.joinRequests" :key="joinRequest.sender">
           <b-card v-if="joinRequest.status === 'PENDING'" no-body class="my-2 shadow-sm">
         <div class="m-2 d-flex">
-        <div class="mr-auto">{{ joinRequest.sender }}</div>
-        <div>
-          <b-button @click="acceptMatchRequest(name, item[0].id)" variant="outline-secondary" size="sm" class="mx-1">Acceptera</b-button>
-          <b-button variant="outline-secondary" size="sm" class="mx-1">Neka</b-button></div>
+        <div class="mr-auto">
+          <div>{{ joinRequest.sender }}</div>
+          </div>
+        <div v-if="value.username === loggedInUser">
+          <b-button @click="acceptMatchRequest(name, item[0].id); updateKey()" variant="outline-secondary" size="sm" class="mx-1">Acceptera</b-button>
+          <b-button variant="outline-secondary" size="sm" class="mx-1" @click="rejectMatchRequest(name, item[0].id); updateKey()">Neka</b-button>
+          </div>
         </div>
         </b-card>
           </div>
         <hr>
         </div>
-          <div>
+          <div v-if="value.username === loggedInUser">
             <b-button variant="outline-secondary" @click="cancelMatch(name)" >Avbryt</b-button>
           </div>
-        </div>
+        <!-- </div> -->
         <div v-if="value.username !== loggedInUser">
-          <!-- <div v-for="(joinRequest) in row.item.joinRequests" :key="joinRequest.id"> -->
-              <!-- <div v-if="Object.keys(row.item.joinRequests).length === 0"> -->
             <div v-for="joinRequest in row.item.joinRequests" :key="joinRequest.id">
               <div v-if="joinRequest.status === 'PENDING' && joinRequest.sender === loggedInUser">
                 <div>Du är i kö, chilla, {{ joinRequest.sender }}</div>
@@ -93,21 +95,11 @@
               <div v-else-if="joinRequest.status === 'ACCEPTED' && joinRequest.sender === loggedInUser">
                 <div>Du är med i spelet</div>
               </div>
-              <div v-else-if="joinRequest.sender === loggedInUser && joinRequest.status === 'REJECTED'">
-              <b-button @click="joinMatch(item[0].id)">Gå med</b-button>
-              {{ joinRequest.sender }}
-              </div>
-              <div v-else-if="joinRequest.sender !== loggedInUser">
-                <b-button @click="joinMatch(item[0].id)">Gå med</b-button>
-              </div>
             </div>
-            <div v-if="Object.keys(row.item.joinRequests).length === 0">
-          <p>!loggedInUser</p>
-          <b-button @click="joinMatch(item[0].id)">Gå med2</b-button>
+            <div v-if="!testing(row.item.joinRequests)">
+              <b-button @click="joinMatch(item[0].id); updateKey()">Gå med</b-button>
             </div>
-          <!-- </div>
-            </div> -->
-        <!-- </div> -->
+            </div>
         </div>
         </div>
         </b-card>
@@ -121,7 +113,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 export default {
   name: 'Padel',
   computed: {
@@ -140,7 +131,8 @@ export default {
         venue: '',
         participants: ''
       },
-      fields: ['username', 'date', 'time', 'courtIsBooked', 'venue', 'requestedParticipants', 'info']
+      fields: ['username', 'date', 'time', 'courtIsBooked', 'venue', 'requestedParticipants', 'info'],
+      componentKey: 0
     }
   },
   methods: {
@@ -174,6 +166,20 @@ export default {
     joinMatch (id) {
       this.$store.dispatch('matchStore/joinMatch', id)
         .then(() => this.$store.dispatch('matchStore/matchingQueue'))
+    },
+    testing (param) {
+      let s = {}
+      let value = false
+      for (s in param) {
+        if (param[s].sender === this.$store.getters['authStore/loggedInUser']) {
+          value = true
+          break
+        }
+      }
+      return value
+    },
+    updateKey () {
+      this.componentKey += 1
     }
   },
   created () {
