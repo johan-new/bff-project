@@ -19,8 +19,8 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(errorMessage, badRequest);
     }
 
-    @ExceptionHandler(value = {NotFoundExceptions.class})
-    public ResponseEntity<Object> handleNotFoundExceptions(NotFoundExceptions e, WebRequest request) {
+    @ExceptionHandler(value = {NotFoundException.class})
+    public ResponseEntity<Object> handleNotFoundExceptions(NotFoundException e, WebRequest request) {
         HttpStatus notFound = HttpStatus.NOT_FOUND;
         ErrorMessage errorMessage = new ErrorMessage(HttpStatus.NOT_FOUND.value(), new Date(), e.getMessage(), request.getDescription(false));
 
@@ -51,7 +51,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(value = {TeapotException.class})
-    public ResponseEntity<Object> HandleATeapotException(TeapotException e, WebRequest request) {
+    public ResponseEntity<Object> HandleTeapotException(TeapotException e, WebRequest request) {
         HttpStatus teapot = HttpStatus.I_AM_A_TEAPOT;
         ErrorMessage errorMessage = new ErrorMessage(HttpStatus.I_AM_A_TEAPOT.value(), new Date(), e.getMessage(), request.getDescription(false));
 

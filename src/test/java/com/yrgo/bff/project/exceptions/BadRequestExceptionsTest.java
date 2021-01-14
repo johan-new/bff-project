@@ -16,25 +16,22 @@ public class BadRequestExceptionsTest {
     @Autowired
     UserAccountService userAccountService;
 
-    private UserAccount user;
-
-
     @Test
-    public void testCreateUserThatThrowsExceptionsWhenCreatingWithEmptyPassword() {
+    public void testCreateUserThatThrowsBadRequestExceptionWhenCreatingWithEmptyPassword() {
         assertThrows(BadRequestException.class, ()-> {
           userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(), "");
         });
     }
 
     @Test
-    public void testCreateUserThatThrowsExceptionsWhenCreatingWithInvalidUsername() {
+    public void testCreateUserThatThrowsBadRequestExceptionWhenCreatingWithInvalidUsername() {
         assertThrows(BadRequestException.class, ()-> {
             userAccountService.createUser("blaha", "hej");
         });
     }
 
     @Test
-    public void testCreateUserThatThrowsExceptionsWhenCreatingWithEmptyUsername() {
+    public void testCreateUserThatThrowsBadRequestExceptionWhenCreatingWithEmptyUsername() {
         assertThrows(BadRequestException.class, ()-> {
            userAccountService.createUser("","hej");
         });

@@ -192,13 +192,13 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
         }
     }
 
-    private void changePassword(UserAccount userAccount, String oldPassword, String newPassword) throws Exception {
+    private void changePassword(UserAccount userAccount, String oldPassword, String newPassword) throws BadRequestException {
         //check if newPassword value is passed in the json body
         if (newPassword != null) {
             if (qualifiesAsAPassword(newPassword) && bCryptPasswordEncoder.matches(oldPassword,userAccount.getPassword())){
                 userAccount.setPassword(bCryptPasswordEncoder.encode(newPassword));
             } else {
-                throw new Exception("Password cannot be blank or null!");
+                throw new BadRequestException("Password cannot be blank or null!");
             }
         }
     }
