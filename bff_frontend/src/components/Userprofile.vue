@@ -1,17 +1,24 @@
 <template>
   <div>
-    <b-container fluid="md" class="px-0">
+    <!-- <b-container fluid="md" class="px-0"> -->
+      <b-container fluid="md">
       <b-row class="justify-content-md-center mt-n4">
-        <b-col md="8" class="px-2">
-    <b-card md="6" img-src="https://assets.entrepreneur.com/content/3x2/2000/20150312184504-cool-awesome.jpeg?width=700&crop=2:1" fluid-grow img-alt="Card image" img-top img-height="150">
+        <b-col md="8">
+    <b-card class="shadow-sm" md="8" img-src="https://assets.entrepreneur.com/content/3x2/2000/20150312184504-cool-awesome.jpeg?width=700&crop=2:1" fluid-grow img-alt="Card image" img-top img-height="120">
     <b-avatar size="6rem" class="profileImage"></b-avatar>
-    <h5 class="mt-n5 font-weight-bold">{{ username }}</h5>
-    <div class="smaller-text text-secondary">
+    <!-- <div class="d-flex"> -->
+    <!-- <div class="mr-auto"> -->
+      <h5 id="raiseProfile" class="font-weight-bold">{{ username }}</h5>
+      <!-- </div> -->
+    <b-button size="sm" class="changeProfile mt-n5" variant="outline-secondary">Ändra profil</b-button>
+    <!-- </div> -->
+
+    <div class="smaller-text text-secondary font-italic">
       <b-icon icon="geo-alt" aria-hidden="true"></b-icon> {{ data.city }}
     </div>
     <div class="smaller-text text-secondary">Kön: <span>{{ formatGender }},</span> Ålder: <span>{{ data.age }}</span></div>
-    <div class="my-3">{{ data.presentation }}</div>
-    <hr>
+    <div class="my-2">{{ data.presentation }}</div>
+    <!-- <hr> -->
     <div v-if="!loggedInUser">
       <div v-if="!friendStatus" :key="friends.length">
         <button @click="addFriend">Add friend</button>
@@ -143,7 +150,16 @@ export default {
  .profileImage:hover {
    border: 3px solid white;
  }
- .parent {
-  position: relative;
+ .changeProfile {
+   position: absolute;
+   top: 180px;
+   right: 0px;
+   /* left: 350px; */
+   left: 75%;
+   width: auto;
+   height: auto;
  }
+ #raiseProfile {
+  margin-top: -4rem !important;
+}
 </style>
