@@ -1,23 +1,17 @@
 <template>
-  <div class="wrapper">
-    <h1>Userprofile component</h1>
-    <div>Användarprofil: {{ username }}</div>
-    <h3>
-      Spelade och kommande matcher:
-    </h3>
-    <div v-for="(item, name) in data.games" :key="name">
-      {{ name }}:
-      {{ item.venue }}, {{ item.players }}, {{ item.id }},
-      {{ item.when }}
+  <div>
+    <b-container fluid="md" class="px-0">
+      <b-row class="justify-content-md-center mt-n4">
+        <b-col md="8" class="px-2">
+    <b-card md="6" img-src="https://assets.entrepreneur.com/content/3x2/2000/20150312184504-cool-awesome.jpeg?width=700&crop=2:1" fluid-grow img-alt="Card image" img-top img-height="150">
+    <b-avatar size="6rem" class="profileImage"></b-avatar>
+    <h5 class="mt-n5 font-weight-bold">{{ username }}</h5>
+    <div class="smaller-text text-secondary">
+      <b-icon icon="geo-alt" aria-hidden="true"></b-icon> {{ data.city }}
     </div>
-    <div v-if="loggedInUser">
-      <h2>Ändra lösenord:</h2>
-      <form @submit.prevent="changePassword">
-        <input type="password" placeholder="Gammalt lösenord" v-model="oldPassword"/><br>
-        <input type="password" placeholder="Nytt lösenord" v-model="newPassword"/><br>
-        <button>Ändra lösenord</button>
-      </form>
-    </div>
+    <div class="smaller-text text-secondary">Kön: <span>{{ formatGender }},</span> Ålder: <span>{{ data.age }}</span></div>
+    <div class="my-3">{{ data.presentation }}</div>
+    <hr>
     <div v-if="!loggedInUser">
       <div v-if="!friendStatus" :key="friends.length">
         <button @click="addFriend">Add friend</button>
@@ -27,6 +21,19 @@
       </div>
     </div>
     <Friends v-if="loggedInUser" :friends=friends />
+    <!-- <hr> -->
+    <div v-if="loggedInUser">
+      <h6 class="mt-5">Redigera profil</h6>
+      <form @submit.prevent="changePassword">
+        <input type="password" placeholder="Gammalt lösenord" v-model="oldPassword"/><br>
+        <input type="password" placeholder="Nytt lösenord" v-model="newPassword"/><br>
+        <button>Ändra lösenord</button>
+      </form>
+    </div>
+    </b-card>
+    </b-col>
+    </b-row>
+    </b-container>
   </div>
 </template>
 
@@ -42,7 +49,8 @@ export default {
     return {
       oldPassword: '',
       newPassword: '',
-      friends: []
+      friends: [],
+      gender: this.data.gender
     }
   },
   created () {
@@ -63,6 +71,20 @@ export default {
       } else {
         return false
       }
+    },
+    formatGender () {
+      const caps = this.gender
+      const lower = caps.toLowerCase()
+      let normal = ''
+      normal = lower.charAt(0).toUpperCase() + lower.slice(1)
+      if (normal === 'Female') {
+        normal = 'Kvinna'
+      } else if (normal === 'Male') {
+        normal = 'Man'
+      } else {
+        normal = 'ICKE CIS'
+      }
+      return normal
     }
   },
   props: ['username', 'data'],
@@ -104,3 +126,24 @@ export default {
   }
 }
 </script>
+
+<style>
+ .smaller-text {
+   font-size: small;
+ }
+ .profileImage {
+  position: absolute;
+  top: -70px;
+  right: 0;
+  left: 0px;
+  width: auto;
+  height: auto;
+  border: 4px solid white;
+}
+ .profileImage:hover {
+   border: 3px solid white;
+ }
+ .parent {
+  position: relative;
+ }
+</style>

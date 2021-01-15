@@ -1,12 +1,11 @@
 <template>
-    <div class="wrapper">
-        <h1>Friends component</h1>
-         <!-- <div v-for="friend of friends" :key="friend">
-            {{ friend }}
-         </div> -->
+    <div>
+       <b-card class="mx-n2 shadow-sm rounded-0">
+        <h6>Vänner:</h6>
          <div v-for="friend of friends" :key="friend">
-            <router-link :to="{ name: 'Userprofile', params: { username: friend }}">{{ friend }}</router-link>
+            <b-avatar size="sm"></b-avatar><router-link :to="{ name: 'Userprofile', params: { username: friend }}" class="m-2 smaller-text text-secondary">{{ friend }}</router-link>
          </div>
+         </b-card>
     </div>
 </template>
 
