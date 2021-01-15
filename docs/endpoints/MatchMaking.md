@@ -30,4 +30,28 @@ Lägger till en matchrequest i kön
 		},
 	]
 }
+
 ``` 
+
+`POST match/request`
+
+Organisatören för matchningsförfrågan 904 vill acceptera förfrågan att gå med från en annan
+spelare. Denna förfrågan har idnummer 1. Endast organisatören kan acceptera("accept") eller avvisa ("reject").
+
+```
+{
+	"matchingRequestId": 904,
+	"joinRequestId": "1",
+	"action": "accept"
+}
+```
+
+
+`POST match/join`
+Den inloggade användaren ber om att få delta i en MatchRequest med id 900.
+
+```
+{
+	"requestId": 904
+}
+```

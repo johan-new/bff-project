@@ -48,16 +48,18 @@ public class Game {
 
     public Map<String, String> mapGameDetails() {
         Map<String, String> gameDetails = new HashMap<>();
-        List<String> players = new ArrayList<>();
 
+        StringBuilder players = new StringBuilder();
         for (UserAccount user : participants) {
-            players.add(user.getUsername());
+            players.append(user.getUsername() + ", ");
         }
+
+        String playersStr = players.substring(0,players.length()-2);
 
         gameDetails.put("id", getId().toString());
         gameDetails.put("when", getWhen().toString());
         gameDetails.put("venue", getVenue());
-        gameDetails.put("players", players.toString());
+        gameDetails.put("players", playersStr);
 
         return gameDetails;
     }

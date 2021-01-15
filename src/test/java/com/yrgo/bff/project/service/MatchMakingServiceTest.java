@@ -1,5 +1,8 @@
 package com.yrgo.bff.project.service;
 
+import com.yrgo.bff.project.domain.MatchingRequest;
+import com.yrgo.bff.project.domain.MatchingRequestTest;
+import com.yrgo.bff.project.domain.UserAccount;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +11,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -85,12 +90,12 @@ public class MatchMakingServiceTest {
 
         assertTrue(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
 
-        //no pending request due to matching success
+
+        //clean up, no pending request due to matching success
         assertThrows(NullPointerException.class,()->matchMakingService.removeUserMatchRequest(user1, location));
-        assertThrows(NullPointerException.class,()->matchMakingService.removeUserMatchRequest(user2, location));
+        matchMakingService.removeUserMatchRequest(user3, location2);
 
         //clean up
-        matchMakingService.removeUserMatchRequest(user3, location2);
         userAccountService.removeUser(user1);
         userAccountService.removeUser(user2);
         userAccountService.removeUser(user3);
@@ -155,8 +160,68 @@ public class MatchMakingServiceTest {
 
         assertFalse(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
 
+
         matchMakingService.removeUserMatchRequest(user4, location);
-        matchMakingService.removeUserMatchRequest(user5, location2);
+        matchMakingService.removeUserMatchRequest(user4, location2);
+    }
+
+    @WithMockUser(username=user6)
+    @Test
+    void testJoinRequests() throws Exception {
+        UserAccount organizer = userAccountService.createUser(user6,"asdf");
+
+        Map<String,Object> request = new HashMap();
+        request.put("username", organizer.getUsername());
+        request.put("date","2020-01-01");
+        request.put("time","20:00:00");
+        request.put("reservation",false);
+        request.put("venue","GLTK");
+        request.put("participants",3);
+
+        MatchingRequest matchingRequest = matchMakingService.addUserMatchRequest(new JSONObject(request),"Norumsgärde");
+        final Long id = matchingRequest.getId();
+
+        matchMakingService.askToJoinGame(id);
+        assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("PENDING"));
+        matchMakingService.acceptJoinRequest(id,0);
+        assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("ACCEPTED"));
+        assertTrue(notificationService.getNotifications().toString().contains(NotificationService.Type.ACCEPTED_JOIN_REQUEST.name()));
+
+    }
+
+    @WithMockUser(username=user7)
+    @Test
+    void testDenyRequest() throws Exception {
+        UserAccount organizer = userAccountService.createUser(user7,"asdf");
+
+        Map<String,Object> request = new HashMap();
+        request.put("username", organizer.getUsername());
+        request.put("date","2020-01-01");
+        request.put("time","20:00:00");
+        request.put("reservation",false);
+        request.put("venue","GLTK");
+        request.put("participants",3);
+
+        MatchingRequest matchingRequest = matchMakingService.addUserMatchRequest(new JSONObject(request),"Partille");
+
+        final Long id = matchingRequest.getId();
+
+        matchMakingService.askToJoinGame(id);
+
+        System.out.println(matchMakingService.getUsersLookingToBeMatched());
+        //assure its pending
+        assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("PENDING"));
+        //assure organizer is notified
+        assertTrue(notificationService.getNotifications().toString().contains(NotificationService.Type.NEW_JOIN_REQUEST.name()));
+
+
+        matchMakingService.rejectJoinRequest(id,0);
+        //assure its rejected
+        assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("REJECTED"));
+        assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("\"confirmedParticipants\":\"[]\""));
+        //assure the the requestee is notified
+        assertTrue(notificationService.getNotifications().toString().contains(NotificationService.Type.REJECTED_JOIN_REQUEST.name()));
+        System.out.println(matchMakingService.getUsersLookingToBeMatched());
     }
 
 

@@ -2,7 +2,9 @@ import axios from 'axios'
 
 const state = {
   queue: [],
-  inQueue: false
+  inQueue: false,
+  previous_games: [],
+  test: {}
 }
 
 const getters = {
@@ -10,13 +12,14 @@ const getters = {
   getQueue: state => state.queue,
   getLoggedInUser (state, getters, rootState, rootGetters) {
     return rootGetters.loggedInUser
-  }
+  },
+  previousGames: state => state.previous_games
 }
 
 const actions = {
-  submitMatchRequest (context, payload) {
+  submitMatch (context, payload) {
     return new Promise((resolve, reject) => {
-      axios.post('http://localhost:8080/match', {
+      axios.post('http://localhost:8080/match/submit', {
         location: payload.location,
         date: payload.date,
         time: payload.time,
@@ -52,9 +55,9 @@ const actions = {
         console.log(error)
       })
   },
-  cancelMatchRequest (context, payload) {
+  cancelMatch (context, payload) {
     return new Promise((resolve, reject) => {
-      axios.delete('http://localhost:8080/match', {
+      axios.delete('http://localhost:8080/match/cancel', {
         data: { location: payload }
       })
         .then(data => {
@@ -66,6 +69,42 @@ const actions = {
           reject(error)
         })
     })
+  },
+  previousGames (context) {
+    axios.get('http://localhost:8080/user/previousgames')
+      .then(data => {
+        context.commit('previous_games', data.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  matchRequest (context, payload) {
+    console.log(payload)
+    axios.post('http://localhost:8080/match/request', {
+      matchingRequestId: payload.matchingRequestId,
+      joinRequestId: payload.joinRequestId,
+      action: payload.action
+    })
+      .then(data => {
+        context.commit('test', data.data)
+        console.log(data.data)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+  },
+  joinMatch (context, payload) {
+    axios.post('http://localhost:8080/match/join', {
+      requestId: payload
+    })
+      .then(data => {
+        context.commit('test', data.data)
+        console.log(data.data)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
   }
 }
 const mutations = {
@@ -74,6 +113,12 @@ const mutations = {
   },
   queue_status (state, data) {
     state.inQueue = data
+  },
+  previous_games (state, data) {
+    state.previous_games = data
+  },
+  test (state, data) {
+    state.test = data
   }
 }
 export default {

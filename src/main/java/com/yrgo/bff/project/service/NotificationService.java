@@ -8,6 +8,9 @@ public interface NotificationService {
 
     enum Type {
         MATCH_SUCCESS,
-        GENERAL
+        GENERAL,
+        REJECTED_JOIN_REQUEST,
+        ACCEPTED_JOIN_REQUEST,
+        NEW_JOIN_REQUEST
     }
 }
