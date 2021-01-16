@@ -5,7 +5,7 @@
             <b-list-group class="m-n3">
                <b-list-group-item class="font-weight-bold">Vänner</b-list-group-item>
          <div v-for="friend of friends" :key="friend">
-               <b-list-group-item @click="fetchUser(friend)" class="smaller-text text-secondary">
+               <b-list-group-item button @click="fetchUser(friend)" class="smaller-text text-secondary">
             <b-avatar size="sm" class="mr-2"></b-avatar>{{ friend }}
                </b-list-group-item>
          </div>

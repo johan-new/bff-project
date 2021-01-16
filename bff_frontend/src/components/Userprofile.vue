@@ -8,7 +8,7 @@
       <b-card id="raiseProfile" border-variant="light">
       <h5 class="font-weight-bold mt-n4">
         {{ user.username }}</h5>
-    <b-button size="sm" class="changeProfile mt-n5" variant="outline-secondary" v-if="loggedInUser" v-b-modal.modal-1>Ändra profil</b-button>
+    <b-button pill size="sm" class="changeProfile mt-n5" variant="outline-secondary" v-if="loggedInUser" v-b-modal.modal-1>Ändra profil</b-button>
       <b-modal id="modal-1" title="Ändra profil" @ok="updateProfile">
             <b-form @submit="updateProfile">
               <div class="form-row">
@@ -77,21 +77,53 @@
       </div>
     </b-card>
     <div v-if="!loggedInUser">
+    <b-card>
       <div v-if="!friendStatus" :key="friends.length">
-        <button @click="addFriend">Add friend</button>
+        <b-button @click="addFriend" variant="outline-secondary" size="sm">Lägg till vän</b-button>
         </div>
       <div v-if="friendStatus" :key="friends.length">
-        <button @click="removeFriend">Remove friend</button>
+        <b-button @click="removeFriend" variant="outline-secondary" size="sm">Ta bort vän</b-button>
       </div>
+      </b-card>
     </div>
     <Friends v-if="loggedInUser" :friends=friends />
-    <div v-if="loggedInUser">
-      <h6 class="mt-5">Redigera profil</h6>
-      <form @submit.prevent="changePassword">
-        <input type="password" placeholder="Gammalt lösenord" v-model="oldPassword"/><br>
-        <input type="password" placeholder="Nytt lösenord" v-model="newPassword"/><br>
-        <button>Ändra lösenord</button>
-      </form>
+    <div v-if="loggedInUser" class="my-3">
+        <b-button v-b-toggle.collapse-1337 variant="link" size="sm">
+          Ändra lösenord <b-icon icon="arrow-down-short" aria-hidden="true"></b-icon></b-button>
+  <b-collapse id="collapse-1337" class="mt-2">
+      <b-card class="rounded-0">
+      <h6>Byt lösenord</h6>
+      <b-form @submit.prevent="changePassword">
+        <b-form-group
+          id="oldPassword"
+          label="Gammalt lösenord"
+          label-for="oldPasswordInput"
+        >
+          <b-form-input
+            id="oldPasswordInput"
+            type="text"
+            required
+            v-model="oldPassword"
+          >
+          </b-form-input>
+          </b-form-group>
+                  <b-form-group
+          id="newPassword"
+          label="Nytt lösenord"
+          label-for="newPasswordInput"
+        >
+          <b-form-input
+            id="newPasswordInput"
+            type="text"
+            required
+            v-model="newPassword"
+          >
+          </b-form-input>
+          </b-form-group>
+        <b-button variant="outline-secondary" size="sm">Spara ändringar</b-button>
+      </b-form>
+      </b-card>
+      </b-collapse>
     </div>
     </b-card>
     </b-col>
