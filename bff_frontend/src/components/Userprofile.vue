@@ -6,7 +6,8 @@
     <b-card no-body :key="componentKey" class="shadow-sm" md="8" img-src="https://assets.entrepreneur.com/content/3x2/2000/20150312184504-cool-awesome.jpeg?width=700&crop=2:1" fluid-grow img-alt="Card image" img-top img-height="120">
     <b-avatar size="6rem" class="profileImage"></b-avatar>
       <b-card id="raiseProfile" border-variant="light">
-      <h5 class="font-weight-bold mt-n4">{{ username }}</h5>
+      <h5 class="font-weight-bold mt-n4">
+        {{ user.username }}</h5>
     <b-button size="sm" class="changeProfile mt-n5" variant="outline-secondary" v-b-modal.modal-1>Ändra profil</b-button>
       <b-modal id="modal-1" title="Ändra profil" @ok="updateProfile">
             <b-form @submit="updateProfile">
@@ -62,11 +63,17 @@
       </b-form>
   </b-modal>
     <div class="smaller-text text-secondary font-italic">
-      <b-icon icon="geo-alt" aria-hidden="true"></b-icon> {{ data.city }}
+      <b-icon icon="geo-alt" aria-hidden="true"></b-icon>
+      {{ user.city }}
     </div>
-    <div class="smaller-text text-secondary">Kön: <span>{{ formatGender }},</span> Ålder: <span>{{ data.age }}</span></div>
-    <div class="mt-2">{{ data.presentation }}</div>
-    {{ componentKey }}
+    <div class="smaller-text text-secondary">Kön: <span>
+      {{ formatGender }},
+      </span> Ålder: <span>
+      {{ user.age }}
+      </span></div>
+    <div class="mt-2">
+      {{ user.presentation }}
+      </div>
     </b-card>
     <div v-if="!loggedInUser">
       <div v-if="!friendStatus" :key="friends.length">
@@ -105,7 +112,6 @@ export default {
       oldPassword: '',
       newPassword: '',
       friends: [],
-      myGender: this.data.gender,
       form: {
         gender: '',
         age: '',
@@ -119,6 +125,9 @@ export default {
     this.fetchFriends()
   },
   computed: {
+    user () {
+      return this.$store.getters['userStore/user']
+    },
     loggedInUser () {
       const loggedIn = this.$store.getters['authStore/loggedInUser']
       if (loggedIn === this.username) {
@@ -136,8 +145,9 @@ export default {
     },
     formatGender () {
       let normal = ''
-      if (typeof this.myGender !== 'undefined') {
-        const caps = this.myGender
+      const user = this.$store.getters['userStore/user']
+      if (typeof this.user.gender !== 'undefined') {
+        const caps = user.gender
         const lower = caps.toLowerCase()
         normal = lower.charAt(0).toUpperCase() + lower.slice(1)
         if (normal === 'Female') {

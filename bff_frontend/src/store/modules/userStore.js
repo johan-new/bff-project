@@ -9,7 +9,7 @@ const state = {
 }
 
 const getters = {
-  username: state => state.username,
+  user: state => state.user,
   friendlist: state => state.friendlist,
   gamelist: state => state.gamelist,
   getNotifications: state => state.notifications
