@@ -5,7 +5,7 @@
             <b-list-group class="m-n3">
                <b-list-group-item class="font-weight-bold">Vänner</b-list-group-item>
          <div v-for="friend of friends" :key="friend">
-               <b-list-group-item :to="{ name: 'Userprofile', params: { username: friend }}" class="smaller-text text-secondary">
+               <b-list-group-item @click="fetchUser(friend)" class="smaller-text text-secondary">
             <b-avatar size="sm" class="mr-2"></b-avatar>{{ friend }}
                </b-list-group-item>
          </div>
@@ -19,6 +19,18 @@ export default {
   name: 'Friends',
   props: ['friends'],
   methods: {
+    fetchUser (friend) {
+      this.$store.dispatch('userStore/fetchUser', friend)
+        .then(() => {
+          this.$router.push({
+            name: 'Userprofile',
+            params: { username: friend }
+          })
+        })
+        .catch((error) => {
+          console.log(error.response)
+        })
+    }
   }
 }
 </script>

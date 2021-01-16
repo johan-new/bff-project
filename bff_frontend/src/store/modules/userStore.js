@@ -17,12 +17,10 @@ const getters = {
 
 const actions = {
   fetchUser (context, username) {
-    username = username.user
     axios.get('http://localhost:8080/user', {
       params: { username }
     })
       .then(data => {
-        console.log(data.data)
         context.commit('userprofile', data.data)
       })
       .catch(error => {
@@ -55,7 +53,6 @@ const actions = {
   notifications (context) {
     axios.get('http://localhost:8080/notifications')
       .then(data => {
-        console.log(data.data)
         if (data.data !== '') {
           context.commit('set_notifications', data.data)
         }

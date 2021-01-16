@@ -8,7 +8,7 @@
       <b-card id="raiseProfile" border-variant="light">
       <h5 class="font-weight-bold mt-n4">
         {{ user.username }}</h5>
-    <b-button size="sm" class="changeProfile mt-n5" variant="outline-secondary" v-b-modal.modal-1>Ändra profil</b-button>
+    <b-button size="sm" class="changeProfile mt-n5" variant="outline-secondary" v-if="loggedInUser" v-b-modal.modal-1>Ändra profil</b-button>
       <b-modal id="modal-1" title="Ändra profil" @ok="updateProfile">
             <b-form @submit="updateProfile">
               <div class="form-row">
@@ -55,10 +55,11 @@
       </div>
             <b-form-textarea class="form-group ml-n1"
       id="textarea"
-      placeholder="Skriv en kort presentation..."
+      placeholder=""
       rows="2"
       max-rows="3"
       v-model="form.presentation"
+      :value="user"
     ></b-form-textarea>
       </b-form>
   </b-modal>
