@@ -62,5 +62,4 @@ export default {
     font-size: small;
   }
   .card { background-color: rgba(255, 255, 255, 0.9) !important; }
-  .card-header, .card-footer { opacity: 0.1}
 </style>

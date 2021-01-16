@@ -1,10 +1,15 @@
 <template>
     <div>
-       <b-card class="shadow-sm rounded-0">
-        <h6>Vänner:</h6>
+       <b-card class="rounded-0">
+        <!-- <h6 class="text-center">Vänner</h6> -->
+            <b-list-group class="m-n3">
+               <b-list-group-item class="font-weight-bold">Vänner</b-list-group-item>
          <div v-for="friend of friends" :key="friend">
-            <b-avatar size="sm"></b-avatar><router-link :to="{ name: 'Userprofile', params: { username: friend }}" class="smaller-text text-secondary">{{ friend }}</router-link>
+               <b-list-group-item :to="{ name: 'Userprofile', params: { username: friend }}" class="smaller-text text-secondary">
+            <b-avatar size="sm" class="mr-2"></b-avatar>{{ friend }}
+               </b-list-group-item>
          </div>
+            </b-list-group>
          </b-card>
     </div>
 </template>

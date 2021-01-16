@@ -64,6 +64,20 @@ const actions = {
       .catch(error => {
         console.log(error)
       })
+  },
+  updateProfile (commit, payload) {
+    axios.put('http://localhost:8080/user', {
+      presentation: payload.presentation,
+      age: payload.age,
+      gender: payload.gender,
+      city: payload.city
+    })
+      .then(data => {
+        commit('userprofile', data.data)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
   }
 }
 

@@ -1,24 +1,73 @@
 <template>
   <div>
-    <!-- <b-container fluid="md" class="px-0"> -->
       <b-container fluid="md">
       <b-row class="justify-content-md-center mt-n4">
         <b-col md="8">
-    <b-card class="shadow-sm" md="8" img-src="https://assets.entrepreneur.com/content/3x2/2000/20150312184504-cool-awesome.jpeg?width=700&crop=2:1" fluid-grow img-alt="Card image" img-top img-height="120">
+    <b-card no-body :key="componentKey" class="shadow-sm" md="8" img-src="https://assets.entrepreneur.com/content/3x2/2000/20150312184504-cool-awesome.jpeg?width=700&crop=2:1" fluid-grow img-alt="Card image" img-top img-height="120">
     <b-avatar size="6rem" class="profileImage"></b-avatar>
-    <!-- <div class="d-flex"> -->
-    <!-- <div class="mr-auto"> -->
-      <h5 id="raiseProfile" class="font-weight-bold">{{ username }}</h5>
-      <!-- </div> -->
-    <b-button size="sm" class="changeProfile mt-n5" variant="outline-secondary">Ändra profil</b-button>
-    <!-- </div> -->
-
+      <b-card id="raiseProfile" border-variant="light">
+      <h5 class="font-weight-bold mt-n4">{{ username }}</h5>
+    <b-button size="sm" class="changeProfile mt-n5" variant="outline-secondary" v-b-modal.modal-1>Ändra profil</b-button>
+      <b-modal id="modal-1" title="Ändra profil" @ok="updateProfile">
+            <b-form @submit="updateProfile">
+              <div class="form-row">
+              <div class="form-group">
+            <b-form-group
+          id="profileCity"
+          label="Stad:"
+          label-for="cityInput"
+        >
+          <b-form-input
+            id="cityInput"
+            type="text"
+            required
+            v-model="form.city"
+          >
+          </b-form-input>
+        </b-form-group>
+              </div></div>
+                        <div class="form-row">
+            <div class="form-group">
+        <b-form-group
+          id="profileAge"
+          label="Ålder:"
+          label-for="ageInput"
+        >
+          <b-form-input
+            id="ageInput"
+            type="number"
+            required
+            v-model.number="form.age"
+          >
+          </b-form-input>
+        </b-form-group>
+            </div>
+    <div class="ml-3">
+      <label for="gender">Ange kön</label>
+      <select class="custom-select" id="gender" required v-model="form.gender">
+        <option selected disabled value="">Kön...</option>
+            <option :value="'male'">Man</option>
+    <option :value="'female'">Kvinna</option>
+    <option :value="'nonbinary'">Annat</option>
+      </select>
+      </div>
+      </div>
+            <b-form-textarea class="form-group ml-n1"
+      id="textarea"
+      placeholder="Skriv en kort presentation..."
+      rows="2"
+      max-rows="3"
+      v-model="form.presentation"
+    ></b-form-textarea>
+      </b-form>
+  </b-modal>
     <div class="smaller-text text-secondary font-italic">
       <b-icon icon="geo-alt" aria-hidden="true"></b-icon> {{ data.city }}
     </div>
     <div class="smaller-text text-secondary">Kön: <span>{{ formatGender }},</span> Ålder: <span>{{ data.age }}</span></div>
-    <div class="my-2">{{ data.presentation }}</div>
-    <!-- <hr> -->
+    <div class="mt-2">{{ data.presentation }}</div>
+    {{ componentKey }}
+    </b-card>
     <div v-if="!loggedInUser">
       <div v-if="!friendStatus" :key="friends.length">
         <button @click="addFriend">Add friend</button>
@@ -28,7 +77,6 @@
       </div>
     </div>
     <Friends v-if="loggedInUser" :friends=friends />
-    <!-- <hr> -->
     <div v-if="loggedInUser">
       <h6 class="mt-5">Redigera profil</h6>
       <form @submit.prevent="changePassword">
@@ -57,7 +105,14 @@ export default {
       oldPassword: '',
       newPassword: '',
       friends: [],
-      gender: this.data.gender
+      myGender: this.data.gender,
+      form: {
+        gender: '',
+        age: '',
+        presentation: '',
+        city: ''
+      },
+      componentKey: 1337
     }
   },
   created () {
@@ -80,22 +135,37 @@ export default {
       }
     },
     formatGender () {
-      const caps = this.gender
-      const lower = caps.toLowerCase()
       let normal = ''
-      normal = lower.charAt(0).toUpperCase() + lower.slice(1)
-      if (normal === 'Female') {
-        normal = 'Kvinna'
-      } else if (normal === 'Male') {
-        normal = 'Man'
+      if (typeof this.myGender !== 'undefined') {
+        const caps = this.myGender
+        const lower = caps.toLowerCase()
+        normal = lower.charAt(0).toUpperCase() + lower.slice(1)
+        if (normal === 'Female') {
+          normal = 'Kvinna'
+        } else if (normal === 'Male') {
+          normal = 'Man'
+        } else {
+          normal = 'Varken eller'
+        }
       } else {
-        normal = 'ICKE CIS'
+        normal = ''
       }
       return normal
     }
   },
   props: ['username', 'data'],
   methods: {
+    updateProfile () {
+      console.log(this.form)
+      axios.put('http://localhost:8080/user', {
+        presentation: this.form.presentation,
+        age: this.form.age,
+        gender: this.form.gender,
+        city: this.form.city
+      })
+        .then((data) => this.$emit('update-user', data.data)
+        )
+    },
     changePassword () {
       const payload = {
         oldPassword: this.oldPassword,
@@ -129,6 +199,9 @@ export default {
         .catch((error) => {
           console.log(error.response)
         })
+    },
+    updateKey () {
+      this.componentKey += 1
     }
   }
 }
@@ -140,9 +213,9 @@ export default {
  }
  .profileImage {
   position: absolute;
-  top: -70px;
+  top: -45px;
   right: 0;
-  left: 0px;
+  left: 3%;
   width: auto;
   height: auto;
   border: 4px solid white;
@@ -152,7 +225,7 @@ export default {
  }
  .changeProfile {
    position: absolute;
-   top: 180px;
+   top: 10px;
    right: 0px;
    /* left: 350px; */
    left: 75%;
@@ -160,6 +233,6 @@ export default {
    height: auto;
  }
  #raiseProfile {
-  margin-top: -4rem !important;
+  margin-top: -2.5rem !important;
 }
 </style>
