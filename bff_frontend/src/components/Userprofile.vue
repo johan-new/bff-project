@@ -166,15 +166,13 @@ export default {
   props: ['username', 'data'],
   methods: {
     updateProfile () {
-      console.log(this.form)
       axios.put('http://localhost:8080/user', {
         presentation: this.form.presentation,
         age: this.form.age,
         gender: this.form.gender,
         city: this.form.city
       })
-        .then((data) => this.$emit('update-user', data.data)
-        )
+        .then(() => this.$store.dispatch('userStore/fetchUserprofile'))
     },
     changePassword () {
       const payload = {

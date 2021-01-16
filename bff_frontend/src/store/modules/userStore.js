@@ -32,7 +32,6 @@ const actions = {
   fetchUserprofile (context) {
     axios.get('http://localhost:8080/loggedinuser')
       .then(data => {
-        console.log(data.data)
         context.commit('userprofile', data.data)
       })
       .catch(error => {
