@@ -1,38 +1,48 @@
 <template>
     <div>
         <b-card md="6" class="shadow">
-    <!-- <div v-for="(item, name) of getPreviousGames" :key="name">{{ item }} {{ name }}</div> -->
-    <!-- <div v-for="(item, name) of previous" :key="name">{{ item }} {{ name }}</div> -->
-    <!-- <div v-for="(item) of test" :key="item.venue">{{ item }}</div> -->
     <h4>Kommande matcher:</h4>
-        <b-table stacked="sm" hover :items="test">
+        <b-table stacked="sm" hover :items="games">
         </b-table>
+        {{ games[0].when }}
+        <!-- {{ compareDates }} -->
+        <div v-if="dateToday > games[0].when">Idag är {{ dateToday }}</div>
+        <div v-else>Hejdå</div>
         </b-card>
     </div>
 </template>
-            <!-- <div v-for="(value) in item" :key="value.id"></div> -->
 
 <script>
 export default {
   name: 'Games',
   data () {
     return {
-
+      date: ''
     }
   },
   computed: {
-    getPreviousGames () {
-      return this.$store.getters['matchStore/previousGames']
-    },
-    previous () {
-      const s = this.$store.getters['matchStore/previousGames']
-      const formatted = Object.values(s)
-      console.log(formatted)
-      return formatted
-    },
-    test () {
+    games () {
       const m = this.$store.getters['matchStore/previousGames']
       return Object.values(m)
+    },
+    // compareDates () {
+    //   const when = this.$store.getters['matchStore/previousGames']
+    //   if (this.date > Object.values(when)[0].when) {
+    //     console.log('date är större')
+    //   } else {
+    //     console.log('when är större')
+    //   }
+    //   return when
+    // },
+    dateToday: {
+      get () {
+        const today = new Date().toISOString()
+        console.log(today)
+        return today
+      }
+      // set (newDate) {
+      //   this.date = newDate
+      // }
     }
   },
   methods: {
@@ -42,6 +52,7 @@ export default {
   },
   created () {
     this.previousGames()
+    this.gimmeDate()
   }
 }
 </script>

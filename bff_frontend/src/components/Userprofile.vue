@@ -240,9 +240,6 @@ export default {
         .catch((error) => {
           console.log(error.response)
         })
-    },
-    updateKey () {
-      this.componentKey += 1
     }
   }
 }
