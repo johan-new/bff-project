@@ -1,17 +1,26 @@
 <template>
     <div>
-        <b-card md="6" class="shadow">
-    <h4>Kommande matcher:</h4>
-        <!-- <b-table stacked="sm" hover :items="games">
-        </b-table> -->
-        {{ games[0].when }}
-        <!-- {{ compareDates }} -->
-        <div v-if="dateToday > games[0].when">Idag är {{ dateToday }}</div>
-        <div v-else>Hejdå</div>
-        <h5>Spelade</h5>
-        <b-table :items="playedGames"></b-table>
-        <h5>Kommande</h5>
-        <b-table :items="comingGames"></b-table>
+      <b-card md="6" class="shadow">
+        <b-card class="shadow-sm mb-4">
+    <h4 class="font-weight-bold">Matcher</h4>
+    <p>Här kan du se dina kommande och spelade padelmatcher.</p>
+        </b-card>
+        <div class="table-responsive">
+        <b-card class="shadow-sm mb-4">
+        <h5 class="font-weight-bold">Kommande matcher</h5>
+        <div v-if="comingGames.length !== 0">
+        <b-table stacked="sm" hover :items="comingGames" :fields="fields"></b-table>
+        </div>
+        <div v-else>Du har inga kommande matcher</div>
+        </b-card>
+        <b-card class="shadow-sm mb-4">
+        <h5 class="font-weight-bold">Spelade matcher</h5>
+        <div v-if="playedGames.length !== 0">
+        <b-table stacked="sm" hover :items="playedGames" :fields="fields"></b-table>
+        </div>
+        <div v-else>Du har inga kommande matcher</div>
+        </b-card>
+        </div>
         </b-card>
     </div>
 </template>
@@ -21,7 +30,18 @@ export default {
   name: 'Games',
   data () {
     return {
-      date: ''
+      fields: [
+        {
+          key: 'venue',
+          label: 'Stad'
+        }, {
+          key: 'players',
+          label: 'Spelare'
+        }, {
+          key: 'when',
+          label: 'Tid'
+        }
+      ]
     }
   },
   computed: {
@@ -29,24 +49,12 @@ export default {
       const m = this.$store.getters['matchStore/previousGames']
       return Object.values(m)
     },
-    // compareDates () {
-    //   const when = this.$store.getters['matchStore/previousGames']
-    //   if (this.date > Object.values(when)[0].when) {
-    //     console.log('date är större')
-    //   } else {
-    //     console.log('when är större')
-    //   }
-    //   return when
-    // },
     dateToday: {
       get () {
         const today = new Date().toISOString()
         console.log(today)
         return today
       }
-      // set (newDate) {
-      //   this.date = newDate
-      // }
     },
     playedGames () {
       const gamez = this.$store.getters['matchStore/previousGames']
