@@ -11,6 +11,13 @@ import java.util.Date;
 @ControllerAdvice
 public class ApiExceptionHandler {
 
+    /**
+     * Creates the message and JSON-body that is returned when thrown
+     *
+     * @exception BadRequestException - 400 Bad Request
+     * returns a full Json-body with status code, timestamp, a message and a description/path
+     */
+
     @ExceptionHandler(value = {BadRequestException.class})
     public ResponseEntity<Object> handleBadRequestsException(BadRequestException e, WebRequest request) {
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;
@@ -18,6 +25,13 @@ public class ApiExceptionHandler {
 
         return new ResponseEntity<>(errorMessage, badRequest);
     }
+
+    /**
+     * Creates the message and JSON-body that is returned when thrown
+     *
+     * @exception NotFoundException - 404 Not Found
+     * returns a full Json-body with status code, timestamp, a message and a description/path
+     */
 
     @ExceptionHandler(value = {NotFoundException.class})
     public ResponseEntity<Object> handleNotFoundExceptions(NotFoundException e, WebRequest request) {
@@ -27,6 +41,13 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(errorMessage, notFound);
     }
 
+    /**
+     * Creates the message and JSON-body that is returned when thrown
+     *
+     * @exception InternalServerErrorException - 500 Internal Server Erorr
+     * returns a full Json-body with status code, timestamp, a message and a description/path
+     */
+
     @ExceptionHandler(value = {InternalServerErrorException.class})
     public ResponseEntity<Object> handleInternalServerException (InternalServerErrorException e, WebRequest request) {
         HttpStatus exception = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -34,6 +55,13 @@ public class ApiExceptionHandler {
 
         return new ResponseEntity<>(errorMessage, exception);
     }
+
+    /**
+     * Creates the message and JSON-body that is returned when thrown
+     *
+     * @exception TeapotException - 418 I'm a Teapot
+     * returns a full Json-body with status code, timestamp, a message and a description/path
+     */
 
     @ExceptionHandler(value = {TeapotException.class})
     public ResponseEntity<Object> HandleTeapotException(TeapotException e, WebRequest request) {
