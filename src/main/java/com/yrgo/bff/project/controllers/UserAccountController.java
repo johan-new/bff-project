@@ -1,7 +1,12 @@
 package com.yrgo.bff.project.controllers;
 
+import com.yrgo.bff.project.domain.UserAccount;
+import com.yrgo.bff.project.exception.BadRequestException;
+import com.yrgo.bff.project.exception.InternalServerErrorException;
 import com.yrgo.bff.project.service.useraccount.UserAccountService;
 import com.yrgo.bff.project.service.useraccount.UserAccountServiceImplementation;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +22,8 @@ public class UserAccountController {
     UserAccountService userAccountService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private Log log = LogFactory.getLog(getClass());
+
     public UserAccountController(UserAccountService userAccountService, BCryptPasswordEncoder bCryptPasswordEncoder)
     {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -24,13 +31,13 @@ public class UserAccountController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity createUser(@RequestBody JSONObject user) throws Exception {
+    public ResponseEntity createUser(@RequestBody JSONObject user) throws BadRequestException {
         //parsing
         final String username = (String)user.get("username");
         final String password = (String)user.get("password");
 
         if (!UserAccountServiceImplementation.validEmailAddress(username)) {
-            throw new Exception("Invalid email address!");
+            throw new BadRequestException("Invalid email address!");
         }
 
         if (userAccountService.readUser(username)==null) {
@@ -39,7 +46,7 @@ public class UserAccountController {
                 status(HttpStatus.CREATED).
                 body(userAccountService.readUser(username).toJSON());
         } else {
-            throw new Exception("User already exists!");
+            throw new BadRequestException("User already exists!");
         }
     }
 
@@ -54,7 +61,14 @@ public class UserAccountController {
     }
 
     @GetMapping("/loggedinuser")
-    JSONObject readUser() {
+    public JSONObject readUser() {
+        try {
+            UserAccount loggedInUser = userAccountService.readLoggedInUser();
+        } catch (NullPointerException e) {
+                final String errorLogMessage = "Cannot read logged in user";
+                log.error(errorLogMessage);
+                throw new InternalServerErrorException(errorLogMessage);
+        }
         return userAccountService.readLoggedInUser().toJSON();
     }
 
