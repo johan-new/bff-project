@@ -40,7 +40,7 @@ public class MatchingRequest {
     private LocalDate date;
     private LocalTime time;
     private boolean courtIsBooked;
-    private String venue;
+    private String venue ,location;
     private int requestedParticipants;
 
     private Set<String> confirmedParticipants;
@@ -65,6 +65,7 @@ public class MatchingRequest {
         this.time = LocalTime.parse(timeString);
         this.courtIsBooked = (boolean)jsonObject.get("reservation");
         this.venue = (String)jsonObject.get("venue");
+        this.venue = (String)jsonObject.get("location");
 
         try {
             setRequestedParticipants(Integer.parseInt(jsonObject.get("participants").toString()));
@@ -133,6 +134,10 @@ public class MatchingRequest {
 
     public String getVenue() {
         return venue;
+    }
+
+    public String getLocation() {
+        return location;
     }
 
     public int getRequestedParticipants() {

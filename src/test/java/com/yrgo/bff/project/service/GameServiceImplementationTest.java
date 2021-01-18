@@ -29,7 +29,7 @@ public class GameServiceImplementationTest {
         UserAccount user2 = userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"hej");
         Set<UserAccount> users = new HashSet<>();
         users.add(user); users.add(user2);
-        return gameService.createGame(LocalDate.now(),LocalTime.now(),"Helsinki",users);
+        return gameService.createGame(LocalDate.now(),LocalTime.now(), "Sprängtporten TK","Helsinki",users);
     }
 
     @Test

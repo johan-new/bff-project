@@ -39,7 +39,7 @@ public class GameController {
         //TODO: Ability to change date?
         Game game = gameService.readGame(Long.parseLong(gameId));
         gameService.removeGame(Long.parseLong(gameId));
-        gameService.createGame(game.getDate(),game.getTime(),game.getVenue(),stringArrayToSet(newPlayers));
+        gameService.createGame(game.getDate(),game.getTime(),game.getVenue(),game.getLocation(), stringArrayToSet(newPlayers));
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 

@@ -11,6 +11,7 @@ Notera att antal deltagare som anges är 1-3 stycken. Organisatören läggs til 
 			"time": "18:30",
 			"reservation": false,
 			"venue": "GLTK",
+            "location": "Göteborg",
 			"participants": 3
 		},
 		{ 
@@ -19,16 +20,9 @@ Notera att antal deltagare som anges är 1-3 stycken. Organisatören läggs til 
 			"time": "16:30",
 			"reservation": false,
 			"venue": "MBB",
+            "location": Göteborg,
 			"participants": 2
-		},
-		{ 
-			"username": "b@b.b",
-			"date": "2020-12-31",
-			"time": "23:30",
-			"reservation": true,
-			"venue": "Hallen",
-			"participants": 1
-		},
+		}
 	]
 }
 

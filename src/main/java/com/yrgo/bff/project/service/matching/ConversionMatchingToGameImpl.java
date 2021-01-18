@@ -38,6 +38,7 @@ public class ConversionMatchingToGameImpl implements ConversionMatchingToGame {
             gameService.createGame(matchingRequest.getDate(),
                     matchingRequest.getLocalTime(),
                     matchingRequest.getVenue(),
+                    matchingRequest.getLocation(),
                     participants);
             //notify them
             notifyUsers(participants,matchingRequest);

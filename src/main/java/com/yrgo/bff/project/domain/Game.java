@@ -18,12 +18,12 @@ public class Game {
     private LocalDate date;
     private LocalTime time;
 
-    private String venue;
+    private String venue, location;
 
     @ManyToMany
     Set<UserAccount> participants;
 
-    public Game(LocalDate date, LocalTime time, String venue, Set<UserAccount> participants) {
+    public Game(LocalDate date, LocalTime time, String venue, String location, Set<UserAccount> participants) {
         this.date = date;
         this.time = time;
         this.venue = venue;
@@ -41,6 +41,10 @@ public class Game {
 
     public String getVenue() {
         return venue;
+    }
+
+    public String getLocation() {
+        return location;
     }
 
     public Set<UserAccount> getParticipants() {
@@ -67,6 +71,7 @@ public class Game {
         gameDetails.put("id", getId().toString());
         gameDetails.put("when", getDate() + " " + getTime());
         gameDetails.put("venue", getVenue());
+        gameDetails.put("location", getLocation());
         gameDetails.put("players", playersStr);
 
         return gameDetails;

@@ -32,8 +32,8 @@ public class GameServiceImplementation implements GameService {
      *
      * */
     @Override @Transactional
-    public Game createGame(LocalDate date, LocalTime time, String venue, Set<UserAccount> users) {
-        Game game = new Game(date, time, venue, users);
+    public Game createGame(LocalDate date, LocalTime time, String venue, String location, Set<UserAccount> users) {
+        Game game = new Game(date, time, venue, location, users);
         gameDataAccess.save(game);
         return game;
     }

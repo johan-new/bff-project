@@ -104,9 +104,9 @@ public class Project2Application {
 			users3.add(userAccountService.readUser(user3));
 			users3.add(userAccountService.readUser(user5));
 
-			gameService.createGame(LocalDate.now(), LocalTime.now(),"Göteborg",users);
-			gameService.createGame(LocalDate.now(), LocalTime.now(), "Borås", users2);
-			gameService.createGame(LocalDate.now(), LocalTime.now(), "Halmstad", users3);
+			gameService.createGame(LocalDate.now(), LocalTime.now(),"Padelklubben","Göteborg",users);
+			gameService.createGame(LocalDate.now(), LocalTime.now(),"Klubb Bollkalle", "Borås", users2);
+			gameService.createGame(LocalDate.now(), LocalTime.now(),"Basshunter TK", "Halmstad", users3);
 			LocalDate ld = LocalDate.parse("2020-12-24");
 			LocalTime lt = LocalTime.parse("17:00");
 			LocalDate ld2 = LocalDate.parse("2020-12-25");
