@@ -1,7 +1,9 @@
-package com.yrgo.bff.project.service;
+package com.yrgo.bff.project.service.matching;
 
 import com.yrgo.bff.project.domain.MatchingRequest;
 import com.yrgo.bff.project.domain.UserAccount;
+import com.yrgo.bff.project.service.notification.NotificationService;
+import com.yrgo.bff.project.service.useraccount.UserAccountService;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
@@ -21,6 +23,9 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
     @Autowired
     UserAccountService userAccountService;
 
+    @Autowired
+    ConversionMatchingToGame converter;
+
     private Log log = LogFactory.getLog(getClass());
 
     @Override
@@ -33,21 +38,29 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         MatchingRequest matchingRequest = getRequestByRequestId(matchingRequestId).get();
         UserAccount loggedInUser = userAccountService.readLoggedInUser();
 
+        //TODO: REMOVE BELOW
+        System.out.println("*** LOGGED IN USER: " + loggedInUser.getUsername() + "\n" + "Organizer: " + matchingRequest.getUsername());
+
         if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
             matchingRequest.accept(joinRequestId);
             notificationService.addNotification(loggedInUser.getUsername(),
                     matchingRequest.toString(),
                     NotificationService.Type.ACCEPTED_JOIN_REQUEST);
+            converter.convertRequestToGame(matchingRequest);
         } else {
             //TODO: Exception? Or return a boolean indicating success?
             log.error("ACCEPTING REQUEST ONLY POSSIBLE BY THE ORGANIZER");
         }
     }
 
+
+
     @Override
     public void rejectJoinRequest(Long matchingRequestId, int joinRequestId) {
         MatchingRequest matchingRequest = getRequestByRequestId(matchingRequestId).get();
         UserAccount loggedInUser = userAccountService.readLoggedInUser();
+        //TODO: REMOVE BELOW
+        System.out.println("*** LOGGED IN USER: " + loggedInUser.getUsername() + "\n" + "Organizer: " + matchingRequest.getUsername());
 
         if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
             matchingRequest.reject(joinRequestId);
@@ -146,4 +159,26 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         return new JSONObject(usersLookingToBeMatched);
     }
 
+    @Override
+    public void removeUserMatchRequest(Long id) {
+        String location = "";
+        String username = "";
+
+        Iterator iterator = usersLookingToBeMatched.entrySet().iterator();
+        while (iterator.hasNext()){
+            Map.Entry set = (Map.Entry) iterator.next();
+            for (Object matchingRequest : (List)set.getValue()) {
+                if (((MatchingRequest)matchingRequest).getId() == id ){
+                    location = (String)set.getKey();
+                    username = ((MatchingRequest) matchingRequest).getUsername();
+                }
+            }
+        }
+
+        if (!location.isBlank() && !username.isBlank()) {
+            System.out.println("MATCHING REQUEST FOUND BY ID. REMOVING...");
+            removeUserMatchRequest(username,location);
+        }
+
+    }
 }

@@ -1,4 +1,4 @@
-package com.yrgo.bff.project.service;
+package com.yrgo.bff.project.service.notification;
 
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;

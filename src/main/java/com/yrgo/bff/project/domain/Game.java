@@ -4,6 +4,8 @@ package com.yrgo.bff.project.domain;
 import org.json.simple.JSONObject;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 @Entity
@@ -13,21 +15,28 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Date when;
+    private LocalDate date;
+    private LocalTime time;
+
     private String venue;
 
     @ManyToMany
     Set<UserAccount> participants;
 
-    public Game(Date when, String venue, Set<UserAccount> participants) {
-        this.when = when;
+    public Game(LocalDate date, LocalTime time, String venue, Set<UserAccount> participants) {
+        this.date = date;
+        this.time = time;
         this.venue = venue;
         this.participants = participants;
     }
     public Game () {}
 
-    public Date getWhen() {
-        return when;
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public LocalTime getTime() {
+        return time;
     }
 
     public String getVenue() {
@@ -53,11 +62,10 @@ public class Game {
         for (UserAccount user : participants) {
             players.append(user.getUsername() + ", ");
         }
-
         String playersStr = players.substring(0,players.length()-2);
 
         gameDetails.put("id", getId().toString());
-        gameDetails.put("when", getWhen().toString());
+        gameDetails.put("when", getDate() + " " + getTime());
         gameDetails.put("venue", getVenue());
         gameDetails.put("players", playersStr);
 

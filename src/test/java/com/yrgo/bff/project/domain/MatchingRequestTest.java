@@ -1,7 +1,7 @@
 package com.yrgo.bff.project.domain;
 
 import com.yrgo.bff.project.service.FriendsUserAccountServiceImplementationTest;
-import com.yrgo.bff.project.service.UserAccountService;
+import com.yrgo.bff.project.service.useraccount.UserAccountService;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

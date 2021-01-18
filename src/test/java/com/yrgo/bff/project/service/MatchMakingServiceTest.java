@@ -1,13 +1,17 @@
 package com.yrgo.bff.project.service;
 
 import com.yrgo.bff.project.domain.MatchingRequest;
-import com.yrgo.bff.project.domain.MatchingRequestTest;
 import com.yrgo.bff.project.domain.UserAccount;
+import com.yrgo.bff.project.service.game.GameService;
+import com.yrgo.bff.project.service.matching.MatchMakingService;
+import com.yrgo.bff.project.service.notification.NotificationService;
+import com.yrgo.bff.project.service.useraccount.UserAccountService;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,6 +31,8 @@ public class MatchMakingServiceTest {
     private static final String user5 = "zeta@mail.com";
     private static final String user6 = "eta@mail.com";
     private static final String user7 = "theta@mail.com";
+    private static final String user8 = "jota@mail.com";
+
 
     private static final String somePassword = "asdf";
     private static final LocalDate ld = LocalDate.parse("2020-12-24");
@@ -46,6 +52,9 @@ public class MatchMakingServiceTest {
 
     @Autowired
     NotificationService notificationService;
+
+    @Autowired
+    GameService gameService;
 
     @WithMockUser(username=user1)
     @Test
@@ -222,6 +231,33 @@ public class MatchMakingServiceTest {
         //assure the the requestee is notified
         assertTrue(notificationService.getNotifications().toString().contains(NotificationService.Type.REJECTED_JOIN_REQUEST.name()));
         System.out.println(matchMakingService.getUsersLookingToBeMatched());
+    }
+
+    @WithMockUser(username=user8)
+    @Test
+    @Transactional
+    void testConversionMatchingRequestToGame() throws Exception {
+        UserAccount organizer =  userAccountService.createUser(user8,somePassword);
+
+        final String date = "2020-03-14";
+        final String time = "21:00:00";
+        final String venue ="Ullevi";
+
+        Map<String,Object> request = new HashMap();
+        request.put("username", organizer.getUsername());
+        request.put("date",date);
+        request.put("time",time);
+        request.put("reservation",true);
+        request.put("venue", venue);
+        request.put("participants",1);
+
+        MatchingRequest matchingRequest = matchMakingService.addUserMatchRequest(new JSONObject(request),"Partille");
+        final Long id = matchingRequest.getId();
+        matchMakingService.askToJoinGame(id);
+        matchMakingService.acceptJoinRequest(id,0);
+
+
+        assertTrue(notificationService.getNotifications().toString().contains(NotificationService.Type.GAME_CREATED.name()));
     }
 
 

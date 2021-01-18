@@ -1,6 +1,6 @@
 package com.yrgo.bff.project.security;
 
-import com.yrgo.bff.project.service.UserAccountServiceImplementation;
+import com.yrgo.bff.project.service.useraccount.UserAccountServiceImplementation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;

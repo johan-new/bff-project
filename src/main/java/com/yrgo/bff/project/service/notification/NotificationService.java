@@ -1,4 +1,4 @@
-package com.yrgo.bff.project.service;
+package com.yrgo.bff.project.service.notification;
 
 import java.util.Map;
 
@@ -11,6 +11,7 @@ public interface NotificationService {
         GENERAL,
         REJECTED_JOIN_REQUEST,
         ACCEPTED_JOIN_REQUEST,
-        NEW_JOIN_REQUEST
+        NEW_JOIN_REQUEST,
+        GAME_CREATED
     }
 }
