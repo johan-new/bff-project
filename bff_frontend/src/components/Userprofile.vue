@@ -160,12 +160,10 @@ export default {
   created () {
     this.fetchFriends()
     this.fetchUser()
-    console.log('hejhej')
   },
   computed: {
     loggedInUser () {
       const loggedIn = this.$store.getters['authStore/loggedInUser']
-      console.log(this.userprofile)
       if (loggedIn === this.username) {
         return true
       } else {
@@ -266,6 +264,11 @@ export default {
         .catch((error) => {
           console.log(error.response)
         })
+    }
+  },
+  watch: {
+    $route (to, from) {
+      this.doThis(to.params.username)
     }
   }
 }
