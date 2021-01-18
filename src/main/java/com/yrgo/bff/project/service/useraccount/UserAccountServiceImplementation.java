@@ -2,6 +2,7 @@ package com.yrgo.bff.project.service.useraccount;
 
 import com.yrgo.bff.project.dao.UserAccountDataAccess;
 import com.yrgo.bff.project.domain.UserAccount;
+import com.yrgo.bff.project.exception.BadRequestException;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
@@ -42,9 +43,9 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      * @return An instance of User
      */
     @Override
-    public UserAccount createUser(String username, String password) throws Exception {
+    public UserAccount createUser(String username, String password) throws BadRequestException {
         if (!qualifiesAsAPassword(password)) {
-            throw new Exception("Password cannot be blank or null!");
+            throw new BadRequestException("Password cannot be blank or null!");
         }
 
         UserAccount user = new UserAccount(username.toLowerCase(),bCryptPasswordEncoder.encode(password));
@@ -191,13 +192,13 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
         }
     }
 
-    private void changePassword(UserAccount userAccount, String oldPassword, String newPassword) throws Exception {
+    private void changePassword(UserAccount userAccount, String oldPassword, String newPassword) throws BadRequestException {
         //check if newPassword value is passed in the json body
         if (newPassword != null) {
             if (qualifiesAsAPassword(newPassword) && bCryptPasswordEncoder.matches(oldPassword,userAccount.getPassword())){
                 userAccount.setPassword(bCryptPasswordEncoder.encode(newPassword));
             } else {
-                throw new Exception("Password cannot be blank or null!");
+                throw new BadRequestException("Password cannot be blank or null!");
             }
         }
     }
