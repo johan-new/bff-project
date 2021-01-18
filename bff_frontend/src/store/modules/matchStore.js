@@ -88,7 +88,6 @@ const actions = {
     })
       .then(data => {
         context.commit('test', data.data)
-        console.log(data.data)
       })
       .catch(error => {
         console.log(error.response)
@@ -100,7 +99,6 @@ const actions = {
     })
       .then(data => {
         context.commit('test', data.data)
-        console.log(data.data)
       })
       .catch(error => {
         console.log(error.response)

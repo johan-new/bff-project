@@ -88,6 +88,9 @@ export default {
   computed: {
     isLoggedIn () {
       return this.$store.getters['authStore/isLoggedIn']
+    },
+    loggedInUser () {
+      return this.$store.getters['authStore/loggedInUser']
     }
   },
   methods: {
@@ -113,17 +116,10 @@ export default {
         })
     },
     fetchUserprofile () {
-      axios
-        .get('http://localhost:8080/loggedinuser')
-        .then((data) => {
-          this.$router.push({
-            name: 'Userprofile',
-            params: { username: data.data.username, data: data.data }
-          })
-        })
-        .catch((error) => {
-          console.log(error.response)
-        })
+      this.$router.push({
+        name: 'Userprofile',
+        params: { username: this.loggedInUser }
+      })
     }
   }
 }

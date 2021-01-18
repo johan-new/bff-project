@@ -87,8 +87,11 @@ public class MatchingRequest {
         joinRequests.get(elementNumber).accept(this);
     }
 
+//    public void reject(int elementNumber){
+//        joinRequests.get(elementNumber).reject(this);
+//    }
     public void reject(int elementNumber){
-        joinRequests.get(elementNumber).reject(this);
+    joinRequests.remove(elementNumber);
     }
 
     public void askToJoin(UserAccount userAccount) {
