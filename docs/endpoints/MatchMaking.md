@@ -1,5 +1,6 @@
 `POST /game` 
 Lägger till en matchrequest i kön
+Notera att antal deltagare som anges är 1-3 stycken. Organisatören läggs til lautomatiskt, och antas alltså att delta i spelet.
 
 ``` 
 {

@@ -11,6 +11,7 @@ public interface NotificationService {
         GENERAL,
         REJECTED_JOIN_REQUEST,
         ACCEPTED_JOIN_REQUEST,
-        NEW_JOIN_REQUEST
+        NEW_JOIN_REQUEST,
+        GAME_CREATED
     }
 }

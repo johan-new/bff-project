@@ -1,8 +1,11 @@
 package com.yrgo.bff.project.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
 
+import javax.persistence.Transient;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -45,6 +48,9 @@ public class MatchingRequest {
     //contains only JoinRequest objects
     private List<JoinRequest> joinRequests;
 
+    @Transient
+    private Log log = LogFactory.getLog(getClass());
+
 
     public MatchingRequest(JSONObject jsonObject) {
 
@@ -62,8 +68,13 @@ public class MatchingRequest {
 
         try {
             setRequestedParticipants(Integer.parseInt(jsonObject.get("participants").toString()));
-        } catch (NumberFormatException | NullPointerException e) {
-            //sets default value to three
+            if (getRequestedParticipants() <= 0 && getRequestedParticipants() >= 4) {
+                throw new Exception("Valid participants 1-3 persons (the organizer is assumed to participate)");
+            }
+        } catch (Exception e) {
+            log.debug(getClass().getSimpleName() + ": " + toString() +
+                    "\nException creating MatchingRequest, fallback to default value participants=3");
+            log.debug(e.getMessage());
             requestedParticipants = 3;
         }
 
@@ -94,13 +105,6 @@ public class MatchingRequest {
         }
         return returnValues;
     }
-
-    /*public List<JoinRequest> getPendingJoinRequests(){
-        return this.joinRequests
-                .stream()
-                .filter(JoinRequest::isPending)
-                .collect(Collectors.toList());
-    }*/
 
     private void setRequestedParticipants(int requestedParticipants) {
         if (requestedParticipants>0 && requestedParticipants < 4)

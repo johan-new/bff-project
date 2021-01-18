@@ -120,7 +120,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      * @param username - String username of the user you want to find
      * @return An instance of User that was found
      */
-    @Override
+    @Override @org.springframework.transaction.annotation.Transactional
     public UserAccount readUser(String username) {
         return userAccountDataAccess.findByUsername(username.toLowerCase());
     }

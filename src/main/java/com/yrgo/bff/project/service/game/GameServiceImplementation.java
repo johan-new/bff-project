@@ -7,6 +7,7 @@ import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -30,7 +31,7 @@ public class GameServiceImplementation implements GameService {
      * @return An instance of Game
      *
      * */
-    @Override
+    @Override @Transactional
     public Game createGame(LocalDate date, LocalTime time, String venue, Set<UserAccount> users) {
         Game game = new Game(date, time, venue, users);
         gameDataAccess.save(game);

@@ -51,7 +51,7 @@ public class ConversionMatchingToGameImpl implements ConversionMatchingToGame {
             notificationService.addNotification(user.getUsername(),
                     "Houston, we got a match! At " + matchingRequest.getVenue() + " " +
                             matchingRequest.getTime() + ". Please go to the Game page for more info.",
-                    NotificationService.Type.MATCH_SUCCESS);
+                    NotificationService.Type.GAME_CREATED);
         }
     }
 
@@ -60,6 +60,7 @@ public class ConversionMatchingToGameImpl implements ConversionMatchingToGame {
         Set<UserAccount> users = new HashSet<>();
         //adding the organizer
         final UserAccount organizer = userAccountService.readUser(matchingRequest.getUsername());
+        System.out.println("adderar organistör " + organizer);
         users.add(organizer);
         //adding the other players
         for (String username: matchingRequest.getConfirmedParticipants()) {
