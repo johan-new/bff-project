@@ -6,6 +6,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 @Service
@@ -35,7 +37,8 @@ public class NotificationServiceImplementation implements NotificationService {
     public void addNotification(String username, String content, Type type) {
         Map<String,String> notificationContent = new HashMap<>();
         notificationContent.put("type",type.name());
-        notificationContent.put("timestamp",new Date().toString());
+        notificationContent.put("date", LocalDate.now().toString());
+        notificationContent.put("time", LocalTime.now().toString());
         notificationContent.put("content", content);
 
         if (notifications.containsKey(username)) {
