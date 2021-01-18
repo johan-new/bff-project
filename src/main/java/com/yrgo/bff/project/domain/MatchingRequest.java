@@ -65,7 +65,7 @@ public class MatchingRequest {
         this.time = LocalTime.parse(timeString);
         this.courtIsBooked = (boolean)jsonObject.get("reservation");
         this.venue = (String)jsonObject.get("venue");
-        this.venue = (String)jsonObject.get("location");
+        this.location = (String)jsonObject.get("location");
 
         try {
             setRequestedParticipants(Integer.parseInt(jsonObject.get("participants").toString()));
