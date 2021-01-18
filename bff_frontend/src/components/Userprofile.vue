@@ -7,7 +7,7 @@
     <b-avatar size="6rem" class="profileImage"></b-avatar>
       <b-card id="raiseProfile" border-variant="light">
       <h5 class="font-weight-bold mt-n4">
-        {{ user.username }}</h5>
+        {{ userprofile.username }}</h5>
     <b-button pill size="sm" class="changeProfile mt-n5" variant="outline-secondary" v-if="loggedInUser" v-b-modal.modal-1>Ändra profil</b-button>
       <b-modal id="modal-1" title="Ändra profil" @ok="updateProfile">
             <b-form @submit="updateProfile">
@@ -59,21 +59,23 @@
       rows="2"
       max-rows="3"
       v-model="form.presentation"
-      :value="user"
     ></b-form-textarea>
       </b-form>
   </b-modal>
     <div class="smaller-text text-secondary font-italic">
       <b-icon icon="geo-alt" aria-hidden="true"></b-icon>
-      {{ user.city }}
+      {{ userprofile.city }}
     </div>
     <div class="smaller-text text-secondary">Kön: <span>
       {{ formatGender }},
       </span> Ålder: <span>
-      {{ user.age }}
+      {{ userprofile.age }}
       </span></div>
     <div class="mt-2">
-      {{ user.presentation }}
+      {{ userprofile.presentation }}
+      </div>
+      <div>
+        {{ $route.params }}
       </div>
     </b-card>
     <div v-if="!loggedInUser">
@@ -86,7 +88,7 @@
       </div>
       </b-card>
     </div>
-    <Friends v-if="loggedInUser" :friends=friends />
+    <Friends v-if="loggedInUser" :friends=friends @em="doThis"/>
     <div v-if="loggedInUser" class="my-3">
         <b-button v-b-toggle.collapse-1337 variant="link" size="sm">
           Ändra lösenord <b-icon icon="arrow-down-short" aria-hidden="true"></b-icon></b-button>
@@ -151,18 +153,19 @@ export default {
         presentation: '',
         city: ''
       },
+      userprofile: {},
       componentKey: 1337
     }
   },
   created () {
     this.fetchFriends()
+    this.fetchUser()
+    console.log('hejhej')
   },
   computed: {
-    user () {
-      return this.$store.getters['userStore/user']
-    },
     loggedInUser () {
       const loggedIn = this.$store.getters['authStore/loggedInUser']
+      console.log(this.userprofile)
       if (loggedIn === this.username) {
         return true
       } else {
@@ -178,9 +181,8 @@ export default {
     },
     formatGender () {
       let normal = ''
-      const user = this.$store.getters['userStore/user']
-      if (typeof this.user.gender !== 'undefined') {
-        const caps = user.gender
+      if (typeof this.userprofile.gender !== 'undefined') {
+        const caps = this.userprofile.gender
         const lower = caps.toLowerCase()
         normal = lower.charAt(0).toUpperCase() + lower.slice(1)
         if (normal === 'Female') {
@@ -198,6 +200,18 @@ export default {
   },
   props: ['username', 'data'],
   methods: {
+    doThis (friend) {
+      const username = friend
+      axios.get('http://localhost:8080/user', {
+        params: { username }
+      })
+        .then((data) => {
+          this.userprofile = data.data
+        })
+        .catch((error) => {
+          console.log(error.response)
+        })
+    },
     updateProfile () {
       axios.put('http://localhost:8080/user', {
         presentation: this.form.presentation,
@@ -236,6 +250,18 @@ export default {
       axios.get('http://localhost:8080/friend/all')
         .then(data => {
           this.friends = data.data
+        })
+        .catch((error) => {
+          console.log(error.response)
+        })
+    },
+    fetchUser () {
+      const username = this.username
+      axios.get('http://localhost:8080/user', {
+        params: { username }
+      })
+        .then((data) => {
+          this.userprofile = data.data
         })
         .catch((error) => {
           console.log(error.response)

@@ -116,13 +116,10 @@ export default {
         })
     },
     fetchUserprofile () {
-      this.$store.dispatch('userStore/fetchUserprofile')
-        .then(() => {
-          this.$router.push({
-            name: 'Userprofile',
-            params: { username: this.loggedInUser }
-          })
-        })
+      this.$router.push({
+        name: 'Userprofile',
+        params: { username: this.loggedInUser }
+      })
     }
   }
 }

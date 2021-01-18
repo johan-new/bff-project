@@ -20,16 +20,11 @@ export default {
   props: ['friends'],
   methods: {
     fetchUser (friend) {
-      this.$store.dispatch('userStore/fetchUser', friend)
-        .then(() => {
-          this.$router.push({
-            name: 'Userprofile',
-            params: { username: friend }
-          })
-        })
-        .catch((error) => {
-          console.log(error.response)
-        })
+      this.$emit('em', friend)
+      this.$router.push({
+        name: 'Userprofile',
+        params: { username: friend }
+      })
     }
   }
 }
