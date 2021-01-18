@@ -17,7 +17,6 @@ public class InternalServerErrorExceptionTest {
 
     @Test
     public void testInternalServerErrorWithoutMockUser() {
-        System.out.println(userAccount);
         assertThrows(InternalServerErrorException.class,()-> {
            userAccount.readUser();
         });
