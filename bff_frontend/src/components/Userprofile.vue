@@ -75,7 +75,7 @@
       {{ userprofile.presentation }}
       </div>
       <div>
-        {{ $route.params }}
+        <!-- {{ $route.params }} -->
       </div>
     </b-card>
     <div v-if="!loggedInUser">
@@ -88,7 +88,7 @@
       </div>
       </b-card>
     </div>
-    <Friends v-if="loggedInUser" :friends=friends @em="doThis"/>
+    <Friends :friends=friends @em="doThis"/>
     <div v-if="loggedInUser" class="my-3">
         <b-button v-b-toggle.collapse-1337 variant="link" size="sm">
           Ändra lösenord <b-icon icon="arrow-down-short" aria-hidden="true"></b-icon></b-button>

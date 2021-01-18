@@ -11,14 +11,15 @@
         <div v-if="comingGames.length !== 0">
         <b-table stacked="sm" hover :items="comingGames" :fields="fields"></b-table>
         </div>
-        <div v-else>Du har inga kommande matcher</div>
+        <div v-else class="smaller-text text-secondary font-italic">Du har inga kommande matcher
+        </div>
         </b-card>
         <b-card class="shadow-sm mb-4">
         <h5 class="font-weight-bold">Spelade matcher</h5>
         <div v-if="playedGames.length !== 0">
         <b-table stacked="sm" hover :items="playedGames" :fields="fields"></b-table>
         </div>
-        <div v-else>Du har inga kommande matcher</div>
+        <div v-else class="smaller-text text-secondary font-italic">Du har inga kommande matcher</div>
         </b-card>
         </div>
         </b-card>
@@ -65,7 +66,6 @@ export default {
           playedGames.push(gamez[item])
         }
       }
-      console.log(playedGames)
       return Object.values(playedGames)
     },
     comingGames () {
@@ -77,7 +77,6 @@ export default {
           comingGames.push(gamez[item])
         }
       }
-      console.log(comingGames)
       return comingGames
     }
   },
