@@ -10,8 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class MatchingRequestTest {
@@ -61,7 +60,7 @@ public class MatchingRequestTest {
         System.out.println(matchingRequest);
         matchingRequest.reject(0);
         System.out.println(matchingRequest);
-        assertEquals(matchingRequest.getJoinRequests().get(0).getStatus(), MatchingRequest.JoinRequestStatus.REJECTED);
+        assertNull(matchingRequest.getJoinRequests().get(0));
     }
 
     public JSONObject newRequest(){

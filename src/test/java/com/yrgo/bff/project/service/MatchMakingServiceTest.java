@@ -223,10 +223,10 @@ public class MatchMakingServiceTest {
         //assure organizer is notified
         assertTrue(notificationService.getNotifications().toString().contains(NotificationService.Type.NEW_JOIN_REQUEST.name()));
 
-
         matchMakingService.rejectJoinRequest(id,0);
         //assure its rejected
-        assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("REJECTED"));
+        assertFalse(matchMakingService.getUsersLookingToBeMatched().toString().contains("PENDING"));
+        assertFalse(matchMakingService.getUsersLookingToBeMatched().toString().contains("REJECTED"));
         assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("\"confirmedParticipants\":\"[]\""));
         //assure the the requestee is notified
         assertTrue(notificationService.getNotifications().toString().contains(NotificationService.Type.REJECTED_JOIN_REQUEST.name()));
