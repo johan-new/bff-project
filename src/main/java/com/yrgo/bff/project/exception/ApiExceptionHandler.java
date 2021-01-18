@@ -27,27 +27,12 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(errorMessage, notFound);
     }
 
-    @ExceptionHandler(value = {UnauthorizedException.class})
-    public ResponseEntity<Object> handleUnauthorizedException(UnauthorizedException e, WebRequest request) {
-        HttpStatus unauth = HttpStatus.UNAUTHORIZED;
-        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.UNAUTHORIZED.value(), new Date(), e.getMessage(), request.getDescription(false));
-
-        return new ResponseEntity<>(errorMessage, unauth);
-    }
-
     @ExceptionHandler(value = {InternalServerErrorException.class})
     public ResponseEntity<Object> handleInternalServerException (InternalServerErrorException e, WebRequest request) {
         HttpStatus exception = HttpStatus.INTERNAL_SERVER_ERROR;
         ErrorMessage errorMessage = new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR.value(), new Date(), e.getMessage(), request.getDescription(false));
 
         return new ResponseEntity<>(errorMessage, exception);
-    }
-
-    @ExceptionHandler(value = {ForbiddenErrorException.class})
-    public ResponseEntity<Object> handleForbiddenErrorException (ForbiddenErrorException e, WebRequest request) {
-        HttpStatus forbidden = HttpStatus.FORBIDDEN;
-        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.FORBIDDEN.value(), new Date(), e.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(errorMessage, forbidden);
     }
 
     @ExceptionHandler(value = {TeapotException.class})

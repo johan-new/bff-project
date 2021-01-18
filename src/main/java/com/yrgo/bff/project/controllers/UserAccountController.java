@@ -1,8 +1,13 @@
 package com.yrgo.bff.project.controllers;
 
+import com.yrgo.bff.project.domain.UserAccount;
 import com.yrgo.bff.project.exception.BadRequestException;
+import com.yrgo.bff.project.exception.InternalServerErrorException;
 import com.yrgo.bff.project.service.UserAccountService;
 import com.yrgo.bff.project.service.UserAccountServiceImplementation;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
+import org.apache.maven.surefire.shade.org.apache.commons.lang3.ObjectUtils;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +22,8 @@ public class UserAccountController {
     @Autowired
     UserAccountService userAccountService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private Log log = LogFactory.getLog(getClass());
 
     public UserAccountController(UserAccountService userAccountService, BCryptPasswordEncoder bCryptPasswordEncoder)
     {
@@ -55,7 +62,14 @@ public class UserAccountController {
     }
 
     @GetMapping("/loggedinuser")
-    JSONObject readUser() {
+    public JSONObject readUser() {
+        try {
+            UserAccount loggedInUser = userAccountService.readLoggedInUser();
+        } catch (NullPointerException e) {
+                final String errorLogMessage = "Cannot read logged in user";
+                log.error(errorLogMessage);
+                throw new InternalServerErrorException(errorLogMessage);
+        }
         return userAccountService.readLoggedInUser().toJSON();
     }
 
