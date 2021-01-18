@@ -2,7 +2,7 @@ package com.yrgo.bff.project.exceptions;
 
 import com.yrgo.bff.project.exception.BadRequestException;
 import com.yrgo.bff.project.service.FriendsUserAccountServiceImplementationTest;
-import com.yrgo.bff.project.service.UserAccountService;
+import com.yrgo.bff.project.service.useraccount.UserAccountService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
