@@ -1,13 +1,24 @@
 package com.yrgo.bff.project.service.matching;
 
 import com.yrgo.bff.project.domain.MatchingRequest;
-import com.yrgo.bff.project.domain.UserAccount;
 import org.json.simple.JSONObject;
 
+/**
+ * MatchMakingService
+ *
+ * Core logic of the applications. The implementations of this interface handles
+ * - users wanting to play (the organizer)
+ * - other users asking to join
+ * - organizer accept och rejects theese requests
+ *
+ * Once the spots has been filled, the MatchingRequest is removed, and a Game is
+ * created instead.
+ *
+ **/
 
 public interface MatchMakingService {
-
     MatchingRequest addUserMatchRequest(JSONObject requestParam, String location);
+
     void removeUserMatchRequest(String username, String location);
     void removeUserMatchRequest(Long id);
     JSONObject getUsersLookingToBeMatched();

@@ -12,6 +12,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
+/**
+ * FriendsController
+ *
+ * REST Controller for handling the logged in users friendlist
+ *
+ **/
+
 @RestController
 @ComponentScan("com.yrgo.bff.project.service")
 public class FriendsController {

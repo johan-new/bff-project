@@ -2,6 +2,7 @@ package com.yrgo.bff.project.controllers;
 
 import com.yrgo.bff.project.domain.Game;
 import com.yrgo.bff.project.domain.UserAccount;
+import com.yrgo.bff.project.exception.BadRequestException;
 import com.yrgo.bff.project.service.game.GameService;
 import com.yrgo.bff.project.service.useraccount.UserAccountService;
 import org.apache.juli.logging.Log;
@@ -14,6 +15,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.Set;
+
+/**
+ * GameController
+ *
+ * REST Controller for handling games. Not used since the current flow consists of a matching request that
+ * gets converted into a Game when the adequate number of participants has joined and been confirmed (by the organizer).
+ *
+ **/
+
 
 @RestController
 public class GameController {
@@ -35,7 +45,7 @@ public class GameController {
     }
 
     @PutMapping(value = "/game/{gameId}")
-    ResponseEntity updateGame(@PathVariable("gameId") String gameId, @RequestParam("newPlayers") String[] newPlayers) throws Exception {
+    ResponseEntity updateGame(@PathVariable("gameId") String gameId, @RequestParam("newPlayers") String[] newPlayers) {
         //TODO: Ability to change date?
         Game game = gameService.readGame(Long.parseLong(gameId));
         gameService.removeGame(Long.parseLong(gameId));
@@ -49,12 +59,12 @@ public class GameController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    private Set<UserAccount> stringArrayToSet(String[] players) throws Exception {
+    private Set<UserAccount> stringArrayToSet(String[] players) throws BadRequestException {
 
         //allowing only 1-3 players in addition to the logged in user
         if (players.length <= 0 || players.length > 3) {
             log.error("********** " + players);
-            throw new Exception("Too many players");
+            throw new BadRequestException("Too many players");
         }
 
         Set<UserAccount> playersSet = new HashSet<>();
@@ -68,7 +78,7 @@ public class GameController {
             UserAccount u = userAccountService.readUser(username);
             if (u == null) {
                 log.error("********** " + u);
-                throw new Exception("User doesn't exists!");
+                throw new BadRequestException("User doesn't exists!");
             } else {
                 playersSet.add(u);
                 log.debug("Adding " + username + "to game");

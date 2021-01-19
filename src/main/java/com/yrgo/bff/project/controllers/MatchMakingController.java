@@ -10,6 +10,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * MatchMakingController
+ *
+ * REST Controller for handling the matchmaking requests.
+ * See comments in MatchMakingService for more details.
+ *
+ **/
+
+
 @RestController
 public class MatchMakingController {
 

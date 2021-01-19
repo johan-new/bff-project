@@ -8,6 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+/**
+ * NotificationController
+ *
+ * REST Controller for fetching the notifications of the logged in user.
+ *
+ **/
+
 @RestController
 public class NotificationController {
 

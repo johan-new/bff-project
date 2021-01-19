@@ -6,6 +6,14 @@ import org.json.simple.JSONObject;
 
 import java.util.Set;
 
+/**
+ * UserAccountService
+ *
+ * Handles CRUD operations of UserAccounts and friendslist. Also fetching logged in user and
+ * that users friends.
+ *
+ **/
+
 public interface UserAccountService {
     UserAccount createUser(String username, String password) throws BadRequestException;
     UserAccount removeUser(String username);
