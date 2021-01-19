@@ -32,8 +32,8 @@ const actions = {
           resolve(data)
         })
         .catch(error => {
-          console.log(error.response)
           reject(error)
+          console.log(error.response.data)
         })
     })
   },

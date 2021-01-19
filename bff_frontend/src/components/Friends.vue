@@ -24,6 +24,11 @@ export default {
       this.$router.push({
         name: 'Userprofile',
         params: { username: friend }
+      }).catch(error => {
+        if (error.name !== 'NavigationDuplicated' &&
+            !error.message.includes('Avoided redundant navigation to current location')) {
+          console.log(error)
+        }
       })
     }
   }

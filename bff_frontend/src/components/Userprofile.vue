@@ -88,7 +88,8 @@
       </div>
       </b-card>
     </div>
-    <Friends :friends=friends @em="doThis"/>
+    <!-- <Friends :friends=friends @em="doThis"/> -->
+        <Friends :friends=friends />
     <div v-if="loggedInUser" class="my-3">
         <b-button v-b-toggle.collapse-1337 variant="link" size="sm">
           Ändra lösenord <b-icon icon="arrow-down-short" aria-hidden="true"></b-icon></b-button>
@@ -171,9 +172,13 @@ export default {
       }
     },
     friendStatus () {
+      console.log('this.friends: ' + this.friends)
+      console.log('this.username' + this.username)
       if (this.friends.includes(this.username)) {
+        console.log('friendsstatus = true')
         return true
       } else {
+        console.log('friendstatus = false')
         return false
       }
     },
@@ -245,8 +250,11 @@ export default {
         })
     },
     fetchFriends () {
-      axios.get('http://localhost:8080/friend/all')
-        .then(data => {
+      const username = this.username
+      axios.get('http://localhost:8080/friends', {
+        params: { username }
+      })
+        .then((data) => {
           this.friends = data.data
         })
         .catch((error) => {
@@ -269,6 +277,7 @@ export default {
   watch: {
     $route (to, from) {
       this.doThis(to.params.username)
+      this.fetchFriends()
     }
   }
 }

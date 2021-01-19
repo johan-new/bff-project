@@ -74,7 +74,6 @@ public class UserAccountController {
 
     @PutMapping("/user")
     ResponseEntity updateUser(@RequestBody JSONObject newUserInformation) throws Exception {
-        userAccountService.updateUser(newUserInformation);
         return ResponseEntity.status(HttpStatus.ACCEPTED).
                 body(userAccountService.updateUser(newUserInformation).toJSON());
     }

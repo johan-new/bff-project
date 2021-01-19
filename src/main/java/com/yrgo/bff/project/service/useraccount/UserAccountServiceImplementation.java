@@ -17,10 +17,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.sort;
 
 @Service
 public class UserAccountServiceImplementation implements UserAccountService, UserDetailsService {

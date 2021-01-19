@@ -37,6 +37,11 @@ public class FriendsController {
         return userAccountService.loadFriends(userAccountService.readLoggedInUser().getUsername());
     }
 
+    @GetMapping(value = "/friends")
+    public Set<String> getFriends(@RequestParam String username) {
+        return userAccountService.loadFriends(username);
+    }
+
     @DeleteMapping("/friend")
     ResponseEntity removeFriend(@RequestBody JSONObject user) {
         final String username = (String)user.get("username");

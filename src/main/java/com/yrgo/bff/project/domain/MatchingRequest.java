@@ -38,7 +38,8 @@ public class MatchingRequest {
     private String username;
 
     private LocalDate date;
-    private LocalTime time;
+    @JsonIgnore
+    private LocalTime localTime;
     private boolean courtIsBooked;
     private String venue ,location;
     private int requestedParticipants;
@@ -62,7 +63,7 @@ public class MatchingRequest {
 
         this.username = (String)jsonObject.get("username");
         this.date = LocalDate.parse(dateString);
-        this.time = LocalTime.parse(timeString);
+        this.localTime = LocalTime.parse(timeString);
         this.courtIsBooked = (boolean)jsonObject.get("reservation");
         this.venue = (String)jsonObject.get("venue");
         this.location = (String)jsonObject.get("location");
@@ -126,10 +127,10 @@ public class MatchingRequest {
     }
 
     public String getTime() {
-        return time.format(DateTimeFormatter.ofPattern("HH:mm"));
+        return localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
-    public LocalTime getLocalTime() { return this.time; }
+    public LocalTime getLocalTime() { return this.localTime; }
 
     public boolean isCourtIsBooked() {
         return courtIsBooked;
@@ -158,7 +159,7 @@ public class MatchingRequest {
         request.put("organizer",username);
         request.put("venue",venue);
         request.put("date",date);
-        request.put("time",time);
+        request.put("time",localTime);
         request.put("requestedParticipants", requestedParticipants);
         request.put("joinRequests", joinRequestsMapped());
         request.put("confirmedParticipants", confirmedParticipants.toString());
