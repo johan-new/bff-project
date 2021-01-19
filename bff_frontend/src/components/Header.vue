@@ -109,6 +109,11 @@ export default {
           this.$router.push({
             name: 'Userprofile',
             params: { username: data.data.username, data: data.data }
+          }).catch(error => {
+            if (error.name !== 'NavigationDuplicated' &&
+            !error.message.includes('Avoided redundant navigation to current location')) {
+              console.log(error)
+            }
           })
         })
         .catch((error) => {
@@ -119,6 +124,11 @@ export default {
       this.$router.push({
         name: 'Userprofile',
         params: { username: this.loggedInUser }
+      }).catch(error => {
+        if (error.name !== 'NavigationDuplicated' &&
+            !error.message.includes('Avoided redundant navigation to current location')) {
+          console.log(error)
+        }
       })
     }
   }

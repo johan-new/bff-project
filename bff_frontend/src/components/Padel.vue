@@ -194,12 +194,13 @@ export default {
   },
   methods: {
     submitMatch () {
-      this.$store.dispatch('matchStore/submitMatch', this.form)
-        .then(() => this.$store.dispatch('matchStore/matchingQueue'))
+      return Promise.all([
+        this.$store.dispatch('matchStore/submitMatch', this.form),
+        this.$store.dispatch('matchStore/matchingQueue')])
+        .then(console.log(this.form))
         .catch((error) => {
           console.log(error.response)
         })
-      console.log(this.form)
       // this.form = {}
     },
     cancelMatch (location) {
