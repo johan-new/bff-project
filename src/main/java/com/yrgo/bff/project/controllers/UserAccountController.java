@@ -37,6 +37,7 @@ public class UserAccountController {
         final String password = (String)user.get("password");
 
         if (!UserAccountServiceImplementation.validEmailAddress(username)) {
+            log.error("******* " + username );
             throw new BadRequestException("Invalid email address!");
         }
 
@@ -46,6 +47,7 @@ public class UserAccountController {
                 status(HttpStatus.CREATED).
                 body(userAccountService.readUser(username).toJSON());
         } else {
+            log.error("******* " + username);
             throw new BadRequestException("User already exists!");
         }
     }

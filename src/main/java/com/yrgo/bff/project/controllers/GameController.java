@@ -53,6 +53,7 @@ public class GameController {
 
         //allowing only 1-3 players in addition to the logged in user
         if (players.length <= 0 || players.length > 3) {
+            log.error("********** " + players);
             throw new Exception("Too many players");
         }
 

@@ -45,6 +45,7 @@ public class FriendsController {
     @DeleteMapping("/friend")
     ResponseEntity removeFriend(@RequestBody JSONObject user) {
         final String username = (String)user.get("username");
+        log.debug("******* " + username);
         userAccountService.removeFriend(username);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
