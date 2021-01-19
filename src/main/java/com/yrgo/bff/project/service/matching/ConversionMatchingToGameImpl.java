@@ -5,6 +5,8 @@ import com.yrgo.bff.project.domain.UserAccount;
 import com.yrgo.bff.project.service.game.GameService;
 import com.yrgo.bff.project.service.notification.NotificationService;
 import com.yrgo.bff.project.service.useraccount.UserAccountService;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,14 +29,14 @@ public class ConversionMatchingToGameImpl implements ConversionMatchingToGame {
     @Autowired
     GameService gameService;
 
+    private Log log = LogFactory.getLog(getClass());
+
     public void convertRequestToGame(MatchingRequest matchingRequest) {
         System.out.println("Initiating conversion of " + matchingRequest);
         if (gameIsFull(matchingRequest)) {
-            //TODO: Remove below
             Set<UserAccount> participants = getParticipantsAsASet(matchingRequest);
-            //TODO: Date is deprecated, refactor Game class
             //create new game with the accepted participants
-            System.out.println("Game is full, creating game...");
+            log.debug("Request succeeded, creating game...\n" + matchingRequest.toJSON());
             gameService.createGame(matchingRequest.getDate(),
                     matchingRequest.getLocalTime(),
                     matchingRequest.getVenue(),
@@ -61,7 +63,6 @@ public class ConversionMatchingToGameImpl implements ConversionMatchingToGame {
         Set<UserAccount> users = new HashSet<>();
         //adding the organizer
         final UserAccount organizer = userAccountService.readUser(matchingRequest.getUsername());
-        System.out.println("adderar organistör " + organizer);
         users.add(organizer);
         //adding the other players
         for (String username: matchingRequest.getConfirmedParticipants()) {

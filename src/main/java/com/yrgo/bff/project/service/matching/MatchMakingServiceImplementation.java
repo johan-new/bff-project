@@ -38,18 +38,15 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         MatchingRequest matchingRequest = getRequestByRequestId(matchingRequestId).get();
         UserAccount loggedInUser = userAccountService.readLoggedInUser();
 
-        //TODO: REMOVE BELOW
-        System.out.println("*** LOGGED IN USER: " + loggedInUser.getUsername() + "\n" + "Organizer: " + matchingRequest.getUsername());
-
         if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
             matchingRequest.accept(joinRequestId);
             notificationService.addNotification(loggedInUser.getUsername(),
                     matchingRequest.toString(),
                     NotificationService.Type.ACCEPTED_JOIN_REQUEST);
             converter.convertRequestToGame(matchingRequest);
-        } else {
-            //TODO: Exception? Or return a boolean indicating success?
-            log.error("ACCEPTING REQUEST ONLY POSSIBLE BY THE ORGANIZER");
+        } else { //this will never occur due to the use of this method
+            log.error("Accepting MatchingRequest #" + matchingRequest + ",  JoinRequest #" + joinRequestId +
+                    " not possible. Can only be done by the organizer.");
         }
     }
 
@@ -59,17 +56,15 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
     public void rejectJoinRequest(Long matchingRequestId, int joinRequestId) {
         MatchingRequest matchingRequest = getRequestByRequestId(matchingRequestId).get();
         UserAccount loggedInUser = userAccountService.readLoggedInUser();
-        //TODO: REMOVE BELOW
-        System.out.println("*** LOGGED IN USER: " + loggedInUser.getUsername() + "\n" + "Organizer: " + matchingRequest.getUsername());
 
         if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
             matchingRequest.reject(joinRequestId);
             notificationService.addNotification(loggedInUser.getUsername(),
                     matchingRequest.toString(),
                     NotificationService.Type.REJECTED_JOIN_REQUEST);
-        } else {
-            //TODO: Exception? Or return a boolean indicating success?
-            log.error("ACCEPTING REQUEST ONLY POSSIBLE BY THE ORGANIZER");
+        } else {//this will never occur due to the use of this method
+            log.error("Rejecting MatchingRequest #" + matchingRequest + ",  JoinRequest #" + joinRequestId +
+                    " not possible. Can only be done by the organizer.");
         }
     }
 
@@ -176,7 +171,6 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         }
 
         if (!location.isBlank() && !username.isBlank()) {
-            System.out.println("MATCHING REQUEST FOUND BY ID. REMOVING...");
             removeUserMatchRequest(username,location);
         }
 

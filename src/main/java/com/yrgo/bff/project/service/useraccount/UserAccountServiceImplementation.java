@@ -148,6 +148,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
         log.debug("loadUserByUsername("+username+")");
         UserAccount user = userAccountDataAccess.findByUsername(username.toLowerCase());
         if (user == null) {
+            log.error("Cannot load username " + username);
             throw new UsernameNotFoundException(username);
         }
         User user2 = new User(user.getUsername(), user.getPassword(), emptyList());
