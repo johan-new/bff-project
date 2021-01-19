@@ -16,6 +16,14 @@ import javax.persistence.ManyToMany;
 
 import java.util.*;
 
+/**
+ * UserAccount
+ *
+ * Representing a user of the application. Passwords are encoded by the service classes, and not here.
+ * To avoid sending password data, the JSON parsing is done manually.
+ *
+ * */
+
 @Entity
 public class UserAccount {
     @Transient

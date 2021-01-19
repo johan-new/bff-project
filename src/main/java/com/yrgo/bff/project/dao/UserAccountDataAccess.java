@@ -3,6 +3,13 @@ package com.yrgo.bff.project.dao;
 import com.yrgo.bff.project.domain.UserAccount;
 import org.springframework.data.repository.CrudRepository;
 
+/***
+ *  UserAccountDataAccess
+ *
+ *  Used for persisting via Springs JPA functionality.
+ */
+
+
 public interface UserAccountDataAccess extends CrudRepository<UserAccount, String> {
     /**
      * findByUserName

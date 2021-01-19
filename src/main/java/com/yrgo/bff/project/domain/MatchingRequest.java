@@ -15,7 +15,9 @@ import java.util.*;
 /***
  * MatchingRequest class
  *
- *
+ * Contains all data for a MatchingRequest. This request will eventually be converted to at Game.
+ * Other users kan as to join this (coming) game, by sending a request.
+ * Only the organizer of the game can accept/deny users that want to join.
  *
  */
 

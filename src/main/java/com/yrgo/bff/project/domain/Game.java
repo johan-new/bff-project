@@ -8,6 +8,13 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
+/**
+ * Game
+ *
+ * Representing a game in the application.
+ *
+ * */
+
 @Entity
 public class Game {
 
@@ -27,6 +34,7 @@ public class Game {
         this.date = date;
         this.time = time;
         this.venue = venue;
+        this.location = location;
         this.participants = participants;
     }
     public Game () {}
@@ -44,7 +52,7 @@ public class Game {
     }
 
     public String getLocation() {
-        return location;
+        return this.location;
     }
 
     public Set<UserAccount> getParticipants() {
