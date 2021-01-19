@@ -6,22 +6,28 @@ Notera att antal deltagare som anges är 1-3 stycken. Organisatören läggs til 
 {
 	"Göteborg": [
 		{ 
+            "id": 903,
 			"username": "e@e.e",
 			"date": "2020-12-24",
 			"time": "18:30",
 			"reservation": false,
 			"venue": "GLTK",
             "location": "Göteborg",
-			"participants": 3
+            "joinRequests": {},
+			"requestedParticipants": 3,
+            "confirmedParticipants": ["user@mail.com"]
 		},
 		{ 
+            "id": 904,
 			"username": "s@s.s",
 			"date": "2020-12-24",
 			"time": "16:30",
 			"reservation": false,
 			"venue": "MBB",
             "location": Göteborg,
-			"participants": 2
+            "joinRequests": {},
+            "requestedParticipants": 3,
+            "confirmedParticipants": []
 		}
 	]
 }

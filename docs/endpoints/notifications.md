@@ -7,12 +7,14 @@ Hämtar notiser för inloggad användare. Ex
     {
       "type": "MATCH_SUCCESS",
       "content": "[Simon, Johan, Greven, Erik]",
-      "timestamp": "Thu Dec 10 08:27:54 CET 2020"
+      "time": "17:00:00.0",
+      "date": "2021-01-01"
     },
     "-1179904300": {
       "type": "GENERAL",
       "content": "Detta är en notis!",
-      "timestamp": "Thu Dec 10 08:27:54 CET 2020"
+      "time": "17:00:00.0",
+      "date": "2021-01-01"
     }
   } 
   ```
