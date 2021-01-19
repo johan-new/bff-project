@@ -33,16 +33,21 @@ public class MatchMakingController {
 
 
     @PostMapping("/match/submit")
-    public ResponseEntity submitMatchingRequest(@RequestBody JSONObject request) throws Exception {
-        request.put("username", userAccountService.readLoggedInUser().getUsername());
-        String location = (String)request.get("location");
-        if (location!=null) {
-            request.remove(location);
-            matchMakingService.addUserMatchRequest(request, location);
-            return ResponseEntity.status(HttpStatus.CREATED).body("search added");
-        } else {
-            log.error("No such location");
-            throw new Exception("No such location");
+    public ResponseEntity submitMatchingRequest(@RequestBody JSONObject request)  {
+        try {
+            request.put("username", userAccountService.readLoggedInUser().getUsername());
+            String location = (String)request.get("location");
+            if (location!=null) {
+                request.remove(location);
+                matchMakingService.addUserMatchRequest(request, location);
+                return ResponseEntity.status(HttpStatus.CREATED).body("search added");
+            } else {
+                log.error("No such location");
+                throw new Exception("No such location");
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
         }
 
     }
