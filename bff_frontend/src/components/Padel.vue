@@ -2,16 +2,16 @@
     <div>
       <b-card md="6" class="shadow">
       <b-card class="shadow-sm mb-4">
-        <h4 class="font-weight-bold">Spela padel</h4>
+        <h4 class="font-weight-bold">Spela padel {{ isValidTime }} time: {{ this.form.time }}</h4>
         <b-form @submit.prevent="submitMatch" class="needs-validation" validated novalidate>
           <div class="form-row">
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-5">
               <label for="inputDate">Datum:</label>
-              <b-form-datepicker placeholder="Välj datum" class="form-control" id="inputDate" required v-model="form.date"></b-form-datepicker>
+              <b-form-datepicker placeholder="Välj datum" class="form-control" id="inputDate" :state="isValidDate" v-model="form.date"></b-form-datepicker>
             </div>
             <div class="form-group col-md-3">
               <label for="inputTime">Tidpunkt:</label>
-<b-form-timepicker label-no-time-selected="Välj tid" class="form-control" id="inputTime" required v-model="form.time"></b-form-timepicker>
+<b-form-timepicker label-no-time-selected="Välj tid" class="form-control" id="inputTime" :state="isValidTime" v-model="form.time"></b-form-timepicker>
             </div>
           </div>
 
@@ -140,6 +140,20 @@ export default {
         // }
       }
       return queue
+    },
+    isValidDate () {
+      if (this.form.date !== '' && this.form.date > new Date().toISOString()) {
+        return true
+      } else {
+        return false
+      }
+    },
+    isValidTime () {
+      if (this.form.time.includes(':')) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   data () {
@@ -175,14 +189,18 @@ export default {
           key: 'info',
           label: 'Info'
         }
-      ],
-      componentKey: 0
+      ]
     }
   },
   methods: {
     submitMatch () {
       this.$store.dispatch('matchStore/submitMatch', this.form)
         .then(() => this.$store.dispatch('matchStore/matchingQueue'))
+        .catch((error) => {
+          console.log(error.response)
+        })
+      console.log(this.form)
+      // this.form = {}
     },
     cancelMatch (location) {
       this.$store.dispatch('matchStore/cancelMatch', location)
