@@ -7,7 +7,7 @@
         <b-form @submit.prevent="handleSubmit(submitMatch)" novalidate>
           <div class="form-row">
             <div class="form-group col-md-5">
-              <ValidationProvider name="date" rules="required|date" v-slot="{ errors }">
+              <ValidationProvider name="date" rules="required" v-slot="{ errors }">
               <label for="inputDate">Datum:</label>
               <b-form-datepicker placeholder="Välj datum" class="form-control" id="inputDate" v-model="form.date"></b-form-datepicker>
               <!-- <b-form-datepicker placeholder="Välj datum" id="inputDate" v-model="form.date"></b-form-datepicker> -->
@@ -15,7 +15,7 @@
             </ValidationProvider>
             </div>
             <div class="form-group col-md-3">
-              <ValidationProvider name="time" rules="required|time" v-slot="{ errors }">
+              <ValidationProvider name="time" rules="required" v-slot="{ errors }">
               <label for="inputTime">Tidpunkt:</label>
               <b-form-timepicker label-no-time-selected="Välj tid" class="form-control" id="inputTime" v-model="form.time"></b-form-timepicker>
               <span class="error">{{ errors[0] }}.</span>
@@ -57,9 +57,15 @@
         </ValidationObserver>
         </b-card>
 
-        <b-card class="p-2 shadow-sm mb-1">
-          <h4 class="mb-4 font-weight-bold">Hitta din match</h4>
-      <div v-for="(item, name) of getQueue" :key="name" > <h5>{{ name }} </h5>
+        <b-card class="p-2 shadow-sm mb-1" :key="componentKey">
+                  <div class="mb-4 d-flex">
+        <div class="mr-auto">
+          <h4 class="font-weight-bold">Hitta din match</h4>
+        </div>
+          <b-button size="sm" variant="outline-secondary" @click="updateQueue(); updateKey()">Uppdatera</b-button>
+                  </div>
+          <!-- Lägg till index nedan??? istället.. och ta bort promiese i metod och sätt som innan -->
+      <div v-for="(item, name, index) of getQueue" :key="index" > <h5>{{ name }} </h5>
       <div class="table-responsive">
       <b-table stacked="sm" hover :items="item" :fields="fields">
         <template #cell(info)="row">
@@ -69,7 +75,7 @@
         </template>
               <template #row-details="row">
         <b-card bg-variant="light">
-        <div v-for="(value) in item" :key="value.location">
+        <div v-for="(value, index) in item" :key="index">
           <div v-if="row.item.confirmedParticipants.length !== 0">
           <h5 class="mb-3">Accepterade spelare:</h5>
           <div v-for="confirmedParticipants in row.item.confirmedParticipants" :key="confirmedParticipants">
@@ -80,10 +86,9 @@
           <hr>
           </div>
             <div :key="componentKey">
-          <!-- <div v-if="value.username === loggedInUser"> -->
           <div v-if="Object.keys(row.item.joinRequests).length !== 0">
           <h5 class="my-3">Spelare som vill gå med:</h5>
-        <div v-for="(joinRequest, name) in row.item.joinRequests" :key="joinRequest.sender">
+        <div v-for="(joinRequest, name, index) in row.item.joinRequests" :key="index">
           <b-card v-if="joinRequest.status === 'PENDING'" no-body class="my-2 shadow-sm">
         <div class="m-2 d-flex">
         <div class="mr-auto">
@@ -103,7 +108,7 @@
           </div>
         <!-- </div> -->
         <div v-if="value.username !== loggedInUser">
-            <div v-for="joinRequest in row.item.joinRequests" :key="joinRequest.id">
+            <div v-for="(joinRequest, index) in row.item.joinRequests" :key="index">
               <div v-if="joinRequest.status === 'PENDING' && joinRequest.sender === loggedInUser">
                 <div>Du är i kö, chilla, {{ joinRequest.sender }}</div>
               </div>
@@ -204,19 +209,18 @@ export default {
           key: 'info',
           label: 'Info'
         }
-      ]
+      ],
+      componentKey: 1337,
+      compkey: 0
     }
   },
   methods: {
     submitMatch () {
-      return Promise.all([
-        this.$store.dispatch('matchStore/submitMatch', this.form),
-        this.$store.dispatch('matchStore/matchingQueue')])
-        .then(console.log(this.form))
-        .catch((error) => {
-          console.log(error.response)
+      this.$store.dispatch('matchStore/submitMatch', this.form)
+        .then(() => this.$store.dispatch('matchStore/matchingQueue'))
+        .catch(error => {
+          console.log(error)
         })
-      // this.form = {}
     },
     cancelMatch (location) {
       this.$store.dispatch('matchStore/cancelMatch', location)
@@ -257,10 +261,14 @@ export default {
     },
     updateKey () {
       this.componentKey += 1
+    },
+    updateQueue () {
+      console.log('tjenbo')
+      this.$store.dispatch('matchStore/matchingQueue')
     }
   },
   created () {
-    this.$store.dispatch('matchStore/matchingQueue')
+    this.updateQueue()
   }
 }
 </script>
