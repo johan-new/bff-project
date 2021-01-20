@@ -61,7 +61,7 @@
             <template #button-content>
               &nbsp;<b-icon icon="bell-fill" aria-hidden="true"></b-icon>
             </template>
-            <b-dropdown-text style="width: 240px">
+            <b-dropdown-text style="width: 440px">
               <p>Dina senaste notifikationer</p>
               <b-dropdown-divider></b-dropdown-divider>
               <Notifications />

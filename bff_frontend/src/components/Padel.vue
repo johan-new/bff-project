@@ -150,14 +150,6 @@ export default {
         } else {
           queue[q][0].courtIsBooked = 'Nej'
         }
-        // for (s in queue[q][0].confirmedParticipants) {
-        //   console.log(s)
-        //   console.log(queue[q])
-        //   console.log(queue[q][0].confirmedParticipants[s])
-        //   queue[q][0].requestedParticipants--
-        //   // s++
-        //   // queue[q][0].requestedParticipants -= s
-        // }
       }
       return queue
     },
@@ -263,7 +255,6 @@ export default {
       this.componentKey += 1
     },
     updateQueue () {
-      console.log('tjenbo')
       this.$store.dispatch('matchStore/matchingQueue')
     }
   },

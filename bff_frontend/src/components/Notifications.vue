@@ -1,10 +1,15 @@
 <template>
       <div>
-        <div v-for="(item, name) of getNotifications" :key="name">
-          Name/ID: {{ name }} <br>
-          Item.type: {{ item.type }} <br>
-          Item.content: {{ item.content}} <br>
-          Item.timestamp: {{ item.timestamp }}<br><br>
+        <div v-for="(item, index) of getNotifications" :key="index">
+        <div v-for="(notification, name, index) of item" :key="index">
+          <b-card>
+          Item.id {{ name }}<br><hr>
+          Item.type: {{ notification.type }} <br><hr>
+          Item.date {{ notification.date }}<br><hr>
+          Item.time {{ notification.time }}<br><hr>
+          Item.content: {{ notification.content }}<br><hr>
+          </b-card>
+        </div>
         </div>
     </div>
 
@@ -15,14 +20,23 @@ export default {
   name: 'Notifications',
   computed: {
     getNotifications () {
-      const yolo = this.$store.getters['userStore/getNotifications']
-      console.log(yolo)
-      console.log(yolo[0])
-      return yolo[0]
+      console.log(this.$store.getters['userStore/getNotifications'])
+      return this.$store.getters['userStore/getNotifications']
+    }
+  },
+  methods: {
+    notifications () {
+      this.$store.dispatch('userStore/notifications')
     }
   },
   created () {
-    this.$store.dispatch('userStore/notifications')
+    this.notifications()
+  },
+  watch: {
+    $route (to, from) {
+      console.log('Hämtar notiser!')
+      this.notifications()
+    }
   }
 }
 </script>
