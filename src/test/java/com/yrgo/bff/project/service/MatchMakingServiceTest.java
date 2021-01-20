@@ -206,7 +206,7 @@ public class MatchMakingServiceTest {
 
     @WithMockUser(username=user7)
     @Test
-    void testDenyRequest() throws Exception {
+    void testDenyRequest() {
         UserAccount organizer = userAccountService.createUser(user7,"asdf");
 
         Map<String,Object> request = new HashMap();

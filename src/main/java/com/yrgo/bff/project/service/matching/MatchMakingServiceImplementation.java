@@ -40,7 +40,7 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
 
         if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
             matchingRequest.accept(joinRequestId);
-            notificationService.addNotification(loggedInUser.getUsername(),
+            notificationService.addNotification(matchingRequest.getJoinRequests().get(joinRequestId).getSender(),
                     matchingRequest.toString(),
                     NotificationService.Type.ACCEPTED_JOIN_REQUEST);
             converter.convertRequestToGame(matchingRequest);
@@ -59,7 +59,7 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
 
         if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
             matchingRequest.reject(joinRequestId);
-            notificationService.addNotification(loggedInUser.getUsername(),
+            notificationService.addNotification(matchingRequest.getJoinRequests().get(joinRequestId).getSender(),
                     matchingRequest.toString(),
                     NotificationService.Type.REJECTED_JOIN_REQUEST);
         } else {//this will never occur due to the use of this method
@@ -101,7 +101,7 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
             usersLookingToBeMatched.put(location, new ArrayList<>());
         }
         usersLookingToBeMatched.get(location).add(matchingRequest);
-        matchUsers();
+        //matchUsers();
         //class MatchingRequest don't have any set-ers, therefore no read-only wrapping
         return matchingRequest;
     }
@@ -118,7 +118,7 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
             }
         }
     }
-
+/*
     private void matchUsers() {
         if (usersLookingToBeMatched.size()>1) {
             Map<String, List<MatchingRequest>> matchingUsers = usersLookingToBeMatched.entrySet().
@@ -147,7 +147,7 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
                         NotificationService.Type.MATCH_SUCCESS);
             }
         }
-    }
+    }*/
 
     @Override
     public JSONObject getUsersLookingToBeMatched() {
