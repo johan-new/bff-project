@@ -54,6 +54,7 @@ public class Project2Application {
 
 		private Log log = LogFactory.getLog(getClass());
 
+		//generating som dummy data below
 		@Override @Transactional
 		public void run(ApplicationArguments args) throws Exception {
 

@@ -11,6 +11,12 @@ import javax.transaction.Transactional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * FriendsUserAccountServiceImplementationTest
+ *
+ * Integration tests of friend list functionality
+ **/
+
 @SpringBootTest
 public class FriendsUserAccountServiceImplementationTest {
 

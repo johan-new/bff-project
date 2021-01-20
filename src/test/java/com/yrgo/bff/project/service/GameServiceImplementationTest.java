@@ -15,6 +15,12 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * FriendsUserAccountServiceImplementationTest
+ *
+ * Integration tests of GameService functionality
+ **/
+
 @SpringBootTest
 public class GameServiceImplementationTest {
 

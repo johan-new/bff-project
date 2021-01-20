@@ -20,6 +20,12 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * MatchMakingServiceTest
+ *
+ * Integration tests of MatchMakingService functionality
+ **/
+
 
 @SpringBootTest
 public class MatchMakingServiceTest {

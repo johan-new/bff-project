@@ -12,6 +12,12 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * MatchingRequestTest
+ *
+ * Integration tests of MatchingRequest functionality
+ */
+
 @SpringBootTest
 public class MatchingRequestTest {
 

@@ -8,6 +8,13 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * NotificationServiceTest
+ *
+ * Integration test of ability to add and receive notifications
+ *
+ */
+
 @SpringBootTest
 public class NotificationServiceTest {
 

@@ -1,17 +1,15 @@
 package com.yrgo.bff.project.domain;
 
-import org.h2.engine.User;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * FriendsTest
+ *
+ * Unit tests of user friends list functionality
+ *
+ * */
 
 
 public class FriendsTest {
@@ -41,11 +39,11 @@ public class FriendsTest {
         userWithFriendsList.addFriend(username2);
         userWithFriendsList.addFriend(username3);
 
-        //Kollar så att bägge vännerna ligger i listan
+        //Cheking that both friends has been added
         assertEquals(userWithFriendsList.getFriends().size(), 2);
-        //Tar bort en vän ur listan
+        //Removing a friend
         userWithFriendsList.removeFriend(username2);
-        //Kollar igen så att vännen togs bort
+        //validating that the friend is removed
         assertEquals(userWithFriendsList.getFriends().size(), 1);
 
     }

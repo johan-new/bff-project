@@ -16,9 +16,11 @@ public class UserAccountAccountDataAccessTest {
     UserAccountDataAccess userAccountDataAccess;
 
     @Test
-    void testFindByUserName() throws Exception {
+    void testFindByUserName() {
         final String username = "test@mail.com";
         UserAccount user = new UserAccount(username,"password");
+
+        //persisting
         userAccountDataAccess.save(user);
 
         assertNotNull(userAccountDataAccess.findByUsername(username));

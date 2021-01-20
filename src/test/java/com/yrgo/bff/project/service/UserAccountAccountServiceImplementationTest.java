@@ -13,6 +13,13 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * UserAccountAccountServiceImplementationTest
+ *
+ * Integrations tests
+ *
+ */
+
 @SpringBootTest
 public class UserAccountAccountServiceImplementationTest {
 
@@ -24,14 +31,14 @@ public class UserAccountAccountServiceImplementationTest {
     private UserAccount user;
 
     @Test
-    void testReadUser() throws Exception {
+    void testReadUser() {
         user = new UserAccount(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"test");
         userAccountService.createUser(user.getUsername(),"test");
         assertNotNull(userAccountService.readUser(user.getUsername()));
     }
 
     @Test
-    void testFindAll() throws Exception {
+    void testFindAll() {
         userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"test");
         assertFalse(userAccountService.findAll().isEmpty());
     }
@@ -57,7 +64,7 @@ public class UserAccountAccountServiceImplementationTest {
     }
 
     @Test
-    public void testRemoveUser() throws Exception {
+    public void testRemoveUser() {
         String username = FriendsUserAccountServiceImplementationTest.getRandomUsername();
         userAccountService.createUser(username,"test");
         assertNotNull(userAccountService.readUser(username));
