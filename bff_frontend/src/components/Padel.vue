@@ -2,16 +2,24 @@
     <div>
       <b-card md="6" class="shadow">
       <b-card class="shadow-sm mb-4">
-        <h4 class="font-weight-bold">Spela padel {{ isValidTime }} time: {{ this.form.time }}</h4>
-        <b-form @submit.prevent="submitMatch" class="needs-validation" validated novalidate>
+        <h4 class="font-weight-bold">Spela padel</h4>
+        <ValidationObserver v-slot="{ handleSubmit }">
+        <b-form @submit.prevent="handleSubmit(submitMatch)" novalidate>
           <div class="form-row">
             <div class="form-group col-md-5">
+              <ValidationProvider name="date" rules="required|date" v-slot="{ errors }">
               <label for="inputDate">Datum:</label>
-              <b-form-datepicker placeholder="Välj datum" class="form-control" id="inputDate" :state="isValidDate" v-model="form.date"></b-form-datepicker>
+              <b-form-datepicker placeholder="Välj datum" class="form-control" id="inputDate" v-model="form.date"></b-form-datepicker>
+              <!-- <b-form-datepicker placeholder="Välj datum" id="inputDate" v-model="form.date"></b-form-datepicker> -->
+              <span class="error">{{ errors[0] }}.</span>
+            </ValidationProvider>
             </div>
             <div class="form-group col-md-3">
+              <ValidationProvider name="time" rules="required|time" v-slot="{ errors }">
               <label for="inputTime">Tidpunkt:</label>
-<b-form-timepicker label-no-time-selected="Välj tid" class="form-control" id="inputTime" :state="isValidTime" v-model="form.time"></b-form-timepicker>
+              <b-form-timepicker label-no-time-selected="Välj tid" class="form-control" id="inputTime" v-model="form.time"></b-form-timepicker>
+              <span class="error">{{ errors[0] }}.</span>
+              </ValidationProvider>
             </div>
           </div>
 
@@ -25,21 +33,28 @@
 </b-form-group>
     <div class="form-row">
     <div class="col-md-3 mb-3">
+      <ValidationProvider name="participants" rules="required" v-slot="{ errors }">
       <label for="participants">Antal Spelare:</label>
-      <select class="custom-select" id="participants" required v-model="form.participants">
+      <select class="custom-select" id="participants" v-model="form.participants">
         <option selected disabled value="">Antal...</option>
             <option :value="1" selected>1</option>
     <option :value="2">2</option>
     <option :value="3">3</option>
       </select>
+      <span class="error">{{ errors[0] }}.</span>
+      </ValidationProvider>
     </div>
     <div class="col-md-4 mb-3">
+      <ValidationProvider name="location" rules="required" v-slot="{ errors }">
       <label for="location">Stad:</label>
-      <input type="text" class="form-control" id="location" v-model="form.location" required>
+      <input type="text" class="form-control" id="location" v-model="form.location">
+      <span class="error">{{ errors[0] }}.</span>
+      </ValidationProvider>
     </div>
     </div>
           <b-button variant="outline-secondary" type="submit">Spela!</b-button>
         </b-form>
+        </ValidationObserver>
         </b-card>
 
         <b-card class="p-2 shadow-sm mb-1">
@@ -253,5 +268,10 @@ export default {
 <style>
 .card {
   background-color: rgba(255, 255, 255) !important;
+}
+.error {
+  color: red;
+  font-size: small;
+  font-style: italic;
 }
 </style>
