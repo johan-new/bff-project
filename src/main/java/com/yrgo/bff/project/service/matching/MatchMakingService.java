@@ -9,7 +9,7 @@ import org.json.simple.JSONObject;
  * Core logic of the applications. The implementations of this interface handles
  * - users wanting to play (the organizer)
  * - other users asking to join
- * - organizer accept och rejects theese requests
+ * - organizer accept och rejects these requests
  *
  * Once the spots has been filled, the MatchingRequest is removed, and a Game is
  * created instead.

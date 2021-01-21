@@ -66,7 +66,7 @@ public class MatchingRequestTest {
         System.out.println(matchingRequest);
         matchingRequest.reject(0);
         System.out.println(matchingRequest);
-        assertNull(matchingRequest.getJoinRequests().get(0));
+        assertEquals(matchingRequest.getJoinRequests().get(0).getStatus(), MatchingRequest.JoinRequestStatus.REJECTED);
     }
 
     public JSONObject newRequest(){

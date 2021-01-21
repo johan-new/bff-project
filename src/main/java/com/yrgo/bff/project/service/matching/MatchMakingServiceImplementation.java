@@ -40,9 +40,13 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
 
         if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
             matchingRequest.accept(joinRequestId);
-            notificationService.addNotification(matchingRequest.getJoinRequests().get(joinRequestId).getSender(),
-                    matchingRequest.toString(),
-                    NotificationService.Type.ACCEPTED_JOIN_REQUEST);
+            try {
+                notificationService.addNotification(matchingRequest.getJoinRequests().get(joinRequestId).getSender(),
+                        matchingRequest.toString(),
+                        NotificationService.Type.ACCEPTED_JOIN_REQUEST);
+            } catch (NullPointerException e) {
+                log.error("NullPointer in acceptJoinRequest(... Probably caused due to sender username is null");
+            }
             converter.convertRequestToGame(matchingRequest);
         } else { //this will never occur due to the use of this method
             log.error("Accepting MatchingRequest #" + matchingRequest + ",  JoinRequest #" + joinRequestId +
@@ -59,9 +63,13 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
 
         if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
             matchingRequest.reject(joinRequestId);
-            notificationService.addNotification(matchingRequest.getJoinRequests().get(joinRequestId).getSender(),
-                    matchingRequest.toString(),
-                    NotificationService.Type.REJECTED_JOIN_REQUEST);
+            try {
+                notificationService.addNotification(matchingRequest.getJoinRequests().get(joinRequestId).getSender(),
+                        matchingRequest.toString(),
+                        NotificationService.Type.REJECTED_JOIN_REQUEST);
+            } catch (NullPointerException e) {
+                log.error("NullPointer in rejectJoinRequest(... Probably caused due to sender username is null");
+            }
         } else {//this will never occur due to the use of this method
             log.error("Rejecting MatchingRequest #" + matchingRequest + ",  JoinRequest #" + joinRequestId +
                     " not possible. Can only be done by the organizer.");

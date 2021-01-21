@@ -59,64 +59,6 @@ public class MatchMakingServiceTest {
     @Autowired
     NotificationService notificationService;
 
-    @Autowired
-    GameService gameService;
-
-    @WithMockUser(username=user1)
-    @Test
-    public void testCategorizeUsersByVenue() throws Exception {
-        String location = Double.toString(Math.random());
-        String location2 = Double.toString(Math.random());
-        userAccountService.createUser(user1,somePassword);
-        userAccountService.createUser(user2,somePassword);
-        userAccountService.createUser(user3,somePassword);
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("username", user1);
-        jsonObject.put("date", ld);
-        jsonObject.put("time", lt);
-        jsonObject.put("reservation", false);
-        jsonObject.put("venue", venue);
-        jsonObject.put("participants", 2);
-
-        JSONObject jsonObject2 = new JSONObject();
-        jsonObject2.put("username", user2);
-        jsonObject2.put("date", ld2);
-        jsonObject2.put("time", lt2);
-        jsonObject2.put("reservation", true);
-        jsonObject2.put("venue", venue2);
-        jsonObject2.put("participants", 3);
-
-        JSONObject jsonObject3 = new JSONObject();
-        jsonObject3.put("username", user3);
-        jsonObject3.put("date", ld2);
-        jsonObject3.put("time", lt);
-        jsonObject3.put("reservation", true);
-        jsonObject3.put("venue", venue4);
-        jsonObject3.put("participants", 3);
-
-        //sthlm
-        matchMakingService.addUserMatchRequest(jsonObject, location);
-        matchMakingService.addUserMatchRequest(jsonObject2, location);
-        //gbg
-        matchMakingService.addUserMatchRequest(jsonObject3, location2);
-
-        String notifications = notificationService.getNotifications().toString();
-
-        assertTrue(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
-
-
-        //clean up, no pending request due to matching success
-        assertThrows(NullPointerException.class,()->matchMakingService.removeUserMatchRequest(user1, location));
-        matchMakingService.removeUserMatchRequest(user3, location2);
-
-        //clean up
-        userAccountService.removeUser(user1);
-        userAccountService.removeUser(user2);
-        userAccountService.removeUser(user3);
-
-    }
-
     @WithMockUser(username=user3)
     @Test
     void testFalseNotification() {
@@ -182,7 +124,7 @@ public class MatchMakingServiceTest {
 
     @WithMockUser(username=user6)
     @Test
-    void testJoinRequests() throws Exception {
+    void testJoinRequests() {
         UserAccount organizer = userAccountService.createUser(user6,"asdf");
 
         Map<String,Object> request = new HashMap();
@@ -223,7 +165,6 @@ public class MatchMakingServiceTest {
 
         matchMakingService.askToJoinGame(id);
 
-        System.out.println(matchMakingService.getUsersLookingToBeMatched());
         //assure its pending
         assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("PENDING"));
         //assure organizer is notified
@@ -232,11 +173,9 @@ public class MatchMakingServiceTest {
         matchMakingService.rejectJoinRequest(id,0);
         //assure its rejected
         assertFalse(matchMakingService.getUsersLookingToBeMatched().toString().contains("PENDING"));
-        assertFalse(matchMakingService.getUsersLookingToBeMatched().toString().contains("REJECTED"));
-        assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("\"confirmedParticipants\":\"[]\""));
+        assertTrue(matchMakingService.getUsersLookingToBeMatched().toString().contains("REJECTED"));
         //assure the the requestee is notified
         assertTrue(notificationService.getNotifications().toString().contains(NotificationService.Type.REJECTED_JOIN_REQUEST.name()));
-        System.out.println(matchMakingService.getUsersLookingToBeMatched());
     }
 
     @WithMockUser(username=user8)

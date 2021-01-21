@@ -1,6 +1,7 @@
 package com.yrgo.bff.project.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
@@ -94,10 +95,11 @@ public class MatchingRequest {
 //        joinRequests.get(elementNumber).reject(this);
 //    }
     public void reject(int elementNumber){
-    joinRequests.remove(elementNumber);
+    joinRequests.get(elementNumber).reject(this);
     }
 
     public void askToJoin(UserAccount userAccount) {
+        System.out.println("*** " + userAccount);
         this.joinRequests.add(new JoinRequest(userAccount, this));
     }
 
@@ -106,6 +108,7 @@ public class MatchingRequest {
     }
 
     public Map<Integer,JoinRequest> getJoinRequests() {
+        System.out.println("join requests size" + joinRequests.size());
         Map<Integer,JoinRequest> returnValues = new HashMap();
         for (int i = 0; i < joinRequests.size(); i++) {
             returnValues.put(i,joinRequests.get(i));
