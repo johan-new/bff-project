@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -38,7 +39,7 @@ public class NotificationServiceImplementation implements NotificationService {
         Map<String,String> notificationContent = new HashMap<>();
         notificationContent.put("type",type.name());
         notificationContent.put("date", LocalDate.now().toString());
-        notificationContent.put("time", LocalTime.now().toString());
+        notificationContent.put("time", LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
         notificationContent.put("content", content);
 
         if (notifications.containsKey(username)) {

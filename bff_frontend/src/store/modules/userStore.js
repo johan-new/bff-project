@@ -86,6 +86,9 @@ const mutations = {
   },
   set_notifications (state, data) {
     state.notifications.push(data)
+  },
+  delete_notification (state) {
+    state.notifications = []
   }
 }
 

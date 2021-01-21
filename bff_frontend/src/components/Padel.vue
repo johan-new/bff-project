@@ -136,14 +136,12 @@
 export default {
   name: 'Padel',
   computed: {
-    // getQueue () { return this.$store.getters['matchStore/getQueue'] },
     inQueue () { return this.$store.getters['matchStore/inQueue'] },
     loggedInUser () { return this.$store.getters['authStore/loggedInUser'] },
     trueOrFalse () { return this.form.reservation },
     getQueue () {
       const queue = this.$store.getters['matchStore/getQueue']
       let q = {}
-      // let s = 0
       for (q in queue) {
         if (queue[q][0].courtIsBooked === true) {
           queue[q][0].courtIsBooked = 'Ja'

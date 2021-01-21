@@ -53,6 +53,7 @@ const actions = {
       context.commit('logout')
       localStorage.removeItem('token')
       delete axios.defaults.headers.common.Authorization
+      context.commit('userStore/delete_notification', null, { root: true })
       resolve()
     })
   }
