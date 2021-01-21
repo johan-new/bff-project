@@ -47,6 +47,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     @Override
     public UserAccount createUser(String username, String password) throws BadRequestException {
         if (!qualifiesAsAPassword(password)) {
+            log.error("Password cannot be blank or null!");
             throw new BadRequestException("Password cannot be blank or null!");
         }
 
@@ -170,7 +171,9 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
 
     @Override @Transactional
     public void addFriend(String username) {
+        //The new friend comes in as an argument
         UserAccount user = readLoggedInUser();
+        //Adds the new friend onto the logged in user in the database
         user.addFriend(readUser(username));
     }
 
@@ -182,6 +185,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
 
     @Override
     public Set<String> loadFriends(String username) {
+        //Makes sure that no other user can change the friends through the reference that returns
         Set<String> returnvalues = readUser(username).getFriends();
         log.debug("loadFriends(" + username + ")\n" + returnvalues);
         return Collections.unmodifiableSet(returnvalues);
@@ -216,6 +220,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
             if (qualifiesAsAPassword(newPassword) && bCryptPasswordEncoder.matches(oldPassword,userAccount.getPassword())){
                 userAccount.setPassword(bCryptPasswordEncoder.encode(newPassword));
             } else {
+                log.error("Password cannot be blank or null");
                 throw new BadRequestException("Password cannot be blank or null!");
             }
         }

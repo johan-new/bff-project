@@ -1,5 +1,6 @@
 package com.yrgo.bff.project.controllers;
 
+import com.yrgo.bff.project.exception.BadRequestException;
 import com.yrgo.bff.project.service.matching.MatchMakingService;
 import com.yrgo.bff.project.service.useraccount.UserAccountService;
 import org.apache.juli.logging.Log;
@@ -84,7 +85,7 @@ public class MatchMakingController {
             } else
             {
                 log.error("Action must be either accept or reject");
-                throw new Exception("Action must be either accept or reject");
+                throw new BadRequestException("Action must be either accept or reject");
             }
 
         } catch (Exception e) {
