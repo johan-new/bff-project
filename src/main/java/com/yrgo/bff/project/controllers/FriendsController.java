@@ -38,7 +38,6 @@ public class FriendsController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    //returns the logged in users friendlist
     @GetMapping(value = "/friend/all")
     public Set<String> loadMyFriends() {
         return userAccountService.loadFriends(userAccountService.readLoggedInUser().getUsername());

@@ -162,21 +162,36 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
         return readUser(authentication.getName());
     }
 
+    /**
+     * @param username - The friends username
+     * Saves a user as a Friend to the database
+     *
+     */
+
     @Override @Transactional
     public void addFriend(String username) {
-        //Tar in den nya vännen som argument
         UserAccount user = readLoggedInUser();
-        //Lägger till den nya vännen på användaren
         user.addFriend(readUser(username));
     }
 
+    /**
+     * Fetches all friends for the logged in user
+     *
+     * @return a Set of friends
+     */
+
     @Override
     public Set<String> loadFriends(String username) {
-        //ser till så att ingen kan ändra vännerna genom referensen som returneras
         Set<String> returnvalues = readUser(username).getFriends();
         log.debug("loadFriends(" + username + ")\n" + returnvalues);
         return Collections.unmodifiableSet(returnvalues);
     }
+
+    /**
+     * @param username - The friends username
+     * Deletes a user as a Friend from the database
+     *
+     */
 
     @Override @Transactional
     public void removeFriend(String username) {

@@ -83,6 +83,7 @@ public class MatchMakingController {
                 matchMakingService.rejectJoinRequest(matchingRequestId,joinRequestId);
             } else
             {
+                log.error("Action must be either accept or reject");
                 throw new Exception("Action must be either accept or reject");
             }
 

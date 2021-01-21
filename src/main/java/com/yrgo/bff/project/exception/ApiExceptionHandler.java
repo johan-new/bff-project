@@ -44,7 +44,7 @@ public class ApiExceptionHandler {
     /**
      * Creates the message and JSON-body that is returned when thrown
      *
-     * @exception InternalServerErrorException - 500 Internal Server Erorr
+     * @exception InternalServerErrorException - 500 Internal Server Error
      * returns a full Json-body with status code, timestamp, a message and a description/path
      */
 
