@@ -64,15 +64,16 @@
         </div>
           <b-button size="sm" variant="outline-secondary" @click="updateQueue(); updateKey()">Uppdatera</b-button>
                   </div>
-          <!-- Lägg till index nedan??? istället.. och ta bort promiese i metod och sätt som innan -->
       <div v-for="(item, name, index) of getQueue" :key="index" > <h5>{{ name }} </h5>
       <div class="table-responsive">
       <b-table stacked="sm" hover :items="item" :fields="fields">
-        <!-- <template #cell(info)="row">
+        <template #cell(info)="row">
         <div v-for="(value, index) in item" :key="index">
+          <div v-if="value.username === row.item.username">
             <b-button variant="outline-secondary" @click="row.toggleDetails">{{ row.detailsShowing ? 'Dölj' : 'Visa mer'}}</b-button>
+            </div>
         </div>
-        </template> -->
+        </template>
               <template #row-details="row">
         <b-card bg-variant="light">
         <div v-for="(value, index) in item" :key="index">
@@ -80,7 +81,6 @@
           <h5 class="mb-3">Accepterade spelare:</h5>
           <div v-for="confirmedParticipants in row.item.confirmedParticipants" :key="confirmedParticipants">
             <b-card no-body class="my-2 shadow-sm" align-v="center">
-              <!-- <b-card no-body class="my-2 shadow-sm"> -->
             <div class="m-2">{{ confirmedParticipants }}</div>
             </b-card>
             </div>
@@ -151,20 +151,6 @@ export default {
         }
       }
       return queue
-    },
-    isValidDate () {
-      if (this.form.date !== '' && this.form.date > new Date().toISOString()) {
-        return true
-      } else {
-        return false
-      }
-    },
-    isValidTime () {
-      if (this.form.time.includes(':')) {
-        return true
-      } else {
-        return false
-      }
     }
   },
   data () {
@@ -209,7 +195,14 @@ export default {
     submitMatch () {
       this.$store.dispatch('matchStore/submitMatch', this.form)
         .then(() => this.$store.dispatch('matchStore/matchingQueue'))
+      this.$bvToast.toast('Din match har blivit tillagd!', {
+        title: 'Succé!',
+        autoHideDelay: 5000,
+        toaster: 'b-toaster-bottom-center',
+        variant: 'success'
+      })
         .catch(error => {
+          this.$bvToast.toast('Det gick EJ bra!', error.response)
           console.log(error)
         })
     },

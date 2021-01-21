@@ -2,8 +2,10 @@
   <div>
     <b-card class="p-5 shadow-lg p-3 mb-5">
       <h3 class="mb-4">Logga in</h3>
-      <b-form @submit.prevent="login">
-        <b-form-group
+      <ValidationObserver v-slot="{ handleSubmit }">
+      <b-form @submit.prevent="handleSubmit(login)">
+        <ValidationProvider name="email" rules="required|email" v-slot="{ errors }">
+        <b-form-group class="mb-0"
           id="loginInputMail"
           label="E-postadress:"
           label-for="emailInput"
@@ -17,7 +19,10 @@
           >
           </b-form-input>
         </b-form-group>
-        <b-form-group
+        <span class="error">{{ errors[0] }}.</span>
+        </ValidationProvider>
+        <ValidationProvider name="password" rules="required" v-slot="{ errors }">
+        <b-form-group class="mb-0"
           id="loginInputPassword"
           label="Lösenord:"
           label-for="passwordInput"
@@ -31,7 +36,9 @@
           >
           </b-form-input>
         </b-form-group>
-        <div class="d-flex justify-content-between">
+        <span class="error">{{ errors[0] }}.</span>
+      </ValidationProvider>
+        <div class="d-flex justify-content-between mt-2">
           <b-button type="submit">Logga in</b-button>
           <div class="forgottenPassword">
             <a href="#" v-b-modal.modal1>Glömt lösenordet?</a>
@@ -43,6 +50,7 @@
           </p>
         </div>
       </b-form>
+    </ValidationObserver>
     </b-card>
     <b-modal id="modal1" title="Glömt lösenord">
       <b-img
