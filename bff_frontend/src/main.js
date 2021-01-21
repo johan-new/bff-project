@@ -6,8 +6,13 @@ import { routes } from './routes'
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import { ValidationProvider } from 'vee-validate/dist/vee-validate.full.esm'
+import { ValidationObserver } from 'vee-validate'
 
 import Axios from 'axios'
+
+Vue.component('ValidationProvider', ValidationProvider)
+Vue.component('ValidationObserver', ValidationObserver)
 
 Vue.use(BootstrapVueIcons)
 Vue.use(BootstrapVue)

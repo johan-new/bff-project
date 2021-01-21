@@ -41,8 +41,8 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
             matchingRequest.accept(joinRequestId);
             try {
-                notificationService.addNotification(matchingRequest.getJoinRequests().get(joinRequestId).getSender(),
-                        matchingRequest.toString(),
+                notificationService.addNotification(loggedInUser.getUsername(),
+                        MatchingRequest.ACCEPTED_JOIN_NOTIFICATION,
                         NotificationService.Type.ACCEPTED_JOIN_REQUEST);
             } catch (NullPointerException e) {
                 log.error("NullPointer in acceptJoinRequest(... Probably caused due to sender username is null");
@@ -64,8 +64,8 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
             matchingRequest.reject(joinRequestId);
             try {
-                notificationService.addNotification(matchingRequest.getJoinRequests().get(joinRequestId).getSender(),
-                        matchingRequest.toString(),
+                notificationService.addNotification(loggedInUser.getUsername(),
+                        MatchingRequest.REJECTED_JOIN_NOTIFICATION,
                         NotificationService.Type.REJECTED_JOIN_REQUEST);
             } catch (NullPointerException e) {
                 log.error("NullPointer in rejectJoinRequest(... Probably caused due to sender username is null");
@@ -83,7 +83,7 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         final String organizer = joinRequest.getUsername();
 
         notificationService.addNotification(organizer,
-                joinRequest.toString(),
+                MatchingRequest.NEW_JOIN_NOTIFICATION,
                 NotificationService.Type.NEW_JOIN_REQUEST);
     }
 
@@ -151,7 +151,7 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
             for (Object matchingRequest : (List)set.getValue()) {
                 MatchingRequest castedRequest = (MatchingRequest)matchingRequest;
                 notificationService.addNotification(castedRequest.getUsername(),
-                        set.getValue().toString(),
+                        "Remove?",
                         NotificationService.Type.MATCH_SUCCESS);
             }
         }

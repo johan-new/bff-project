@@ -1,13 +1,24 @@
 <template>
       <div>
-        <div v-for="(item, name) of getNotifications" :key="name">
-          Name/ID: {{ name }} <br>
-          Item.type: {{ item.type }} <br>
-          Item.content: {{ item.content}} <br>
-          Item.timestamp: {{ item.timestamp }}<br><br>
-        </div>
+        <b-list-group>
+        <div v-for="(item, index) of getNotifications" :key="index">
+        <div v-for="(notification, name, index) of item" :key="index">
+          <b-list-group-item button @click="notificationRoute(notification.type)" class="flex-column align-items-start overflowNo">
+          <!-- <b-row fluid align-h="between" class="mb-2 smaller-text text-secondary"> -->
+                <div class="d-flex w-100 justify-content-between">
+      <div class="mb-1">{{ notification.time }}</div>
+      <small>{{ notification.date }}</small>
     </div>
-
+          <!-- <b-row class="mb-2"> -->
+            <!-- <b-col>{{ notification.time }}</b-col>
+            <b-col class="text-right">{{ notification.date }}</b-col>
+          </b-row> -->
+          <div>{{ notification.content }}</div>
+          </b-list-group-item>
+        </div>
+        </div>
+        </b-list-group>
+    </div>
 </template>
 
 <script>
@@ -15,14 +26,45 @@ export default {
   name: 'Notifications',
   computed: {
     getNotifications () {
-      const yolo = this.$store.getters['userStore/getNotifications']
-      console.log(yolo)
-      console.log(yolo[0])
-      return yolo[0]
+      return this.$store.getters['userStore/getNotifications']
+    }
+  },
+  methods: {
+    notifications () {
+      this.$store.dispatch('userStore/notifications')
+    },
+    notificationRoute (route) {
+      let destination = ''
+      if (route.includes('REQUEST')) {
+        destination = 'Padel'
+      } else if (route.includes('GAME')) {
+        destination = 'Games'
+      } else {
+        destination = 'Home'
+      }
+      this.$router.push({
+        name: destination
+      })
     }
   },
   created () {
-    this.$store.dispatch('userStore/notifications')
+    this.notifications()
+  },
+  watch: {
+    $route (to, from) {
+      console.log('Hämtar notiser!')
+      this.notifications()
+    }
+  },
+  data () {
+    return {
+    }
   }
 }
 </script>
+
+<style>
+  .overflowNo {
+    word-wrap: break-word !important;
+  }
+</style>

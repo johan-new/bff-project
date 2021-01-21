@@ -2,16 +2,24 @@
     <div>
       <b-card md="6" class="shadow">
       <b-card class="shadow-sm mb-4">
-        <h4 class="font-weight-bold">Spela padel {{ isValidTime }} time: {{ this.form.time }}</h4>
-        <b-form @submit.prevent="submitMatch" class="needs-validation" validated novalidate>
+        <h4 class="font-weight-bold">Spela padel</h4>
+        <ValidationObserver v-slot="{ handleSubmit }">
+        <b-form @submit.prevent="handleSubmit(submitMatch)" novalidate>
           <div class="form-row">
             <div class="form-group col-md-5">
+              <ValidationProvider name="date" rules="required" v-slot="{ errors }">
               <label for="inputDate">Datum:</label>
-              <b-form-datepicker placeholder="Välj datum" class="form-control" id="inputDate" :state="isValidDate" v-model="form.date"></b-form-datepicker>
+              <b-form-datepicker placeholder="Välj datum" class="form-control" id="inputDate" v-model="form.date"></b-form-datepicker>
+              <!-- <b-form-datepicker placeholder="Välj datum" id="inputDate" v-model="form.date"></b-form-datepicker> -->
+              <span class="error">{{ errors[0] }}.</span>
+            </ValidationProvider>
             </div>
             <div class="form-group col-md-3">
+              <ValidationProvider name="time" rules="required" v-slot="{ errors }">
               <label for="inputTime">Tidpunkt:</label>
-<b-form-timepicker label-no-time-selected="Välj tid" class="form-control" id="inputTime" :state="isValidTime" v-model="form.time"></b-form-timepicker>
+              <b-form-timepicker label-no-time-selected="Välj tid" class="form-control" id="inputTime" v-model="form.time"></b-form-timepicker>
+              <span class="error">{{ errors[0] }}.</span>
+              </ValidationProvider>
             </div>
           </div>
 
@@ -25,26 +33,39 @@
 </b-form-group>
     <div class="form-row">
     <div class="col-md-3 mb-3">
+      <ValidationProvider name="participants" rules="required" v-slot="{ errors }">
       <label for="participants">Antal Spelare:</label>
-      <select class="custom-select" id="participants" required v-model="form.participants">
+      <select class="custom-select" id="participants" v-model="form.participants">
         <option selected disabled value="">Antal...</option>
             <option :value="1" selected>1</option>
     <option :value="2">2</option>
     <option :value="3">3</option>
       </select>
+      <span class="error">{{ errors[0] }}.</span>
+      </ValidationProvider>
     </div>
     <div class="col-md-4 mb-3">
+      <ValidationProvider name="location" rules="required" v-slot="{ errors }">
       <label for="location">Stad:</label>
-      <input type="text" class="form-control" id="location" v-model="form.location" required>
+      <input type="text" class="form-control" id="location" v-model="form.location">
+      <span class="error">{{ errors[0] }}.</span>
+      </ValidationProvider>
     </div>
     </div>
           <b-button variant="outline-secondary" type="submit">Spela!</b-button>
         </b-form>
+        </ValidationObserver>
         </b-card>
 
-        <b-card class="p-2 shadow-sm mb-1">
-          <h4 class="mb-4 font-weight-bold">Hitta din match</h4>
-      <div v-for="(item, name) of getQueue" :key="name" > <h5>{{ name }} </h5>
+        <b-card class="p-2 shadow-sm mb-1" :key="componentKey">
+                  <div class="mb-4 d-flex">
+        <div class="mr-auto">
+          <h4 class="font-weight-bold">Hitta din match</h4>
+        </div>
+          <b-button size="sm" variant="outline-secondary" @click="updateQueue(); updateKey()">Uppdatera</b-button>
+                  </div>
+          <!-- Lägg till index nedan??? istället.. och ta bort promiese i metod och sätt som innan -->
+      <div v-for="(item, name, index) of getQueue" :key="index" > <h5>{{ name }} </h5>
       <div class="table-responsive">
       <b-table stacked="sm" hover :items="item" :fields="fields">
         <template #cell(info)="row">
@@ -54,21 +75,21 @@
         </template>
               <template #row-details="row">
         <b-card bg-variant="light">
-        <div v-for="(value) in item" :key="value.location">
+        <div v-for="(value, index) in item" :key="index">
           <div v-if="row.item.confirmedParticipants.length !== 0">
           <h5 class="mb-3">Accepterade spelare:</h5>
           <div v-for="confirmedParticipants in row.item.confirmedParticipants" :key="confirmedParticipants">
-            <b-card no-body class="my-2 shadow-sm" align-v="center">
+            <!-- <b-card no-body class="my-2 shadow-sm" align-v="center">             -->
+              <b-card no-body class="my-2 shadow-sm">
             <div class="m-2">{{ confirmedParticipants }}</div>
             </b-card>
             </div>
           <hr>
           </div>
             <div :key="componentKey">
-          <!-- <div v-if="value.username === loggedInUser"> -->
           <div v-if="Object.keys(row.item.joinRequests).length !== 0">
           <h5 class="my-3">Spelare som vill gå med:</h5>
-        <div v-for="(joinRequest, name) in row.item.joinRequests" :key="joinRequest.sender">
+        <div v-for="(joinRequest, name, index) in row.item.joinRequests" :key="index">
           <b-card v-if="joinRequest.status === 'PENDING'" no-body class="my-2 shadow-sm">
         <div class="m-2 d-flex">
         <div class="mr-auto">
@@ -88,7 +109,7 @@
           </div>
         <!-- </div> -->
         <div v-if="value.username !== loggedInUser">
-            <div v-for="joinRequest in row.item.joinRequests" :key="joinRequest.id">
+            <div v-for="(joinRequest, index) in row.item.joinRequests" :key="index">
               <div v-if="joinRequest.status === 'PENDING' && joinRequest.sender === loggedInUser">
                 <div>Du är i kö, chilla, {{ joinRequest.sender }}</div>
               </div>
@@ -116,28 +137,18 @@
 export default {
   name: 'Padel',
   computed: {
-    // getQueue () { return this.$store.getters['matchStore/getQueue'] },
     inQueue () { return this.$store.getters['matchStore/inQueue'] },
     loggedInUser () { return this.$store.getters['authStore/loggedInUser'] },
     trueOrFalse () { return this.form.reservation },
     getQueue () {
       const queue = this.$store.getters['matchStore/getQueue']
       let q = {}
-      // let s = 0
       for (q in queue) {
         if (queue[q][0].courtIsBooked === true) {
           queue[q][0].courtIsBooked = 'Ja'
         } else {
           queue[q][0].courtIsBooked = 'Nej'
         }
-        // for (s in queue[q][0].confirmedParticipants) {
-        //   console.log(s)
-        //   console.log(queue[q])
-        //   console.log(queue[q][0].confirmedParticipants[s])
-        //   queue[q][0].requestedParticipants--
-        //   // s++
-        //   // queue[q][0].requestedParticipants -= s
-        // }
       }
       return queue
     },
@@ -189,19 +200,18 @@ export default {
           key: 'info',
           label: 'Info'
         }
-      ]
+      ],
+      componentKey: 1337,
+      compkey: 0
     }
   },
   methods: {
     submitMatch () {
-      return Promise.all([
-        this.$store.dispatch('matchStore/submitMatch', this.form),
-        this.$store.dispatch('matchStore/matchingQueue')])
-        .then(console.log(this.form))
-        .catch((error) => {
-          console.log(error.response)
+      this.$store.dispatch('matchStore/submitMatch', this.form)
+        .then(() => this.$store.dispatch('matchStore/matchingQueue'))
+        .catch(error => {
+          console.log(error)
         })
-      // this.form = {}
     },
     cancelMatch (location) {
       this.$store.dispatch('matchStore/cancelMatch', location)
@@ -242,10 +252,13 @@ export default {
     },
     updateKey () {
       this.componentKey += 1
+    },
+    updateQueue () {
+      this.$store.dispatch('matchStore/matchingQueue')
     }
   },
   created () {
-    this.$store.dispatch('matchStore/matchingQueue')
+    this.updateQueue()
   }
 }
 </script>
@@ -253,5 +266,10 @@ export default {
 <style>
 .card {
   background-color: rgba(255, 255, 255) !important;
+}
+.error {
+  color: red;
+  font-size: small;
+  font-style: italic;
 }
 </style>

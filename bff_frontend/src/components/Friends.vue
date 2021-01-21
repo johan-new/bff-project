@@ -20,7 +20,7 @@ export default {
   props: ['friends'],
   methods: {
     fetchUser (friend) {
-      this.$emit('em', friend)
+      // this.$emit('em', friend)
       this.$router.push({
         name: 'Userprofile',
         params: { username: friend }

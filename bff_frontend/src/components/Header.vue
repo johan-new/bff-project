@@ -61,9 +61,8 @@
             <template #button-content>
               &nbsp;<b-icon icon="bell-fill" aria-hidden="true"></b-icon>
             </template>
-            <b-dropdown-text style="width: 240px">
-              <p>Dina senaste notifikationer</p>
-              <b-dropdown-divider></b-dropdown-divider>
+            <b-dropdown-text style="width: 300px" class="p-n5">
+              <h6 class="ml-2 p-2 font-weight-bold">Dina senaste notifikationer</h6>
               <Notifications />
             </b-dropdown-text>
           </b-dropdown>
@@ -134,3 +133,10 @@ export default {
   }
 }
 </script>
+
+<style>
+  .b-dropdown-text {
+    padding: 0 !important;
+    margin: 0 ! important;
+  }
+  </style>

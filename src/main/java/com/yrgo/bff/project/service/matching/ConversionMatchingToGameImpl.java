@@ -52,8 +52,7 @@ public class ConversionMatchingToGameImpl implements ConversionMatchingToGame {
     private void notifyUsers(Set<UserAccount> participants, MatchingRequest matchingRequest) {
         for (UserAccount user:participants) {
             notificationService.addNotification(user.getUsername(),
-                    "Houston, we got a match! At " + matchingRequest.getVenue() + " " +
-                            matchingRequest.getTime() + ". Please go to the Game page for more info.",
+                    MatchingRequest.GAME_CREATED_NOTIFICATION,
                     NotificationService.Type.GAME_CREATED);
         }
     }
