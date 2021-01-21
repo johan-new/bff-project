@@ -62,18 +62,18 @@ public class Project2Application {
 			log.debug("TEST: Detta är ett debug-meddelande");
 			log.error("TEST: TEST: Detta är ett felmeddelande");
 
-			final String user = "erik@a.a";
-			final String user2 = "simon@a.a";
-			final String user3 = "johan@a.a";
-			final String user4 = "greven@a.a";
+			final String user = "erik@a.se";
+			final String user2 = "simon@a.se";
+			final String user3 = "johan@a.se";
+			final String user4 = "greven@a.se";
 			final String password = "a";
 
 			final String location = "Mölndal";
 
-			final String user5 = "nahid@a.a";
-			final String user6 = "anders@a.a";
-			final String user7 = "hampus@a.a";
-			final String user8 = "jon@a.a";
+			final String user5 = "nahid@a.se";
+			final String user6 = "anders@a.se";
+			final String user7 = "hampus@a.se";
+			final String user8 = "jon@a.se";
 
 			userAccountService.createUser(user,password);
 			userAccountService.createUser(user2,password);

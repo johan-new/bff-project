@@ -32,7 +32,7 @@
       <span class="error">{{ errors[0] }}.</span>
       </ValidationProvider>
         <div class="d-flex justify-content-between mt-2">
-          <b-button type="submit">Registrera dig</b-button>
+          <b-button type="submit" ref="button">Registrera dig</b-button>
           </div>
           </b-form>
           </ValidationObserver>
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import anime from 'animejs'
 export default {
   name: 'Register',
   data () {
@@ -60,14 +61,20 @@ export default {
         password: this.userData.password
       }
       this.$store.dispatch('authStore/addUser', payload)
-        .then(() => this.$router.push({
-          name: 'Login'
-        }).catch(error => {
-          if (error.name !== 'NavigationDuplicated' &&
-            !error.message.includes('Avoided redundant navigation to current location')) {
-            console.log(error.response)
+        .then(() => anime({
+          targets: this.$refs.button,
+          translateX: 250,
+          easing: 'easeInOutExpo',
+          complete: () => {
+            this.$router.push('/login')
           }
         }))
+        .catch(error => {
+          if (error.name !== 'NavigationDuplicated' &&
+            !error.message.includes('Avoided redundant navigation to current location')) {
+            console.log(error)
+          }
+        })
     }
   }
 }
@@ -78,4 +85,5 @@ export default {
     font-size: small;
   }
   .card { background-color: rgba(255, 255, 255, 0.9) !important; }
+
 </style>
