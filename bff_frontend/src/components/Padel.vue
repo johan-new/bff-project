@@ -68,19 +68,19 @@
       <div v-for="(item, name, index) of getQueue" :key="index" > <h5>{{ name }} </h5>
       <div class="table-responsive">
       <b-table stacked="sm" hover :items="item" :fields="fields">
-        <template #cell(info)="row">
-        <div v-for="(value) in item" :key="value.location">
+        <!-- <template #cell(info)="row">
+        <div v-for="(value, index) in item" :key="index">
             <b-button variant="outline-secondary" @click="row.toggleDetails">{{ row.detailsShowing ? 'Dölj' : 'Visa mer'}}</b-button>
         </div>
-        </template>
+        </template> -->
               <template #row-details="row">
         <b-card bg-variant="light">
         <div v-for="(value, index) in item" :key="index">
           <div v-if="row.item.confirmedParticipants.length !== 0">
           <h5 class="mb-3">Accepterade spelare:</h5>
           <div v-for="confirmedParticipants in row.item.confirmedParticipants" :key="confirmedParticipants">
-            <!-- <b-card no-body class="my-2 shadow-sm" align-v="center">             -->
-              <b-card no-body class="my-2 shadow-sm">
+            <b-card no-body class="my-2 shadow-sm" align-v="center">
+              <!-- <b-card no-body class="my-2 shadow-sm"> -->
             <div class="m-2">{{ confirmedParticipants }}</div>
             </b-card>
             </div>

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class MatchMakingServiceImplementation implements MatchMakingService {
@@ -41,7 +40,8 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
             matchingRequest.accept(joinRequestId);
             try {
-                notificationService.addNotification(loggedInUser.getUsername(),
+                final String sender = matchingRequest.getJoinRequests().get(joinRequestId).getSender();
+                notificationService.addNotification(sender,
                         MatchingRequest.ACCEPTED_JOIN_NOTIFICATION,
                         NotificationService.Type.ACCEPTED_JOIN_REQUEST);
             } catch (NullPointerException e) {

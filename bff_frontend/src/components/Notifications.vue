@@ -44,6 +44,11 @@ export default {
       }
       this.$router.push({
         name: destination
+      }).catch(error => {
+        if (error.name !== 'NavigationDuplicated' &&
+            !error.message.includes('Avoided redundant navigation to current location')) {
+          console.log(error)
+        }
       })
     }
   },

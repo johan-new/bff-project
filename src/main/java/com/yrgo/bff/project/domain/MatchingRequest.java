@@ -1,7 +1,6 @@
 package com.yrgo.bff.project.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonTypeId;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
@@ -10,7 +9,6 @@ import javax.persistence.Transient;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-
 import java.util.*;
 
 /***
@@ -55,11 +53,11 @@ public class MatchingRequest {
     @Transient
     private Log log = LogFactory.getLog(getClass());
 
-    public static final String GENERAL_NOTIFICATION = "Detta är en generell notis!";
-    public static final String REJECTED_JOIN_NOTIFICATION = "Spelarrangören tog bort din förfrågan.";
-    public static final String ACCEPTED_JOIN_NOTIFICATION = "Spelarrangören accepterade din förfrågan.";
-    public static final String NEW_JOIN_NOTIFICATION = "En spelare vill gå med i din match.";
-    public static final String GAME_CREATED_NOTIFICATION = "Lobbyn är full och ett spel är skapat!";
+    public static final String GENERAL_NOTIFICATION = "Detta är en generell notis";
+    public static final String REJECTED_JOIN_NOTIFICATION = "Spelarrangören tog bort din förfrågan";
+    public static final String ACCEPTED_JOIN_NOTIFICATION = "Spelarrangören accepterade din förfrågan";
+    public static final String NEW_JOIN_NOTIFICATION = "En spelare vill gå med i din match";
+    public static final String GAME_CREATED_NOTIFICATION = "Lobbyn är full och ett spel är skapat";
 
     public MatchingRequest(JSONObject jsonObject) {
 
