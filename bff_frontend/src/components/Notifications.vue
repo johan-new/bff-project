@@ -23,25 +23,6 @@ export default {
   computed: {
     getNotifications () {
       return this.$store.getters['userStore/getNotifications']
-    },
-    routerPath () {
-      const notifications = this.$store.getters['userStore/getNotifications']
-      let items = ''
-      let item = ''
-      for (items in Object.values(notifications)) {
-        console.log(notifications[items])
-        for (item of Object.values(notifications[items])) {
-          console.log(typeof item.type)
-          if (item.type.includes('JOIN')) {
-            return 'padel'
-          } else if (item.type === 'GAME_CREATED') {
-            return 'games'
-          } else {
-            return '/'
-          }
-        }
-      }
-      return this.$store.getters['userStore/getNotifications']
     }
   },
   methods: {
