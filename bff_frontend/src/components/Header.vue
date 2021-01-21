@@ -57,14 +57,12 @@
             toggle-class="text-decoration-none"
             no-caret
             v-if="isLoggedIn"
-            class="p-n5"
           >
             <template #button-content>
               &nbsp;<b-icon icon="bell-fill" aria-hidden="true"></b-icon>
             </template>
-            <b-dropdown-text style="width: 440px" class="p-n5">
-              <p>Dina senaste notifikationer</p>
-              <b-dropdown-divider></b-dropdown-divider>
+            <b-dropdown-text style="width: 300px" class="p-n5">
+              <h6 class="ml-2 p-2 font-weight-bold">Dina senaste notifikationer</h6>
               <Notifications />
             </b-dropdown-text>
           </b-dropdown>

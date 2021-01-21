@@ -79,7 +79,8 @@
           <div v-if="row.item.confirmedParticipants.length !== 0">
           <h5 class="mb-3">Accepterade spelare:</h5>
           <div v-for="confirmedParticipants in row.item.confirmedParticipants" :key="confirmedParticipants">
-            <b-card no-body class="my-2 shadow-sm" align-v="center">
+            <!-- <b-card no-body class="my-2 shadow-sm" align-v="center">             -->
+              <b-card no-body class="my-2 shadow-sm">
             <div class="m-2">{{ confirmedParticipants }}</div>
             </b-card>
             </div>

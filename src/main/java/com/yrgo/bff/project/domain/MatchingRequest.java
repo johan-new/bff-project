@@ -52,6 +52,11 @@ public class MatchingRequest {
     @Transient
     private Log log = LogFactory.getLog(getClass());
 
+    public static final String GENERAL_NOTIFICATION = "Detta är en generell notis!";
+    public static final String REJECTED_JOIN_NOTIFICATION = "Spelarrangören tog bort din förfrågan.";
+    public static final String ACCEPTED_JOIN_NOTIFICATION = "Spelarrangören accepterade din förfrågan.";
+    public static final String NEW_JOIN_NOTIFICATION = "En spelare vill gå med i din match.";
+    public static final String GAME_CREATED_NOTIFICATION = "Lobbyn är full och ett spel är skapat!";
 
     public MatchingRequest(JSONObject jsonObject) {
 

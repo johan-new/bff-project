@@ -44,7 +44,7 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
             matchingRequest.accept(joinRequestId);
             notificationService.addNotification(loggedInUser.getUsername(),
-                    matchingRequest.toString(),
+                    MatchingRequest.ACCEPTED_JOIN_NOTIFICATION,
                     NotificationService.Type.ACCEPTED_JOIN_REQUEST);
             converter.convertRequestToGame(matchingRequest);
         } else {
@@ -65,7 +65,7 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         if (loggedInUser.getUsername().equals(matchingRequest.getUsername())) {
             matchingRequest.reject(joinRequestId);
             notificationService.addNotification(loggedInUser.getUsername(),
-                    matchingRequest.toString(),
+                    MatchingRequest.REJECTED_JOIN_NOTIFICATION,
                     NotificationService.Type.REJECTED_JOIN_REQUEST);
         } else {
             //TODO: Exception? Or return a boolean indicating success?
@@ -80,7 +80,7 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         final String organizer = joinRequest.getUsername();
 
         notificationService.addNotification(organizer,
-                joinRequest.toString(),
+                MatchingRequest.NEW_JOIN_NOTIFICATION,
                 NotificationService.Type.NEW_JOIN_REQUEST);
     }
 
@@ -148,7 +148,7 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
             for (Object matchingRequest : (List)set.getValue()) {
                 MatchingRequest castedRequest = (MatchingRequest)matchingRequest;
                 notificationService.addNotification(castedRequest.getUsername(),
-                        set.getValue().toString(),
+                        "Remove?",
                         NotificationService.Type.MATCH_SUCCESS);
             }
         }
