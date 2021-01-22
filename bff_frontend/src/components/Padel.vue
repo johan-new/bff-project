@@ -64,6 +64,7 @@
         </div>
           <b-button size="sm" variant="outline-secondary" @click="updateQueue(); updateKey()">Uppdatera</b-button>
                   </div>
+
       <div v-for="(item, name, index) of getQueue" :key="index" > <h5>{{ name }} </h5>
       <div class="table-responsive">
       <b-table stacked="sm" hover :items="item" :fields="fields">
@@ -77,23 +78,41 @@
               <template #row-details="row">
         <b-card bg-variant="light">
         <div v-for="(value, index) in item" :key="index">
+          <!-- {{ value }} -->
+          <!-- <div v-if="value.username === row.item.username"> -->
           <div v-if="row.item.confirmedParticipants.length !== 0">
+          <div v-if="value.username === row.item.username">
           <h5 class="mb-3">Accepterade spelare:</h5>
           <div v-for="confirmedParticipants in row.item.confirmedParticipants" :key="confirmedParticipants">
             <b-card no-body class="my-2 shadow-sm" align-v="center">
-            <div class="m-2">{{ confirmedParticipants }}</div>
+            <div class="m-2">
+              <div v-if="confirmedParticipants === loggedInUser">
+            <div>{{ confirmedParticipants }}</div>
+            </div>
+          <div v-else>
+            <div class="text-secondary">{{ confirmedParticipants }}</div>
+            </div>
+            </div>
             </b-card>
             </div>
           <hr>
           </div>
+          </div>
             <div :key="componentKey">
           <div v-if="Object.keys(row.item.joinRequests).length !== 0">
-          <h5 class="my-3">Spelare som vill gå med:</h5>
+          <div v-if="value.username === row.item.username">
         <div v-for="(joinRequest, name, index) in row.item.joinRequests" :key="index">
-          <b-card v-if="joinRequest.status === 'PENDING'" no-body class="my-2 shadow-sm">
+          <div v-if="joinRequest.status === 'PENDING'">
+          <h5 class="my-3">Spelare som vill gå med:</h5>
+          <b-card no-body class="my-2 shadow-sm">
         <div class="m-2 d-flex">
         <div class="mr-auto">
-          <div>{{ joinRequest.sender }}</div>
+          <div v-if="joinRequest.sender === loggedInUser">
+            <div>{{ joinRequest.sender }}</div>
+            </div>
+          <div v-else>
+            <div class="text-secondary">{{ joinRequest.sender }}</div>
+            </div>
           </div>
         <div v-if="value.username === loggedInUser">
           <b-button @click="acceptMatchRequest(name, item[0].id); updateKey()" variant="outline-secondary" size="sm" class="mx-1">Acceptera</b-button>
@@ -101,27 +120,32 @@
           </div>
         </div>
         </b-card>
-          </div>
-        <hr>
         </div>
-          <div v-if="value.username === loggedInUser">
+        </div>
+        <hr>
+          </div>
+        </div>
+          <div v-if="row.item.username === loggedInUser && row.item.username === value.username">
             <b-button variant="outline-secondary" @click="cancelMatch(name)" >Avbryt</b-button>
           </div>
-        <!-- </div> -->
-        <div v-if="value.username !== loggedInUser">
+<!-- <div v-for="(value, index) in item" :key="index">
+          <div v-if="value.username === row.item.username"> -->
+        <!-- <div v-if="value.username !== loggedInUser"> -->
+          <div v-if="value.username === row.item.username">
             <div v-for="(joinRequest, index) in row.item.joinRequests" :key="index">
               <div v-if="joinRequest.status === 'PENDING' && joinRequest.sender === loggedInUser">
-                <div>Du är i kö, chilla, {{ joinRequest.sender }}</div>
+                <div>Du är placerad i kö. Invänta matcharrangörens beslut.</div>
               </div>
               <div v-else-if="joinRequest.status === 'ACCEPTED' && joinRequest.sender === loggedInUser">
                 <div>Du är med i spelet</div>
               </div>
             </div>
-            <div v-if="!testing(row.item.joinRequests)">
-              <b-button @click="joinMatch(item[0].id); updateKey()">Gå med</b-button>
+            <div v-if="!testing(row.item.joinRequests) && row.item.username !== loggedInUser">
+              <b-button @click="joinMatch(item[index].id); updateKey()">Gå med</b-button>
             </div>
             </div>
         </div>
+        <!-- </div> -->
         </div>
         </b-card>
       </template>
