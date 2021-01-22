@@ -21,6 +21,14 @@ public class NotificationController {
     @Autowired
     NotificationService notificationService;
 
+    /**
+     *
+     * Reads a notification from the logged in user when used
+     *
+     * Use the interface NotificationService
+     *
+     **/
+
     @GetMapping("/notifications")
     Map<Integer, Map<String, String>> getNotifications(){
         return notificationService.getNotifications();
