@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -34,9 +35,16 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
 
     private Log log = LogFactory.getLog(getClass());
 
+
+    /**
+     * Injecting password hashing instance
+     *
+     * @param bCryptPasswordEncoder
+     */
     public UserAccountServiceImplementation(BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
+
     /**
      * Creates a user and persists it in the database
      *
@@ -144,6 +152,13 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
         return users;
     }
 
+    /**
+     * Used to bridge our specific UserAccount implementation
+     * to Spring Security and its User and UserDetails libraries
+     * @param username
+     * @return UserDetails of a UserAccount
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("loadUserByUsername("+username+")");
@@ -157,9 +172,21 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
         return user2;
     }
 
+    /**
+     * Is logged in user is null, the http session is invalidated
+     * to enforce a new login (session)
+     *
+     * @return the UserAccount object of the logged in user.
+     */
     @Override
     public UserAccount readLoggedInUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null) {
+            log.error("Cannot fetch logged in user, logging out...");
+            new SecurityContextLogoutHandler().setInvalidateHttpSession(true);
+        }
+
         return readUser(authentication.getName());
     }
 
