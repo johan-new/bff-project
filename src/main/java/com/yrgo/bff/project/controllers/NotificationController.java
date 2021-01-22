@@ -22,11 +22,9 @@ public class NotificationController {
     NotificationService notificationService;
 
     /**
-     *
      * Reads a notification from the logged in user when used
      *
-     * Use the interface NotificationService
-     *
+     * Uses the interface NotificationService
      **/
 
     @GetMapping("/notifications")
