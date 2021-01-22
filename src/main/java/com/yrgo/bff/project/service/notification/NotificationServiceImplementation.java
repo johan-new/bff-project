@@ -23,6 +23,12 @@ public class NotificationServiceImplementation implements NotificationService {
         this.notifications =  new HashMap();
     }
 
+    /**
+     * Method to get the notification for the logged in user
+     *
+     * @return Notification and then it's erased
+     */
+
     @Override
     public Map<Integer, Map<String, String>> getNotifications() {
         try {
@@ -34,6 +40,18 @@ public class NotificationServiceImplementation implements NotificationService {
             return null;
         }
     }
+
+    /**
+     * Adds a notification for the logged in user
+     *
+     * @param content - HashMap containing notification to be updated
+     *                           > type
+     *                           > date
+     *                           > time
+     *                           > content
+     * @return Notification for the logged in user
+     *
+     */
 
     @Override
     public void addNotification(String username, String content, Type type) {
