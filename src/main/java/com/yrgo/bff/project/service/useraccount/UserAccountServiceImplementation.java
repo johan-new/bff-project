@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -160,6 +161,12 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     @Override
     public UserAccount readLoggedInUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null) {
+            log.error("Cannot fetch logged in user, logging out...");
+            new SecurityContextLogoutHandler().setInvalidateHttpSession(true);
+        }
+
         return readUser(authentication.getName());
     }
 
