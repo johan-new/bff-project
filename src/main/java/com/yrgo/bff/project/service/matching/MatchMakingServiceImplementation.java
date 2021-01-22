@@ -27,11 +27,22 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
 
     private Log log = LogFactory.getLog(getClass());
 
+    /**
+     * Looking up MatchingRequest by its id number and
+     * if succeeded a joinRequest is made
+     * @param id
+     */
     @Override
     public void askToJoinGame(Long id) {
         getRequestByRequestId(id).ifPresent(this::joinRequest);
     }
 
+    /**
+     * Used by an organizer to accept a join request
+     *
+     * @param matchingRequestId
+     * @param joinRequestId
+     */
     @Override
     public void acceptJoinRequest(Long matchingRequestId, int joinRequestId) {
         MatchingRequest matchingRequest = getRequestByRequestId(matchingRequestId).get();
@@ -55,7 +66,11 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
     }
 
 
-
+    /**
+     * Used by an organizer to reject a join request
+     * @param matchingRequestId
+     * @param joinRequestId
+     */
     @Override
     public void rejectJoinRequest(Long matchingRequestId, int joinRequestId) {
         MatchingRequest matchingRequest = getRequestByRequestId(matchingRequestId).get();
@@ -76,6 +91,10 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         }
     }
 
+    /**
+     * Sending join request from the logged in user, and notifies the organizer
+     * @param joinRequest
+     */
     private void joinRequest(MatchingRequest joinRequest){
         UserAccount loggedInUser = userAccountService.readLoggedInUser();
         joinRequest.askToJoin(loggedInUser);
@@ -88,6 +107,11 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
     }
 
 
+    /**
+     * @param id
+     * @return returns a MatchingRequest object if it exists,
+     *          wrapped around a Optional to simplify null handling.
+     */
     private Optional<MatchingRequest> getRequestByRequestId(Long id) {
         Iterator it = usersLookingToBeMatched.entrySet().iterator();
         while (it.hasNext()) {
@@ -102,6 +126,13 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
     }
 
 
+    /**
+     * Initiate a MatchingRequest, and sorted by its location.
+     *
+     * @param requestParam
+     * @param location
+     * @return returns the created MatchinGRequest
+     */
     @Override
     public MatchingRequest addUserMatchRequest(JSONObject requestParam, String location) {
         MatchingRequest matchingRequest = new MatchingRequest(requestParam);
@@ -114,6 +145,12 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
         return matchingRequest;
     }
 
+    /**
+     * Removes a MatchingRequest. Since it is sorted by the method
+     * requires that argument to know which key to use in usersLookingToBeMatched
+     * @param username the ones sending the removal request
+     * @param location key in the Map usersLookingToBeMatched
+     */
     @Override
     public void removeUserMatchRequest(String username, String location) {
         for (MatchingRequest matchingRequest : usersLookingToBeMatched.get(location)) {
@@ -126,42 +163,22 @@ public class MatchMakingServiceImplementation implements MatchMakingService {
             }
         }
     }
-/*
-    private void matchUsers() {
-        if (usersLookingToBeMatched.size()>1) {
-            Map<String, List<MatchingRequest>> matchingUsers = usersLookingToBeMatched.entrySet().
-                    stream().
-                    filter(a->a.getValue().size()>1).
-                    collect(Collectors.toMap(e->e.getKey(),e->e.getValue()));
 
-            notifyUsersThatMatch(matchingUsers);
 
-            //removing matching users
-            usersLookingToBeMatched = usersLookingToBeMatched.entrySet().
-                    stream().
-                    filter(a->a.getValue().size()<=1).
-                    collect(Collectors.toMap(e->e.getKey(),e->e.getValue()));
-        }
-    }
-
-    private void notifyUsersThatMatch(Map<String, List<MatchingRequest>> matchingUsers) {
-        Iterator iterator = matchingUsers.entrySet().iterator();
-        while (iterator.hasNext()){
-            Map.Entry set = (Map.Entry) iterator.next();
-            for (Object matchingRequest : (List)set.getValue()) {
-                MatchingRequest castedRequest = (MatchingRequest)matchingRequest;
-                notificationService.addNotification(castedRequest.getUsername(),
-                        "Remove?",
-                        NotificationService.Type.MATCH_SUCCESS);
-            }
-        }
-    }*/
-
+    /**
+     * @return parsing the data to JSON
+     */
     @Override
     public JSONObject getUsersLookingToBeMatched() {
         return new JSONObject(usersLookingToBeMatched);
     }
 
+    /**
+     * Removes a MatchingRequest by its id number. Since the data
+     * in usersLookingToBeMatched is not structured by its id the
+     * below approach is required.
+     * @param id
+     */
     @Override
     public void removeUserMatchRequest(Long id) {
         String location = "";
