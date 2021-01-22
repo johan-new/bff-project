@@ -101,9 +101,9 @@
             <div :key="componentKey">
           <div v-if="Object.keys(row.item.joinRequests).length !== 0">
           <div v-if="value.username === row.item.username">
+          <h5 class="my-3">Spelare som vill gå med:</h5>
         <div v-for="(joinRequest, name, index) in row.item.joinRequests" :key="index">
           <div v-if="joinRequest.status === 'PENDING'">
-          <h5 class="my-3">Spelare som vill gå med:</h5>
           <b-card no-body class="my-2 shadow-sm">
         <div class="m-2 d-flex">
         <div class="mr-auto">
@@ -115,8 +115,8 @@
             </div>
           </div>
         <div v-if="value.username === loggedInUser">
-          <b-button @click="acceptMatchRequest(name, item[0].id); updateKey()" variant="outline-secondary" size="sm" class="mx-1">Acceptera</b-button>
-          <b-button variant="outline-secondary" size="sm" class="mx-1" @click="rejectMatchRequest(name, item[0].id); updateKey()">Neka</b-button>
+          <b-button @click="acceptMatchRequest(name, row.item.id); updateKey()" variant="outline-secondary" size="sm" class="mx-1">Acceptera</b-button>
+          <b-button variant="outline-secondary" size="sm" class="mx-1" @click="rejectMatchRequest(name, item[index].id); updateKey()">Neka</b-button>
           </div>
         </div>
         </b-card>
