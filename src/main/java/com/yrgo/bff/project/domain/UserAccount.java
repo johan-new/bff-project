@@ -187,12 +187,12 @@ public class UserAccount {
         return age;
     }
 
-    public void setAge(int age) throws Exception {
+    public void setAge(int age) {
         if (age > 15 && age < 120)
         {
             this.age = age;
         } else {
-            throw new Exception("Ogiltig ålder!");
+            log.debug("Proper age interval is 16-119 years. Property not set.");
         }
     }
 

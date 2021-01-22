@@ -79,7 +79,7 @@ public class MatchingRequest {
             if (getRequestedParticipants() <= 0 && getRequestedParticipants() >= 4) {
                 throw new Exception("Valid participants 1-3 persons (the organizer is assumed to participate)");
             }
-        } catch (Exception e) {
+        } catch (Exception e) { //could be triggered with both NumberFormatException or the above
             log.debug(getClass().getSimpleName() + ": " + toString() +
                     "\nException creating MatchingRequest, fallback to default value participants=3");
             log.debug(e.getMessage());

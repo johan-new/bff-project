@@ -53,7 +53,7 @@ public class MatchMakingController {
                 return ResponseEntity.status(HttpStatus.CREATED).body("search added");
             } else {
                 log.error("No such location");
-                throw new Exception("No such location");
+                throw new BadRequestException("No such location");
             }
         } catch (Exception e) {
             log.error(e.getMessage());
