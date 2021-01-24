@@ -34,6 +34,9 @@ export default {
       fields: [
         {
           key: 'venue',
+          label: 'Padelhall'
+        }, {
+          key: 'location',
           label: 'Stad'
         }, {
           key: 'players',

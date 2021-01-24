@@ -8,6 +8,13 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.Date;
 
+/**
+ * ApiExceptionHandler
+ *
+ * ExceptionsHandlers to handle specific Exceptions
+ *
+ **/
+
 @ControllerAdvice
 public class ApiExceptionHandler {
 
