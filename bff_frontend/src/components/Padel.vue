@@ -128,9 +128,6 @@
           <div v-if="row.item.username === loggedInUser && row.item.username === value.username">
             <b-button variant="outline-secondary" @click="cancelMatch(name)" >Avbryt</b-button>
           </div>
-<!-- <div v-for="(value, index) in item" :key="index">
-          <div v-if="value.username === row.item.username"> -->
-        <!-- <div v-if="value.username !== loggedInUser"> -->
           <div v-if="value.username === row.item.username">
             <div v-for="(joinRequest, index) in row.item.joinRequests" :key="index">
               <div v-if="joinRequest.status === 'PENDING' && joinRequest.sender === loggedInUser">
@@ -145,7 +142,6 @@
             </div>
             </div>
         </div>
-        <!-- </div> -->
         </div>
         </b-card>
       </template>

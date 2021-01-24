@@ -45,7 +45,6 @@ const actions = {
       newPassword
     })
       .then(data => {
-        console.log(data.status)
         context.commit('set_status', data.status)
       })
       .catch(error => {

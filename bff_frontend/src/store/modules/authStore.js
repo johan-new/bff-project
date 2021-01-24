@@ -19,9 +19,6 @@ const actions = {
       username: name,
       password: password
     })
-      .then(data => {
-        console.log(data.data)
-      })
       .catch(error => {
         console.log(error.response)
       })

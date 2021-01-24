@@ -9,16 +9,6 @@
       <b-button size="sm" variant="outline-light" href="/match">Spela padel
               <b-icon icon="arrow-right-short"></b-icon>
       </b-button>
-<!-- <b-navbar variant="faded" type="dark" class="othertest">
-                <b-navbar-nav>
-        <b-nav-item href="/game">Spela padel
-      <b-icon icon="arrow-right"></b-icon>
-        </b-nav-item>
-      </b-navbar-nav>
-  </b-navbar>
-    <b-link class="othertest" href="#foo">Spela Padel
-      <b-icon icon="arrow-right"></b-icon>
-    </b-link> -->
     </b-jumbotron>
   </div>
 </template>
