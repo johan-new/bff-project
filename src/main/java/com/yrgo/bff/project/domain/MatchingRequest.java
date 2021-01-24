@@ -59,6 +59,12 @@ public class MatchingRequest {
     public static final String NEW_JOIN_NOTIFICATION = "En spelare vill gå med i din match";
     public static final String GAME_CREATED_NOTIFICATION = "Lobbyn är full och ett spel är skapat";
 
+    /**
+     * Constructor handling all the parsing of the jsonobject that is passed on as a parameter from the wbeblayer.
+     * Keeps the web layer nice and clean.
+     *
+     * @param jsonObject
+     */
     public MatchingRequest(JSONObject jsonObject) {
 
         this.id = LATEST_ID++;
@@ -90,28 +96,42 @@ public class MatchingRequest {
         confirmedParticipants = new HashSet<>();
     }
 
+    /**
+     * Trying to accept a pending joinRequest (only the organizer is able to)
+     * @param elementNumber
+     */
     public void accept(int elementNumber){
-        joinRequests.get(elementNumber).accept(this);
+        joinRequests.get(elementNumber).accept();
     }
 
-//    public void reject(int elementNumber){
-//        joinRequests.get(elementNumber).reject(this);
-//    }
+    /**
+     * Trying to reject a pending joinRequest (only the organizer is able to)
+     * @param elementNumber
+     */
     public void reject(int elementNumber){
-    joinRequests.get(elementNumber).reject(this);
+    joinRequests.get(elementNumber).reject();
     }
 
+    /**
+     * Some user asks to join the game
+     * @param userAccount
+     */
     public void askToJoin(UserAccount userAccount) {
-        System.out.println("*** " + userAccount);
         this.joinRequests.add(new JoinRequest(userAccount, this));
     }
 
+    /**
+     * @return a set of strings, the usernames of the confirmed participants
+     */
     public Set<String> getConfirmedParticipants() {
         return Collections.unmodifiableSet(confirmedParticipants);
     }
 
+    /**
+     * @return the list mapped with element numbers, needed for
+     *          requests (join etc)
+     */
     public Map<Integer,JoinRequest> getJoinRequests() {
-        System.out.println("join requests size" + joinRequests.size());
         Map<Integer,JoinRequest> returnValues = new HashMap();
         for (int i = 0; i < joinRequests.size(); i++) {
             returnValues.put(i,joinRequests.get(i));
@@ -119,6 +139,10 @@ public class MatchingRequest {
         return returnValues;
     }
 
+    /**
+     * Fool-proofed set-er
+     * @param requestedParticipants amount of players besides toe organizer
+     */
     private void setRequestedParticipants(int requestedParticipants) {
         if (requestedParticipants>0 && requestedParticipants < 4)
             this.requestedParticipants = requestedParticipants;
@@ -126,41 +150,69 @@ public class MatchingRequest {
             this.requestedParticipants = 3;
     }
 
+    /**
+     * @return the username as a String
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * @return the suggested date
+     */
     public LocalDate getDate() {
         return date;
     }
 
+    /**
+     * @return the suggested time formatted in a nice way
+     */
     public String getTime() {
         return localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
+    /**
+     * @return the suggested time
+     */
     public LocalTime getLocalTime() { return this.localTime; }
 
     public boolean isCourtIsBooked() {
         return courtIsBooked;
     }
 
+    /**
+     * @return the venue where the game will take place
+     */
     public String getVenue() {
         return venue;
     }
 
+    /**
+     * @return geographical location, i.e. Brooklyn, Stockholm or Beijing
+     */
     public String getLocation() {
         return location;
     }
 
+    /**
+     * @return the number of requested participants
+     */
     public int getRequestedParticipants() {
         return requestedParticipants;
     }
 
+    /**
+     * @return a nicely formattad manually mappend json String
+     */
     @Override
     public String toString() {
         return new JSONObject(mapped()).toString();
     }
 
+    /**
+     * @return nicely manually mapped data of the object
+     * (to avoid infinite recursion)
+     */
     public Map<Object,Object> mapped(){
         Map request = new HashMap<String,String>();
         request.put("id",id);
@@ -174,10 +226,17 @@ public class MatchingRequest {
         return request;
     }
 
+    /**
+     * @return mapped data as json
+     */
     public JSONObject toJSON(){
-        return null;
+        return new JSONObject(mapped());
     }
 
+    /**
+     * @return nicely manually mapped data of the requests
+     * (to avoid infinite recursion)
+     */
     private Map<Integer,String> joinRequestsMapped() {
         Map<Integer,String> joinRequestsData = new HashMap<>();
         for (int i = 0; i < joinRequests.size(); i++) {
@@ -186,6 +245,9 @@ public class MatchingRequest {
         return joinRequestsData;
     }
 
+    /**
+     * Inner class, only used by the MatchingRequest.
+     */
     public class JoinRequest{
         JoinRequestStatus status;
 
@@ -194,37 +256,65 @@ public class MatchingRequest {
         //person who requested to join
         String sender;
 
+        /**
+         * Set-ers and of course setting the status (Poor mans state design pattern?).
+         * @param sender the person who requested to join
+         * @param matchingRequest passing a reference to the object it belongs to
+         */
         JoinRequest(UserAccount sender, MatchingRequest matchingRequest){
             this.sender = sender.getUsername();
             this.matchingRequestParent = matchingRequest;
             status = JoinRequestStatus.PENDING;
         }
 
-        void accept(MatchingRequest matchingRequest){
+        /**
+         * Accepting the request
+         */
+        void accept(){
             status = JoinRequestStatus.ACCEPTED;
             confirmedParticipants.add(sender);
         }
 
-        void reject(MatchingRequest matchingRequest){
+        /**
+         * Rejecting the request
+         */
+        void reject(){
             status = JoinRequestStatus.REJECTED;
         }
 
+        /**
+         * @return the reference to the parent MatchingRequest object
+         */
         public MatchingRequest getMatchingRequestParent() {
             return matchingRequestParent;
         }
 
+        /**
+         * @return the current status, cannot be null since its setted in
+         * t        the constructor.
+         */
         public JoinRequestStatus getStatus() {
             return status;
         }
 
+        /**
+         * @return the username of the person whom sent the request
+         */
         public String getSender() {
             return sender;
         }
 
+        /**
+         * @return is the requests is pending
+         */
         boolean isPending(){
             return this.status==JoinRequestStatus.PENDING;
         }
 
+        /**
+         * @return manual mapping to avoid infinate recursion.
+         *          As JSON to simplify use in web layer.
+         */
         @Override
         public String toString() {
             Map<String,String> data = new HashMap<>();
@@ -234,6 +324,9 @@ public class MatchingRequest {
         }
     }
 
+    /**
+     * Possible states of the status of the request
+     */
     enum JoinRequestStatus{
         PENDING,
         ACCEPTED,
