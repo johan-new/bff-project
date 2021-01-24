@@ -5,14 +5,16 @@ const state = {
   friendlist: {},
   gamelist: {},
   statuscode: '',
-  notifications: []
+  notifications: [],
+  myFriends: []
 }
 
 const getters = {
   user: state => state.user,
   friendlist: state => state.friendlist,
   gamelist: state => state.gamelist,
-  getNotifications: state => state.notifications
+  getNotifications: state => state.notifications,
+  getMyFriends: state => state.myFriends
 }
 
 const actions = {
@@ -74,6 +76,15 @@ const actions = {
       .catch(error => {
         console.log(error.response)
       })
+  },
+  myFriends (context) {
+    axios.get('http://localhost:8080/friend/all')
+      .then(data => {
+        context.commit('my_friends', data.data)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
   }
 }
 
@@ -89,6 +100,9 @@ const mutations = {
   },
   delete_notification (state) {
     state.notifications = []
+  },
+  my_friends (state, data) {
+    state.myFriends = data
   }
 }
 

@@ -57,7 +57,6 @@ export default {
   },
   watch: {
     $route (to, from) {
-      console.log('Hämtar notiser!')
       this.notifications()
     }
   },

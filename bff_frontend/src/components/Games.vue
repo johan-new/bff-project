@@ -56,7 +56,6 @@ export default {
     dateToday: {
       get () {
         const today = new Date().toISOString()
-        console.log(today)
         return today
       }
     },

@@ -75,7 +75,6 @@
       {{ userprofile.presentation }}
       </div>
       <div>
-        <!-- {{ $route.params }} -->
       </div>
     </b-card>
     <div v-if="!loggedInUser">
@@ -88,7 +87,6 @@
       </div>
       </b-card>
     </div>
-    <!-- <Friends :friends=friends @em="doThis"/> -->
         <Friends :friends=friends />
     <div v-if="loggedInUser" class="my-3">
         <b-button v-b-toggle.collapse-1337 variant="link" size="sm">
@@ -163,22 +161,21 @@ export default {
     this.fetchUser()
   },
   computed: {
+    friendStatus () {
+      const friends = this.$store.getters['userStore/getMyFriends']
+      let friend = ''
+      for (friend of friends) {
+        if (friend === this.$route.params.username) {
+          return true
+        }
+      }
+      return false
+    },
     loggedInUser () {
       const loggedIn = this.$store.getters['authStore/loggedInUser']
       if (loggedIn === this.username) {
         return true
       } else {
-        return false
-      }
-    },
-    friendStatus () {
-      console.log('this.friends: ' + this.friends)
-      console.log('this.username' + this.username)
-      if (this.friends.includes(this.username)) {
-        console.log('friendsstatus = true')
-        return true
-      } else {
-        console.log('friendstatus = false')
         return false
       }
     },
@@ -239,6 +236,7 @@ export default {
         .catch(error => {
           console.log(error.response)
         })
+        .then(() => this.$store.dispatch('userStore/myFriends'))
     },
     removeFriend () {
       axios.delete('http://localhost:8080/friend', {
@@ -248,6 +246,7 @@ export default {
         .catch(error => {
           console.log(error.response)
         })
+        .then(() => this.$store.dispatch('userStore/myFriends'))
     },
     fetchFriends () {
       const username = this.username

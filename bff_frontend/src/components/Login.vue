@@ -83,6 +83,7 @@ export default {
         .dispatch('authStore/login', payload)
         .then(() => this.$router.push('/padel'))
         .catch((err) => console.log(err))
+        .then(() => this.$store.dispatch('userStore/myFriends'))
     }
   }
 }

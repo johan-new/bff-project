@@ -105,6 +105,7 @@ export default {
           params: { username }
         })
         .then((data) => {
+          this.user = ''
           this.$router.push({
             name: 'Userprofile',
             params: { username: data.data.username, data: data.data }
