@@ -23,6 +23,11 @@ import java.util.Date;
 import static com.yrgo.bff.project.security.SecurityConstants.*;
 
 /**
+ *
+ * Handles authentication
+ *
+ *
+ * @author Bruno Krebs
  * Code source and credit:
  * https://auth0.com/blog/implementing-jwt-authentication-on-spring-boot/
 */
@@ -34,6 +39,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
+
+    /**
+     *
+     * Parsing user/password and passing them to the authenticationManager
+     *
+     * @param req
+     * @param res
+     * @return
+     * @throws AuthenticationException
+     */
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req,
@@ -52,6 +67,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
     }
 
+    /**
+     * Generates a JSON Web Token (JWT) when login is successful
+     *
+     * @param req
+     * @param res
+     * @param chain
+     * @param auth
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     protected void successfulAuthentication(HttpServletRequest req,
                                             HttpServletResponse res,

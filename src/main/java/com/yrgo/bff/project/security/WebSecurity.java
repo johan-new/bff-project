@@ -19,6 +19,9 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /**
+ * Configuring Spring Security filter chain
+ *
+ * @author Bruno Krebs
  * Code source and credit:
  * https://auth0.com/blog/implementing-jwt-authentication-on-spring-boot/
  */
