@@ -37,6 +37,11 @@ public class UserAccountController {
         this.userAccountService = userAccountService;
     }
 
+    /**
+     * @param user jsonobject with the variables username and password
+     * @return proper status code and the user data if available
+     * @throws BadRequestException when username is invalid/already exists
+     */
     @PostMapping("/user")
     public ResponseEntity createUser(@RequestBody JSONObject user) throws BadRequestException {
         //parsing
@@ -44,8 +49,9 @@ public class UserAccountController {
         final String password = (String)user.get("password");
 
         if (!UserAccountServiceImplementation.validEmailAddress(username)) {
-            log.error("******* " + username );
-            throw new BadRequestException("Invalid email address!");
+            final String msg = "Invalid email address: " + username;
+            log.error(msg);
+            throw new BadRequestException(msg);
         }
 
         if (userAccountService.readUser(username)==null) {
@@ -54,45 +60,57 @@ public class UserAccountController {
                 status(HttpStatus.CREATED).
                 body(userAccountService.readUser(username).toJSON());
         } else {
-            log.error("******* " + username);
-            throw new BadRequestException("User already exists!");
+            final String msg = "Username already exists: " + username;
+            log.error(msg);
+            throw new BadRequestException(msg);
         }
     }
 
+    /**
+     * @param username username
+     * @return the data of the user
+     */
     @GetMapping("/user")
     JSONObject readUser(@RequestParam String username) {
         return userAccountService.readUser(username).toJSON();
     }
 
+    /**
+     * @return the future and historic games of the logged in user
+     */
     @GetMapping("/user/previousgames")
     JSONObject readUsersPreviousGames() {
         return userAccountService.readLoggedInUser().getPreviousGamesAsJSON();
     }
 
+    /**
+     * @return the data of the logged in user
+     */
     @GetMapping("/loggedinuser")
     public JSONObject readUser() {
         try {
-            UserAccount loggedInUser = userAccountService.readLoggedInUser();
+            return userAccountService.readLoggedInUser().toJSON();
         } catch (NullPointerException e) {
-                final String errorLogMessage = "Cannot read logged in user";
-                log.error(errorLogMessage);
-                throw new InternalServerErrorException(errorLogMessage);
+                final String msg = "Cannot read logged in user";
+                log.error(msg);
+                throw new InternalServerErrorException(msg);
         }
-        return userAccountService.readLoggedInUser().toJSON();
     }
 
+    /**
+     * @param newUserInformation receives new data in json. Updates the changes.
+     * @return proper status code.
+     */
     @PutMapping("/user")
-    ResponseEntity updateUser(@RequestBody JSONObject newUserInformation) throws Exception {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).
-                body(userAccountService.updateUser(newUserInformation).toJSON());
+    ResponseEntity updateUser(@RequestBody JSONObject newUserInformation) {
+        try {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).
+                    body(userAccountService.updateUser(newUserInformation).toJSON());
+        } catch (BadRequestException e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Changes not accepted");
+        }
     }
 
-    //TODO: admin can delete anyone, regular user just themselves
-    @DeleteMapping("/user/admin")
-    ResponseEntity removeUser(@RequestParam(name="name",required = true) String name,
-                    @RequestParam(name="password",required = true) String password){
-        userAccountService.removeUser(name);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
 
 }

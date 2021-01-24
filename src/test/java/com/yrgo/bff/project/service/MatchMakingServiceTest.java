@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class MatchMakingServiceTest {
 
+    //setting up dummy data
     private static final String user1 = "alfa@mail.com";
     private static final String user2 = "beta@mail.com";
     private static final String user3 = "gamma@mail.com";
@@ -59,69 +60,9 @@ public class MatchMakingServiceTest {
     @Autowired
     NotificationService notificationService;
 
-    @WithMockUser(username=user3)
-    @Test
-    void testFalseNotification() {
-        String location2 = Double.toString(Math.random());
-        JSONObject jsonObject3 = new JSONObject();
-        jsonObject3.put("username", user3);
-        jsonObject3.put("date", ld2);
-        jsonObject3.put("time", lt);
-        jsonObject3.put("reservation", true);
-        jsonObject3.put("venue", venue4);
-        jsonObject3.put("participants", 3);
-
-        matchMakingService.addUserMatchRequest(jsonObject3, location2);
-        String notifications = "";
-
-        try{
-            notifications = notificationService.getNotifications().toString();
-        } catch(NullPointerException e)  {}
-
-        assertFalse(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
-        matchMakingService.removeUserMatchRequest(user3, location2);
-    }
-
-    @WithMockUser(username=user4)
-    @Test
-    void testFalseNotificationSeveralUsers() {
-        String location = Double.toString(Math.random());
-        String location2 = Double.toString(Math.random());
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("username", user4);
-        jsonObject.put("date", ld);
-        jsonObject.put("time", lt);
-        jsonObject.put("reservation", false);
-        jsonObject.put("venue", venue);
-        jsonObject.put("participants", 2);
-
-        JSONObject jsonObject2 = new JSONObject();
-        jsonObject2.put("username", user4);
-        jsonObject2.put("date", ld2);
-        jsonObject2.put("time", lt2);
-        jsonObject2.put("reservation", true);
-        jsonObject2.put("venue", venue2);
-        jsonObject2.put("participants", 3);
-
-        //sthlm
-        matchMakingService.addUserMatchRequest(jsonObject, location);
-        //gbg
-        matchMakingService.addUserMatchRequest(jsonObject2, location2);
-
-        String notifications = "";
-
-        try{
-            notifications = notificationService.getNotifications().toString();
-        } catch(NullPointerException e)  {}
-
-        assertFalse(notifications.contains(NotificationService.Type.MATCH_SUCCESS.name()));
-
-
-        matchMakingService.removeUserMatchRequest(user4, location);
-        matchMakingService.removeUserMatchRequest(user4, location2);
-    }
-
+    /**
+     * Integration test of posting and accepting a JoinRequest
+     */
     @WithMockUser(username=user6)
     @Test
     void testJoinRequests() {
@@ -146,6 +87,9 @@ public class MatchMakingServiceTest {
 
     }
 
+    /**
+     * Integration test of rejecting a JoinRequest
+     */
     @WithMockUser(username=user7)
     @Test
     void testDenyRequest() {
@@ -178,6 +122,12 @@ public class MatchMakingServiceTest {
         assertTrue(notificationService.getNotifications().toString().contains(NotificationService.Type.REJECTED_JOIN_REQUEST.name()));
     }
 
+
+    /**
+     * Integration test: will MatchMakingServiceImpl.
+     * convert the MAtchingRequest to a Game when
+     * full?
+     */
     @WithMockUser(username=user8)
     @Test
     @Transactional

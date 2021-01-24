@@ -15,6 +15,10 @@ public class UserAccountAccountDataAccessTest {
     @Autowired
     UserAccountDataAccess userAccountDataAccess;
 
+    /**
+     * Simple integrations test between dao and domain layer
+     * for the UserAccount entities.
+     */
     @Test
     void testFindByUserName() {
         final String username = "test@mail.com";

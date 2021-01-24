@@ -17,7 +17,7 @@ import java.util.Set;
 public interface UserAccountService {
     UserAccount createUser(String username, String password) throws BadRequestException;
     UserAccount removeUser(String username);
-    UserAccount updateUser(JSONObject newUserInformation) throws Exception;
+    UserAccount updateUser(JSONObject newUserInformation) throws BadRequestException;
     UserAccount readUser(String username);
     UserAccount readLoggedInUser();
 

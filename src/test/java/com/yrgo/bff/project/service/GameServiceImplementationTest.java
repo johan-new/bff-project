@@ -30,7 +30,10 @@ public class GameServiceImplementationTest {
     @Autowired
     GameService gameService;
 
-    private Game newGame() throws Exception {
+    /**
+     * @return generates a new Game with random users
+     */
+    private Game newGame() {
         UserAccount user = userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"hej");
         UserAccount user2 = userAccountService.createUser(FriendsUserAccountServiceImplementationTest.getRandomUsername(),"hej");
         Set<UserAccount> users = new HashSet<>();
@@ -38,15 +41,21 @@ public class GameServiceImplementationTest {
         return gameService.createGame(LocalDate.now(),LocalTime.now(), "Sprängtporten TK","Helsinki",users);
     }
 
+    /**
+     * testing to create and read a game
+     */
     @Test
-    public void createGameIsSuccessful() throws Exception {
+    public void createGameIsSuccessful()  {
         Long newGameId = newGame().getId();
         assertNotNull(gameService.readGame(newGameId));
     }
 
 
+    /**
+     * testing to remove a game
+     */
     @Test
-    public void removeGameIsSuccessful() throws Exception {
+    public void removeGameIsSuccessful()  {
         Long newGameId = newGame().getId();
         assertNotNull(gameService.readGame(newGameId));
         gameService.removeGame(newGameId);
@@ -54,8 +63,11 @@ public class GameServiceImplementationTest {
     }
 
 
-    @Test //uppdatera gör egetnligen bara att det gamla spelet tas bort och ett nytt skapas
-    public void updateGameIsSuccessful() throws Exception {
+    /**
+     * Testing that a new game is created when updated
+     */
+    @Test
+    public void updateGameIsSuccessful() {
         Long newGameId = newGame().getId();
         Long anotherNewGameId = newGame().getId();
         assertDoesNotThrow(()->gameService.readGame(anotherNewGameId));
@@ -63,12 +75,6 @@ public class GameServiceImplementationTest {
         gameService.updateGame(newGameId, gameService.readGame(anotherNewGameId));
         assertDoesNotThrow(()->gameService.readGame(anotherNewGameId));
         assertThrows(NoSuchElementException.class, ()->gameService.readGame(newGameId));
-    }
-
-    @Test
-    public void readGameIsSuccessFul() throws Exception {
-        Long newGameId = newGame().getId();
-        assertDoesNotThrow(()->gameService.readGame(newGameId));
     }
 
 }

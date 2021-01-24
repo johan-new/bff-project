@@ -91,7 +91,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
      *
      */
     @Override @Transactional
-    public UserAccount updateUser(JSONObject newUserInformation) throws Exception {
+    public UserAccount updateUser(JSONObject newUserInformation) throws BadRequestException {
         UserAccount userAccount = readLoggedInUser();
 
         final String oldPassword = (String)newUserInformation.get("oldPassword");
@@ -173,7 +173,7 @@ public class UserAccountServiceImplementation implements UserAccountService, Use
     }
 
     /**
-     * Is logged in user is null, the http session is invalidated
+     * If the logged in user is null, the http session is invalidated
      * to enforce a new login (session)
      *
      * @return the UserAccount object of the logged in user.

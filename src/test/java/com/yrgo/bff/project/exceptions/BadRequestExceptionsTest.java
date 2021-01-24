@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * BadRequestExceptionsTest
  *
+ * Testing that its thrown
  */
 
 
@@ -21,6 +22,9 @@ public class BadRequestExceptionsTest {
     @Autowired
     UserAccountService userAccountService;
 
+    /**
+     * Should throw exception since the password is empty
+     */
     @Test
     public void testCreateUserThatThrowsBadRequestExceptionWhenCreatingWithEmptyPassword() {
         assertThrows(BadRequestException.class, ()-> {
@@ -28,6 +32,9 @@ public class BadRequestExceptionsTest {
         });
     }
 
+    /**
+     * Should throw exception since the username is not a valid email address
+     */
     @Test
     public void testCreateUserThatThrowsBadRequestExceptionWhenCreatingWithInvalidUsername() {
         assertThrows(BadRequestException.class, ()-> {
@@ -35,6 +42,9 @@ public class BadRequestExceptionsTest {
         });
     }
 
+    /**
+     * Should throw exception, empty usernames are of course not allowed
+     */
     @Test
     public void testCreateUserThatThrowsBadRequestExceptionWhenCreatingWithEmptyUsername() {
         assertThrows(BadRequestException.class, ()-> {
