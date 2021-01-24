@@ -31,16 +31,22 @@ public class FriendsUserAccountServiceImplementationTest {
     static final String username6 = getRandomUsername();
     static final String username7 = getRandomUsername();
 
+    /**
+     * Integration test: adding a friend
+     */
     @Test @Transactional
-    public void addFriendsTest() throws Exception {
+    public void addFriendsTest() {
         userAccountService.createUser(username, "hej");
         userAccountService.createUser(username2, "hej");
         userAccountService.readUser(username).addFriend(userAccountService.readUser(username2));
         assertTrue(userAccountService.readUser(username).getFriends().contains(username2));
     }
 
+    /**
+     * Integration test: removing a friend
+     */
     @Test @Transactional
-    public void removeFriendsTest() throws Exception {
+    public void removeFriendsTest() {
         UserAccount userWithFriends = userAccountService.createUser(username3, "hej");
         UserAccount theFriend1 = userAccountService.createUser(username4, "hej");
         UserAccount theFriend2 = userAccountService.createUser(username5, "hej");
@@ -56,6 +62,9 @@ public class FriendsUserAccountServiceImplementationTest {
 
     }
 
+    /**
+     * @return a random "email adress"
+     */
     public static String getRandomUsername() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(Math.random());
