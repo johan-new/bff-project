@@ -30,6 +30,15 @@ public class Game {
     @ManyToMany
     Set<UserAccount> participants;
 
+    /**
+     * Regular all args constructor
+     *
+     * @param date of the game
+     * @param time of the game
+     * @param venue where to play
+     * @param location geographical
+     * @param participants the participating users
+     */
     public Game(LocalDate date, LocalTime time, String venue, String location, Set<UserAccount> participants) {
         this.date = date;
         this.time = time;
@@ -37,36 +46,65 @@ public class Game {
         this.location = location;
         this.participants = participants;
     }
+
+    /**
+     * required by hibernate
+     */
     public Game () {}
 
+    /**
+     * @return the date
+     */
     public LocalDate getDate() {
         return date;
     }
 
+    /**
+     * @return the time
+     */
     public LocalTime getTime() {
         return time;
     }
 
+    /**
+     * @return the venue
+     */
     public String getVenue() {
         return venue;
     }
 
+    /**
+     * @return the geographical location
+     */
     public String getLocation() {
         return this.location;
     }
 
+    /**
+     * @return the participants in the game
+     */
     public Set<UserAccount> getParticipants() {
         return participants;
     }
 
+    /**
+     * @return the uniqe game id
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * @return object data as JSON
+     */
     public JSONObject toJSON(){
         return new JSONObject(mapGameDetails());
     }
 
+    /**
+     * @return manually mapped data to avoid
+     * infinite recursion
+     */
     public Map<String, String> mapGameDetails() {
         Map<String, String> gameDetails = new HashMap<>();
 
