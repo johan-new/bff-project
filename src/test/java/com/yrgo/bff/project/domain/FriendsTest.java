@@ -14,8 +14,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FriendsTest {
 
+    /**
+     * Adding a friend
+     */
     @Test
-    public void addFriendsTest() throws Exception {
+    public void addFriendsTest() {
         final String username = "Göte@mail.com";
         UserAccount userWithFriendsList = new UserAccount(username, "lol");
 
@@ -28,8 +31,11 @@ public class FriendsTest {
         assertTrue(userWithFriendsList.getFriends().contains(username));
     }
 
+    /**
+     * Removing a friend
+     */
     @Test
-    public void removeFriendsTest() throws Exception {
+    public void removeFriendsTest() {
         final String username = "mange@mange.se";
         final UserAccount username2 = new UserAccount("kondrad@konken.se", "hej");
         final UserAccount username3 = new UserAccount("abraham@abris.se", "hej");

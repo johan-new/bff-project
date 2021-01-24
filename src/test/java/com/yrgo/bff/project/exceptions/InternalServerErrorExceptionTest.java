@@ -19,6 +19,10 @@ public class InternalServerErrorExceptionTest {
     @Autowired
     UserAccountController userAccount;
 
+    /**
+     * Should throw exception since no user is logged in
+     * (@WithMockUser is not used!)
+     */
     @Test
     public void testInternalServerErrorWithoutMockUser() {
         assertThrows(InternalServerErrorException.class,()-> {

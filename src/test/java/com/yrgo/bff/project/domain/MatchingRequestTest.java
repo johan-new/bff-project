@@ -25,8 +25,11 @@ public class MatchingRequestTest {
     @Autowired
     UserAccountService userAccountService;
 
+    /**
+     * Joining a MatchingRequest
+     */
     @Test
-    void testAskToJoin() throws Exception {
+    void testAskToJoin() {
         JSONObject request = newRequest();
         MatchingRequest matchingRequest = new MatchingRequest(request);
         System.out.println(matchingRequest);
@@ -39,8 +42,11 @@ public class MatchingRequestTest {
         assertTrue(matchingRequest.getJoinRequests().size()==1);
     }
 
+    /**
+     * Organizer accepting a JoinRequest
+     */
     @Test
-    void testAcceptRequest() throws Exception {
+    void testAcceptRequest() {
         JSONObject request = newRequest();
         MatchingRequest matchingRequest = new MatchingRequest(request);
         System.out.println(matchingRequest);
@@ -53,6 +59,9 @@ public class MatchingRequestTest {
         assertEquals(matchingRequest.getJoinRequests().get(0).getStatus(), MatchingRequest.JoinRequestStatus.ACCEPTED);
     }
 
+    /**
+     * Organizer rejecting a JoinRequest
+     */
     @Test
     void testRejectRequest() throws Exception {
         JSONObject request = newRequest();
@@ -69,6 +78,9 @@ public class MatchingRequestTest {
         assertEquals(matchingRequest.getJoinRequests().get(0).getStatus(), MatchingRequest.JoinRequestStatus.REJECTED);
     }
 
+    /**
+     * @return dummy data for a MatchingRequest
+     */
     public JSONObject newRequest(){
         Map request = new HashMap();
         request.put("username", FriendsUserAccountServiceImplementationTest.getRandomUsername());
