@@ -6,6 +6,8 @@ package com.yrgo.bff.project.security;
  * @author Bruno Krebs
  * Code source and credit:
  * https://auth0.com/blog/implementing-jwt-authentication-on-spring-boot/
+ *
+ * Security constants for Spring Security
  */
 public class SecurityConstants {
 

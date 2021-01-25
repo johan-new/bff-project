@@ -36,17 +36,20 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    /**
+     * @param authenticationManager injected AuthenticationManager
+     */
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
     /**
      *
-     * Parsing user/password and passing them to the authenticationManager
+     * Attempts to authenticate user and parse user/password and passing them to the authenticationManager
      *
-     * @param req
-     * @param res
-     * @return
+     * @param req - the login credentials as a HttpServletRequest
+     * @param res - the response to the user, added as a header in a HttpServletResponse
+     * @return Authentication object
      * @throws AuthenticationException
      */
 
@@ -68,12 +71,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     /**
-     * Generates a JSON Web Token (JWT) when login is successful
+     * Generates a JSON Web Token (JWT) and adds it into the header when login is successful
      *
-     * @param req
-     * @param res
-     * @param chain
-     * @param auth
+     * @param req - the login credentials as a HttpServletRequest
+     * @param res - the response to the user, added as a header in a HttpServletResponse
+     * @param chain - FilterChain to issue token
+     * @param auth - our authentication object
      * @throws IOException
      * @throws ServletException
      */

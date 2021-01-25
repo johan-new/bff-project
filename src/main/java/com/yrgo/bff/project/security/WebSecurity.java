@@ -31,11 +31,22 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     private UserAccountServiceImplementation userAccountService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    /**
+     * Injecting password hashing instance and userAccountService interface
+     *
+     * @param bCryptPasswordEncoder
+     * @param userAccountService
+     */
     public WebSecurity(UserAccountServiceImplementation userAccountService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userAccountService = userAccountService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
+    /**
+     * Configures the CORS-filter and define public and private resources
+     *
+     * @param http - HttpSecurity
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
@@ -53,14 +64,22 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
     }
 
-
+    /**
+     * Defines a custom implementation of UserDetailsService
+     *
+     * @param auth - AuthenticationManagerBuilder
+     */
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userAccountService).passwordEncoder(bCryptPasswordEncoder);
     }
 //    https://www.freecodecamp.org/news/how-to-setup-jwt-authorization-and-authentication-in-spring/
 
-
+    /**
+     * Configures our CORS-support, that defines which sources are allowed and which methods
+     *
+     * @return source - a CorsConfigurationSource, our CORS-configuration
+     */
     @Bean   //TODO: Review before prod
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -73,8 +92,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         return source;
     }
 
-
-    //Kanske ej behövs?
+    /**
+     * Exposed AuthenticationManager as a Bean
+     *
+     * @return authenticationManagerBean
+     */
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {

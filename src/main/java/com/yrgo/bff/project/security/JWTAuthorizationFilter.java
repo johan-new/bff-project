@@ -35,11 +35,12 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     /**
      *
-     * custom filter handling with JWT
+     * custom filter checking for a JWT in header from user request, calls for method getAuthentication to
+     * authenticate the user
      *
-     * @param req
-     * @param res
-     * @param chain
+     * @param req - the request from the user as a HttpServletRequest
+     * @param res -the response to the user as a HttpServletResponse
+     * @param chain - FilterChain to filter the request from the user
      * @throws IOException
      * @throws ServletException
      */
@@ -60,7 +61,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         chain.doFilter(req, res);
     }
 
-    // Reads the JWT from the Authorization header, and then uses JWT to validate the token
+    /**
+     *
+     * Authenticate the users JWT from user requests
+     *
+     * @param request - the request from the user as a HttpServletRequest
+     * @return returns a UsernamePasswordAuthenticationToken
+     */
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(HEADER_STRING);
 
