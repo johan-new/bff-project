@@ -18,7 +18,7 @@ npm install vue --save && \
 npm install vuex --save && \
 npm install vee-validate --save && \
 npm install bootstrap@3 --save && \
-npm install --save animejs && \
+npm install animejs --save && \
 cd bff-project/bff_frontend/  && \
 npm install  && \
 npm run serve
